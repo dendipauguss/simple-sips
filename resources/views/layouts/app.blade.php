@@ -628,8 +628,7 @@
         <script src="{{ env('THM_LINK') }}/assets/vendors/chart.js/chart.min.js" defer=""></script>
 
         <!-- Initialize [ SAMPLE ] -->
-        <script src="{{ env('THM_LINK') }}/assets/pages/dashboard-1.js" defer=""></script>
-
+        <script src="/chart.js" defer=""></script>
 
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 

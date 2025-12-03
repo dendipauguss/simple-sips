@@ -49,7 +49,8 @@
                                                                 <label class="d-flex justify-content-between">
                                                                     {{ $pr->nama }}
                                                                     <input type="checkbox" data-id="{{ $pr->pivot->id }}"
-                                                                        data-type="bawaan" class="update-status"
+                                                                        data-type="bawaan"
+                                                                        class="update-status form-check-input"
                                                                         {{ $pr->pivot->status == 'sudah' ? 'checked' : '' }}>
                                                                 </label>
                                                             </li>
@@ -61,7 +62,8 @@
                                                                 <label class="d-flex justify-content-between">
                                                                     {{ $p->perintah_lainnya }}
                                                                     <input type="checkbox" data-id="{{ $p->id }}"
-                                                                        data-type="lainnya" class="update-status"
+                                                                        data-type="lainnya"
+                                                                        class="update-status form-check-input"
                                                                         {{ $p->status_lainnya == 'sudah' ? 'checked' : '' }}>
                                                                 </label>
                                                             </li>
