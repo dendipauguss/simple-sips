@@ -174,9 +174,14 @@ class PenindakanController extends Controller
         }
 
         // hitung ulang status penindakan
-        $this->updatePenindakanStatus($penindakan_id);
+        $status_baru = $this->updatePenindakanStatus($penindakan_id);
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Status perintah berhasil diperbarui!',
+            'penindakan_id' => $penindakan_id,
+            'status_baru' => $status_baru,
+        ]);
     }
 
     public function uploadDokumen(Request $request)
@@ -259,21 +264,23 @@ class PenindakanController extends Controller
     {
         foreach ($request->file('lampiran') as $file) {
 
+            $originalName = $file->getClientOriginalName(); // ← nama asli
             $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
             // simpan ke storage/public/uploads/penindakan
             $path = $file->storeAs('uploads/' . $tabel_name, $filename, 'public');
 
-
             // simpan ke database
             FilesModel::create([
-                'table_name' => $tabel_name,
-                'table_id'   => $tabel_id,
-                'filename'   => $filename,
-                'url_path'   => $path,
+                'table_name'    => $tabel_name,
+                'table_id'      => $tabel_id,
+                'filename'      => $filename,
+                'original_name' => $originalName, // ← simpan juga di DB
+                'url_path'      => $path,
             ]);
         }
     }
+
     private function updatePenindakanStatus($penindakan_id)
     {
         // total perintah bawaan
@@ -312,5 +319,7 @@ class PenindakanController extends Controller
         DB::table('penindakan')
             ->where('id', $penindakan_id)
             ->update(['status' => $status]);
+
+        return $status;
     }
 }

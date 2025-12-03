@@ -73,9 +73,10 @@
                                                     @if (!empty($p->files))
                                                         @foreach ($p->files as $file)
                                                             <a href="{{ asset('storage/' . $file->url_path) }}"
-                                                                target="_blank">
-                                                                <span class="badge bg-success">Lihat</span>
+                                                                target="_blank" class="text-decoration-none">
+                                                                <span>{{ $file->original_name }}</span>
                                                             </a>
+                                                            <br>
                                                         @endforeach
                                                     @else
                                                         <span>Belum ada dokumen</span>
@@ -88,13 +89,8 @@
                                                     </button>
                                                 </td>
                                                 <td class="text-center">
-                                                    @if ($p->status == 'belum')
-                                                        <span class="badge bg-danger">Belum</span>
-                                                    @elseif($p->status == 'pending')
-                                                        <span class="badge bg-warning text-dark">Pending</span>
-                                                    @else
-                                                        <span class="badge bg-success">Selesai</span>
-                                                    @endif
+                                                    <span id="status-penindakan-{{ $p->id }}"
+                                                        class="badge {{ $p->status == 'belum' ? 'bg-danger' : ($p->status == 'pending' ? 'bg-warning text-dark' : 'bg-success') }}">{{ ucfirst($p->status) }}</span>
 
                                                     {{-- 
                                                     <form action="{{ route('penindakan.updateStatus', $p->id) }}"
@@ -168,6 +164,22 @@
     </div>
 
     <script>
+        function updateStatusBadge(id, status) {
+            const el = $("#status-penindakan-" + id);
+
+            el.removeClass("bg-danger bg-warning text-dark bg-success");
+
+            if (status === "belum") {
+                el.addClass("badge bg-danger");
+            } else if (status === "pending") {
+                el.addClass("badge bg-warning text-dark");
+            } else {
+                el.addClass("badge bg-success");
+            }
+
+            el.text(status.charAt(0).toUpperCase() + status.slice(1));
+        }
+
         $('.update-status').on('change', function() {
             const id = $(this).data('id');
             const tipe = $(this).data('type');
@@ -182,7 +194,10 @@
                     tipe: tipe
                 },
                 success: function(res) {
-                    window.location.href = "/penindakan/status-updated";
+                    if (res.success) {
+                        showAjaxToast(res.message);
+                        updateStatusBadge(res.penindakan_id, res.status_baru);
+                    }
                 }
             });
         });
