@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
     });
     Route::post('penindakan/upload-file', [PenindakanController::class, 'uploadDokumen']);
     Route::get('/pengaturan/perintah-sanksi/{id}', [PerintahSanksiController::class, 'show']);
+    Route::get('/perusahaan/import', [PerusahaanController::class, 'importView']);
+    Route::post('/perusahaan/import', [PerusahaanController::class, 'import'])->name('perusahaan.import');
     Route::resource('/perusahaan', PerusahaanController::class);
     Route::resource('/pengaturan/sanksi', SanksiController::class);
     Route::resource('/penindakan', PenindakanController::class);

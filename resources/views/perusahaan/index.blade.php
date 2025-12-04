@@ -6,8 +6,9 @@
                 <div class="col-xl-12 mb-3 mb-xl-0">
 
                     <div class="card h-100">
-                        <div class="card-header d-flex align-items-center border-0">
+                        <div class="card-header d-flex align-items-center border-0 input-group">
                             <a href="{{ url('perusahaan/create') }}" class="btn btn-sm btn-primary">+ Tambah</a>
+                            <a href="{{ url('perusahaan/import') }}" class="btn btn-sm btn-success">+ Import Excel</a>
                         </div>
 
                         <div class="card-body py-0">

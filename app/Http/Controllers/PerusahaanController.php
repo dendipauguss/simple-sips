@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Perusahaan;
+use App\Imports\PerusahaanImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PerusahaanController extends Controller
 {
@@ -75,5 +77,23 @@ class PerusahaanController extends Controller
         $perusahaan->delete();
 
         return redirect()->route('perusahaan.index')->with('success', 'Data perusahaan berhasil dihapus!');
+    }
+
+    public function importView()
+    {
+        return view('perusahaan.import', [
+            'title' => 'Import Excel'
+        ]);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        Excel::import(new PerusahaanImport, $request->file('file'));
+
+        return back()->with('success', 'Data perusahaan berhasil diimport!');
     }
 }
