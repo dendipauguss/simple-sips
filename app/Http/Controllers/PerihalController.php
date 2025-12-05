@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JenisPerusahaan;
+use App\Models\Perihal;
 use Illuminate\Http\Request;
 
-class JenisPerusahaanController extends Controller
+class PerihalController extends Controller
 {
     public function index()
     {
@@ -22,22 +22,22 @@ class JenisPerusahaanController extends Controller
         //
     }
 
-    public function show(JenisPerusahaan $jenisPerusahaan)
+    public function show(Perihal $perihal)
     {
         //
     }
 
-    public function edit(JenisPerusahaan $jenisPerusahaan)
+    public function edit(Perihal $perihal)
     {
         //
     }
 
-    public function update(Request $request, JenisPerusahaan $jenisPerusahaan)
+    public function update(Request $request, Perihal $perihal)
     {
         //
     }
 
-    public function destroy(JenisPerusahaan $jenisPerusahaan)
+    public function destroy(Perihal $perihal)
     {
         //
     }

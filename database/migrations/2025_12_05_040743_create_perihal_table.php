@@ -8,15 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('penindakan', function (Blueprint $table) {
-            $table->unsignedBigInteger('perihal_id');
+        Schema::create('perihal', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::table('penindakan', function (Blueprint $table) {
-            $table->dropColumn('perihal_id');
-        });
+        Schema::dropIfExists('perihal');
     }
 };

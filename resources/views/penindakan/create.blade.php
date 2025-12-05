@@ -23,6 +23,11 @@
                                 <div class="row mb-3">
                                     <label for="perusahaan_id" class="col-sm-2 col-form-label">Perihal</label>
                                     <div class="col-sm-10">
+                                        <select name="perihal" id="perihal" class="form-select">
+                                            @foreach ($perihal as $per)
+                                                <option value="{{ $per->id }}">{{ $per->nama }}</option>
+                                            @endforeach
+                                        </select>
                                         <input type="text" name="perihal" id="perihal"
                                             class="form-control @error('perihal') is-invalid @enderror">
                                         @error('perihal')

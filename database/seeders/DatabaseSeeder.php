@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
             // PerusahaanSeeder::class,
             SanksiSeeder::class,
             PerintahSanksiSeeder::class,
-            JenisPerusahaanSeeder::class
+            JenisPerusahaanSeeder::class,
+            PerihalSeeder::class
         ]);
     }
 }
