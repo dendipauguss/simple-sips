@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Penindakan;
+use App\Models\PengenaanSanksi;
 
-class PenindakanSeeder extends Seeder
+class PengenaanSanksiSeeder extends Seeder
 {
     public function run() {}
 }

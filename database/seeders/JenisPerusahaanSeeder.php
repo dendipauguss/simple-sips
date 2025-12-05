@@ -4,29 +4,29 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\JenisPerusahaan;
+use App\Models\JenisPelakuUsaha;
 
-class JenisPerusahaanSeeder extends Seeder
+class JenisPelakuUsahaSeeder extends Seeder
 {
     public function run(): void
     {
-        JenisPerusahaan::create([
+        JenisPelakuUsaha::create([
             'nama' => 'Pialang Berjangka'
         ]);
 
-        JenisPerusahaan::create([
+        JenisPelakuUsaha::create([
             'nama' => 'Pedagang Berjangka'
         ]);
 
-        JenisPerusahaan::create([
+        JenisPelakuUsaha::create([
             'nama' => 'Pedagang Fisik Emas Digital'
         ]);
 
-        JenisPerusahaan::create([
+        JenisPelakuUsaha::create([
             'nama' => 'Bursa Berjangka'
         ]);
 
-        JenisPerusahaan::create([
+        JenisPelakuUsaha::create([
             'nama' => 'Lembaga Kliring Berjangka'
         ]);
     }

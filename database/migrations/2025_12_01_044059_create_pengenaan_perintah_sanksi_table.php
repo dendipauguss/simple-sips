@@ -8,18 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('penindakan_perintah_sanksi', function (Blueprint $table) {
+        Schema::create('pengenaan_perintah_sanksi', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('penindakan_id');
+            $table->unsignedBigInteger('pengenaan_id');
             $table->unsignedBigInteger('perintah_sanksi_id');
 
-            $table->foreign('penindakan_id')
-                ->references('id')->on('penindakan')
+            $table->foreign('pengenaan_id')
+                ->references('id')->on('pengenaan_sanksi')
                 ->onDelete('cascade');
 
             $table->foreign('perintah_sanksi_id')
-                ->references('id')->on('perintahsanksi')
+                ->references('id')->on('perintah_sanksi')
                 ->onDelete('cascade');
+
+            $table->enum('status', ['belum', 'sudah'])->default('belum');
 
             $table->timestamps();
         });
@@ -27,6 +29,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('penindakan_perintah_sanksi');
+        Schema::dropIfExists('pengenaan_perintah_sanksi');
     }
 };

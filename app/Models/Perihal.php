@@ -13,8 +13,8 @@ class Perihal extends Model
 
     protected $guarded = ['id'];
 
-    public function penindakan()
+    public function pengenaan_sanksi()
     {
-        return $this->hasMany(Penindakan::class);
+        return $this->hasMany(PengenaanSanksi::class);
     }
 }

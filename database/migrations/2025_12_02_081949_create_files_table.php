@@ -13,6 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('table_id');
             $table->string('table_name');
             $table->string('filename');
+            $table->string('original_name')->nullable();
             $table->string('url_path');
             $table->timestamps();
         });

@@ -45,17 +45,6 @@
                     </li>
                     <!-- END : Dashboard -->
 
-                    <!-- Perusahaan -->
-                    <li class="nav-item">
-                        <a href="{{ url('perusahaan') }}"
-                            class="nav-link mininav-toggle collapsed {{ request()->is('perusahaan*') ? 'active' : '' }}"><i
-                                class="psi-building fs-5 me-2"></i>
-
-                            <span class="nav-label mininav-content ms-1">Perusahaan</span>
-                        </a>
-                    </li>
-                    <!-- END : Perusahaan -->
-
                     <!-- Pengenaan Sanksi -->
                     <li class="nav-item">
                         <a href="{{ url('penindakan') }}"
@@ -88,10 +77,31 @@
                             </a>
                             <!-- Menu Levels submenu list -->
                             <ul class="mininav-content nav collapse">
+                                <!-- Pelaku Usaha -->
+                                <li class="nav-item">
+                                    <a href="{{ url('perusahaan') }}"
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('perusahaan*') ? 'active' : '' }}">
+                                        {{-- <i class="psi-building fs-5 me-2"></i> --}}
+                                        Perusahaan
+                                    </a>
+                                </li>
+                                <!-- END : Pelaku Usaha -->
+
+                                <!-- Perusahaan -->
+                                <li class="nav-item">
+                                    <a href="{{ url('perusahaan') }}"
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('perusahaan*') ? 'active' : '' }}">
+                                        {{-- <i class="psi-building fs-5 me-2"></i> --}}
+                                        Perusahaan
+                                    </a>
+                                </li>
+                                <!-- END : Perusahaan -->
+
                                 <li class="nav-item">
                                     <a href="{{ url('pengaturan/sanksi') }}"
-                                        class="nav-link {{ request()->is('pengaturan/sanksi*') ? 'active' : '' }}">Bentuk
-                                        Sanksi</a>
+                                        class="nav-link {{ request()->is('pengaturan/sanksi*') ? 'active' : '' }}">
+                                        Bentuk Sanksi
+                                    </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('pengaturan/perintah-sanksi') }}"

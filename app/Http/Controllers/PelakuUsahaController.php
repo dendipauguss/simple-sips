@@ -3,25 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Perusahaan;
-use App\Imports\PerusahaanImport;
-use App\Models\JenisPerusahaan;
+use App\Models\PelakuUsaha;
+use App\Imports\PelakuUsahaImport;
+use App\Models\JenisPelakuUsaha;
 use Maatwebsite\Excel\Facades\Excel;
 
-class PerusahaanController extends Controller
+class PelakuUsahaController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->jenis_perusahaan) {
-            $perusahaan = Perusahaan::where('jenis_id', $request->jenis_perusahaan)->get();
+            $perusahaan = PelakuUsaha::where('jenis_id', $request->jenis_perusahaan)->get();
         } else {
-            $perusahaan = Perusahaan::all();
+            $perusahaan = PelakuUsaha::all();
         }
 
         return view('perusahaan.index', [
             'title' => 'List Perusahaan',
             'perusahaan' => $perusahaan,
-            'jenis_perusahaan' => JenisPerusahaan::all()
+            'jenis_perusahaan' => JenisPelakuUsaha::all()
         ]);
     }
 
@@ -29,7 +29,7 @@ class PerusahaanController extends Controller
     {
         return view('perusahaan.create', [
             'title' => 'Tambah Perusahaan Baru',
-            'jenis_perusahaan' => JenisPerusahaan::all()
+            'jenis_perusahaan' => JenisPelakuUsaha::all()
         ]);
     }
 
@@ -42,7 +42,7 @@ class PerusahaanController extends Controller
         ]);
 
         // Simpan ke database
-        Perusahaan::create([
+        PelakuUsaha::create([
             'nama'    => $request->nama,
             'alamat'  => $request->alamat
         ]);
@@ -53,14 +53,14 @@ class PerusahaanController extends Controller
 
     public function show($id)
     {
-        $perusahaan = Perusahaan::findOrFail($id);
+        $perusahaan = PelakuUsaha::findOrFail($id);
         $title = 'Perusahaan';
         return view('perusahaan.show', compact('perusahaan', 'title'));
     }
 
     public function edit($id)
     {
-        $perusahaan = Perusahaan::findOrFail($id);
+        $perusahaan = PelakuUsaha::findOrFail($id);
         $title = 'Edit Perusahaan';
         return view('perusahaan.edit', compact('perusahaan', 'title'));
     }
@@ -72,7 +72,7 @@ class PerusahaanController extends Controller
             'alamat' => 'required',
         ]);
 
-        $perusahaan = Perusahaan::findOrFail($id);
+        $perusahaan = PelakuUsaha::findOrFail($id);
         $perusahaan->nama = $request->nama;
         $perusahaan->alamat = $request->alamat;
         $perusahaan->save();
@@ -82,7 +82,7 @@ class PerusahaanController extends Controller
 
     public function destroy($id)
     {
-        $perusahaan = Perusahaan::findOrFail($id);
+        $perusahaan = PelakuUsaha::findOrFail($id);
         $perusahaan->delete();
 
         return redirect()->route('perusahaan.index')->with('success', 'Data perusahaan berhasil dihapus!');
@@ -101,14 +101,14 @@ class PerusahaanController extends Controller
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new PerusahaanImport, $request->file('file'));
+        Excel::import(new PelakuUsahaImport, $request->file('file'));
 
         return back()->with('success', 'Data perusahaan berhasil diimport!');
     }
 
     public function getPerusahaanByJenis($jenis_id)
     {
-        $perusahaan = Perusahaan::where('jenis_id', $jenis_id)->get();
+        $perusahaan = PelakuUsaha::where('jenis_id', $jenis_id)->get();
 
         return response()->json($perusahaan);
     }

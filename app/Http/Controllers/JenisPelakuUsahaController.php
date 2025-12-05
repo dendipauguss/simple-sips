@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JenisPerusahaan;
 use Illuminate\Http\Request;
 
-class JenisPerusahaanController extends Controller
+class JenisPelakuUsahaController extends Controller
 {
     public function index()
     {
@@ -22,22 +21,22 @@ class JenisPerusahaanController extends Controller
         //
     }
 
-    public function show(JenisPerusahaan $jenisPerusahaan)
+    public function show(string $id)
     {
         //
     }
 
-    public function edit(JenisPerusahaan $jenisPerusahaan)
+    public function edit(string $id)
     {
         //
     }
 
-    public function update(Request $request, JenisPerusahaan $jenisPerusahaan)
+    public function update(Request $request, string $id)
     {
         //
     }
 
-    public function destroy(JenisPerusahaan $jenisPerusahaan)
+    public function destroy(string $id)
     {
         //
     }

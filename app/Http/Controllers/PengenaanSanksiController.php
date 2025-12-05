@@ -7,21 +7,21 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PenindakanExport;
 use PDF;
 use Illuminate\Support\Facades\DB;
-use App\Models\Penindakan;
+use App\Models\PengenaanSanksi;
 use App\Models\PerintahSanksi;
-use App\Models\Perusahaan;
+use App\Models\PelakuUsaha;
 use App\Models\Sanksi;
-use App\Models\FilesModel;
+use App\Models\Files;
 use App\Models\Perihal;
-use App\Models\JenisPerusahaan;
+use App\Models\JenisPelakuUsaha;
 
-class PenindakanController extends Controller
+class PengenaanSanksiController extends Controller
 {
     public function index()
     {
         return view('penindakan.index', [
             'title' => 'Pengenaan Sanksi',
-            'penindakan' => Penindakan::where('user_id', auth()->user()->id)->with('files')->get()
+            'penindakan' => PengenaanSanksi::where('user_id', auth()->user()->id)->with('files')->get()
         ]);
     }
 
@@ -29,12 +29,12 @@ class PenindakanController extends Controller
     {
         return view('penindakan.create', [
             'title' => 'Tambah Laporan',
-            'perusahaan' => Perusahaan::all(),
+            'perusahaan' => PelakuUsaha::all(),
             'sanksi' => Sanksi::all(),
             'perintah_sanksi' => PerintahSanksi::all(),
             'selected_perintah_id' => $selected_perintah_id ?? '', // opsional
             'perihal' => Perihal::all(),
-            'jenis_perusahaan' => JenisPerusahaan::all()
+            'jenis_perusahaan' => JenisPelakuUsaha::all()
         ]);
     }
 
@@ -57,7 +57,7 @@ class PenindakanController extends Controller
         $user_id = auth()->user()->id;
         // dd($request, $user_id);
         // 1️⃣ Simpan tabel penindakan utama
-        $penindakan = Penindakan::create([
+        $penindakan = PengenaanSanksi::create([
             'tanggal_mulai'    => $request->tanggal_mulai,
             'tanggal_selesai'  => $request->tanggal_selesai,
             'perihal_id'          => $request->perihal_id,
@@ -78,9 +78,9 @@ class PenindakanController extends Controller
     public function edit($id)
     {
         $title = 'Edit Pengenaan Sanksi';
-        $penindakan = Penindakan::with('perintah')->findOrFail($id);
+        $penindakan = PengenaanSanksi::with('perintah')->findOrFail($id);
 
-        $perusahaan = Perusahaan::all();
+        $perusahaan = PelakuUsaha::all();
         $sanksi = Sanksi::all();
 
         // Ambil daftar perintah berdasarkan setiap sanksi
@@ -111,7 +111,7 @@ class PenindakanController extends Controller
             'perintah_id'       => 'array', // checkbox
         ]);
 
-        $penindakan = Penindakan::findOrFail($id);
+        $penindakan = PengenaanSanksi::findOrFail($id);
 
         $penindakan->update([
             'tanggal_mulai'     => $request->tanggal_mulai,
@@ -132,7 +132,7 @@ class PenindakanController extends Controller
 
     public function destroy($id)
     {
-        $penindakan = Penindakan::findOrFail($id);
+        $penindakan = PengenaanSanksi::findOrFail($id);
         $penindakan->delete();
 
         return redirect()->route('penindakan.index')->with('success', 'Data pengenaan sanksi berhasil dihapus!');
@@ -204,7 +204,7 @@ class PenindakanController extends Controller
 
     public function laporan(Request $request)
     {
-        $query = Penindakan::query();
+        $query = PengenaanSanksi::query();
 
         if ($request->start && $request->end) {
             // Filter rentang
@@ -230,7 +230,7 @@ class PenindakanController extends Controller
         $start = $request->start;
         $end = $request->end;
 
-        $query = Penindakan::with(['perusahaan', 'sanksi']);
+        $query = PengenaanSanksi::with(['perusahaan', 'sanksi']);
 
         if ($start && $end) {
             $query->whereBetween('tanggal_mulai', [$start, $end]);
@@ -246,7 +246,7 @@ class PenindakanController extends Controller
         $start = $request->start;
         $end = $request->end;
 
-        $query = Penindakan::with(['perusahaan', 'sanksi']);
+        $query = PengenaanSanksi::with(['perusahaan', 'sanksi']);
 
         // pakai filter kalau ada tanggal
         if ($start && $end) {
@@ -276,7 +276,7 @@ class PenindakanController extends Controller
             $path = $file->storeAs('uploads/' . $tabel_name, $filename, 'public');
 
             // simpan ke database
-            FilesModel::create([
+            Files::create([
                 'table_name'    => $tabel_name,
                 'table_id'      => $tabel_id,
                 'filename'      => $filename,

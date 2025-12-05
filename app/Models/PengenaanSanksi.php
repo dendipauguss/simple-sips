@@ -5,24 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Penindakan extends Model
+class PengenaanSanksi extends Model
 {
     use HasFactory;
 
-    protected $table = 'penindakan';
+    protected $table = 'pengenaan_sanksi';
 
     protected $guarded = ['id'];
 
     public function perintah()
     {
-        return $this->belongsToMany(PerintahSanksi::class, 'penindakan_perintah_sanksi')
+        return $this->belongsToMany(PerintahSanksi::class, 'pengenaan_perintah_sanksi')
             ->withPivot('status', 'id')
             ->withTimestamps();
     }
 
-    public function perusahaan()
+    public function pelaku_usaha()
     {
-        return $this->belongsTo(Perusahaan::class);
+        return $this->belongsTo(PelakuUsaha::class);
     }
 
     public function sanksi()
@@ -37,8 +37,8 @@ class Penindakan extends Model
 
     public function files()
     {
-        return $this->hasMany(FilesModel::class, 'table_id')
-            ->where('table_name', 'penindakan');
+        return $this->hasMany(Files::class, 'table_id')
+            ->where('table_name', 'pengenaan_sanksi');
     }
 
     public function perihal()

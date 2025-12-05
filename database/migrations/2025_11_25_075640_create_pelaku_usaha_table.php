@@ -4,19 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreatePelakuUsahaTable extends Migration
 {
-    public function up(): void
+    public function up()
     {
-        Schema::create('jenis_perusahaan', function (Blueprint $table) {
+        Schema::create('pelaku_usaha', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->unsignedBigInteger('jenis_id');
             $table->timestamps();
         });
     }
 
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('jenis_perusahaan');
+        Schema::dropIfExists('pelaku_usaha');
     }
-};
+}

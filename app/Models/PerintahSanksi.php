@@ -10,7 +10,7 @@ class PerintahSanksi extends Model
 {
     use HasFactory;
 
-    protected $table = 'perintahsanksi';
+    protected $table = 'perintah_sanksi';
 
     protected $guarded = ['id'];
 
@@ -21,6 +21,6 @@ class PerintahSanksi extends Model
 
     public function penindakan()
     {
-        return $this->belongsToMany(Penindakan::class, 'penindakan_perintah_sanksi');
+        return $this->belongsToMany(PengenaanSanksi::class, 'pengenaan_perintah_sanksi');
     }
 }

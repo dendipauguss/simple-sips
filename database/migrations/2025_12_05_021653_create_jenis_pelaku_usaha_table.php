@@ -8,15 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('penindakan', function (Blueprint $table) {
-            $table->enum('status_lainnya', ['belum', 'sudah'])->default('belum');
+        Schema::create('jenis_pelaku_usaha', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::table('penindakan', function (Blueprint $table) {
-            $table->dropColumn('status_lainnya');
-        });
+        Schema::dropIfExists('jenis_pelaku_usaha');
     }
 };
