@@ -37,7 +37,7 @@
                                                     {{ $p->tanggal_selesai }}
                                                 </td>
                                                 <td class="text-center">
-                                                    {{ $p->perihal }}
+                                                    {{ $p->perihal->nama }}
                                                 </td>
                                                 <td class="text-center">{{ $p->perusahaan->nama }}</td>
                                                 <td>

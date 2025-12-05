@@ -28,7 +28,8 @@ class PerusahaanController extends Controller
     public function create()
     {
         return view('perusahaan.create', [
-            'title' => 'Tambah Perusahaan Baru'
+            'title' => 'Tambah Perusahaan Baru',
+            'jenis_perusahaan' => JenisPerusahaan::all()
         ]);
     }
 
@@ -103,5 +104,12 @@ class PerusahaanController extends Controller
         Excel::import(new PerusahaanImport, $request->file('file'));
 
         return back()->with('success', 'Data perusahaan berhasil diimport!');
+    }
+
+    public function getPerusahaanByJenis($jenis_id)
+    {
+        $perusahaan = Perusahaan::where('jenis_id', $jenis_id)->get();
+
+        return response()->json($perusahaan);
     }
 }

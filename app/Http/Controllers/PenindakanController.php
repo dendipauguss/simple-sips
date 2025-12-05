@@ -12,6 +12,8 @@ use App\Models\PerintahSanksi;
 use App\Models\Perusahaan;
 use App\Models\Sanksi;
 use App\Models\FilesModel;
+use App\Models\Perihal;
+use App\Models\JenisPerusahaan;
 
 class PenindakanController extends Controller
 {
@@ -30,16 +32,19 @@ class PenindakanController extends Controller
             'perusahaan' => Perusahaan::all(),
             'sanksi' => Sanksi::all(),
             'perintah_sanksi' => PerintahSanksi::all(),
-            'selected_perintah_id' => $selected_perintah_id ?? '' // opsional
+            'selected_perintah_id' => $selected_perintah_id ?? '', // opsional
+            'perihal' => Perihal::all(),
+            'jenis_perusahaan' => JenisPerusahaan::all()
         ]);
     }
 
     public function store(Request $request)
     {
+
         $request->validate([
             'tanggal_mulai'    => 'required|date',
             'tanggal_selesai'  => 'required|date',
-            'perihal'          => 'required|string',
+            'perihal_id'          => 'required|integer',
             'perusahaan_id'    => 'required|integer',
             'perintah_id'      => 'required|array', // multiple checkbox
             'perintah_id.*'    => 'integer',
@@ -55,7 +60,7 @@ class PenindakanController extends Controller
         $penindakan = Penindakan::create([
             'tanggal_mulai'    => $request->tanggal_mulai,
             'tanggal_selesai'  => $request->tanggal_selesai,
-            'perihal'          => $request->perihal,
+            'perihal_id'          => $request->perihal_id,
             'perusahaan_id'    => $request->perusahaan_id,
             'sanksi_id'        => $request->sanksi_id,
             'deskripsi'        => $request->deskripsi,

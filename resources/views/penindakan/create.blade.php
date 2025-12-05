@@ -23,25 +23,32 @@
                                 <div class="row mb-3">
                                     <label for="perusahaan_id" class="col-sm-2 col-form-label">Perihal</label>
                                     <div class="col-sm-10">
-                                        <select name="perihal" id="perihal" class="form-select">
+                                        <select name="perihal_id" id="perihal_id"
+                                            class="form-select @error('perihal_id') is-invalid @enderror">
                                             @foreach ($perihal as $per)
                                                 <option value="{{ $per->id }}">{{ $per->nama }}</option>
                                             @endforeach
                                         </select>
-                                        <input type="text" name="perihal" id="perihal"
-                                            class="form-control @error('perihal') is-invalid @enderror">
                                         @error('perihal')
                                             <div class="invalid-feedback"> {{ $message }} </div>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="row mb-3">
+                                    <label for="jenis_perusahaan" class="col-sm-2 col-form-label">Jenis Perusahaan</label>
+                                    <div class="col-sm-10">
+                                        <select name="jenis_perusahaan" id="jenis_perusahaan" class="form-select">
+                                            @foreach ($jenis_perusahaan as $jp)
+                                                <option value="{{ $jp->id }}">{{ $jp->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
                                     <label for="perusahaan_id" class="col-sm-2 col-form-label">Perusahaan</label>
                                     <div class="col-sm-10">
                                         <select name="perusahaan_id" id="perusahaan_id" class="form-select">
-                                            @foreach ($perusahaan as $p)
-                                                <option value="{{ $p->id }}">{{ $p->nama }}</option>
-                                            @endforeach
+                                            <option value="">-- Pilih Jenis Perusahaan Terlebih Dahulu --</option>
                                         </select>
                                     </div>
                                 </div>
@@ -168,6 +175,43 @@
 
             // init ketika load page (biar edit form jalan)
             updateCheckbox();
+
+        });
+
+        $(document).ready(function() {
+
+            // Aktifkan Select2
+            $('.select2').select2({
+                theme: "classic"
+            });
+
+            $('#jenis_perusahaan').on('change', function() {
+                let jenisID = $(this).val();
+
+                $.ajax({
+                    url: `/get-perusahaan/${jenisID}`,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        let perusahaanSelect = $('#perusahaan_id');
+
+                        // Kosongkan select perusahaan
+                        perusahaanSelect.empty();
+                        perusahaanSelect.append(
+                            `<option value="">-- Pilih Perusahaan --</option>`);
+
+                        // Isi ulang dengan data baru
+                        $.each(data, function(index, item) {
+                            perusahaanSelect.append(
+                                `<option value="${item.id}">${item.nama}</option>`
+                            );
+                        });
+
+                        // Refresh select2 setelah update
+                        perusahaanSelect.trigger('change.select2');
+                    }
+                });
+            });
 
         });
     </script>

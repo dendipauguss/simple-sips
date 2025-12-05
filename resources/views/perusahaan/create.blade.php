@@ -20,7 +20,16 @@
                                         <input type="text" class="form-control" id="nama" name="nama">
                                     </div>
                                 </div>
-
+                                <div class="row mb-3">
+                                    <label for="nama" class="col-sm-2 col-form-label">Jenis Perusahaan</label>
+                                    <div class="col-sm-10">
+                                        <select name="jenis_id" id="jenis_id">
+                                            @foreach ($jenis_perusahaan as $jp)
+                                                <option value="{{ $jp->id }}">{{ $jp->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="row mb-3">
                                     <label for="alamat" class="col-sm-2 col-form-label">Alamat Perusahaan</label>
                                     <div class="col-sm-10">

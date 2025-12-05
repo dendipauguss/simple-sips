@@ -12,4 +12,9 @@ class Perihal extends Model
     protected $table = 'perihal';
 
     protected $guarded = ['id'];
+
+    public function penindakan()
+    {
+        return $this->hasMany(Penindakan::class);
+    }
 }

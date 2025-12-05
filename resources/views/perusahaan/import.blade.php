@@ -20,6 +20,7 @@
                                     @enderror
                                 </div>
                                 <button class="btn btn-primary">Import</button>
+                                <a href="{{ route('perusahaan.index') }}" class="btn btn-light">⬅️ Kembali</a>
                             </form>
                         </div>
                     </div>

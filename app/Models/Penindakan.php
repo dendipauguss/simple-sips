@@ -40,4 +40,9 @@ class Penindakan extends Model
         return $this->hasMany(FilesModel::class, 'table_id')
             ->where('table_name', 'penindakan');
     }
+
+    public function perihal()
+    {
+        return $this->belongsTo(Perihal::class);
+    }
 }

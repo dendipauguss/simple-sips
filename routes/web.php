@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     // Route::get('/pengaturan/perintah-sanksi/{id}', [PerintahSanksiController::class, 'show']);
     Route::get('/perusahaan/import', [PerusahaanController::class, 'importView']);
     Route::post('/perusahaan/import', [PerusahaanController::class, 'import'])->name('perusahaan.import');
+    Route::get('/get-perusahaan/{jenis_id}', [PerusahaanController::class, 'getPerusahaanByJenis']);
     Route::resource('/perusahaan', PerusahaanController::class);
     Route::resource('/pengaturan/sanksi', SanksiController::class);
     Route::resource('/pengaturan/perintah-sanksi', PerintahSanksiController::class);

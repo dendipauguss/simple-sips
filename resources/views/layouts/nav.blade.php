@@ -48,7 +48,7 @@
                     <!-- Perusahaan -->
                     <li class="nav-item">
                         <a href="{{ url('perusahaan') }}"
-                            class="nav-link mininav-toggle collapsed {{ request()->is('perusahaan') ? 'active' : '' }}"><i
+                            class="nav-link mininav-toggle collapsed {{ request()->is('perusahaan*') ? 'active' : '' }}"><i
                                 class="psi-building fs-5 me-2"></i>
 
                             <span class="nav-label mininav-content ms-1">Perusahaan</span>
