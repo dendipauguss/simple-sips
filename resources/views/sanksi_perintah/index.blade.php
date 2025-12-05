@@ -8,19 +8,21 @@
                     <div class="card h-100">
                         <div class="card-header d-flex align-items-center border-0">
                             <div class="me-auto">
-                                Daftar Perintah Bentuk Sanksi
+                                <a href="{{ url('pengaturan/perintah-sanksi/create') }}" class="btn btn-sm btn-primary">+
+                                    Tambah</a>
                             </div>
                         </div>
 
                         <!-- Network - Area Chart -->
-                        <div class="card-body py-0" style="height: 250px; max-height: 275px">
+                        <div class="card-body py-0">
                             <div class="table-responsive">
-                                <table class="table table-striped">
+                                <table class="table table-striped" id="dataTables">
                                     <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Bentuk Sanksi</th>
                                             <th>Nama</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -35,6 +37,26 @@
                                                 </td>
                                                 <td>
                                                     {{ $p->nama }}
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a href="{{ route('perintah-sanksi.edit', $p->id) }}"
+                                                            class="badge bg-warning me-1 text-decoration-none"
+                                                            title="Edit">
+                                                            Edit <i class="psi-pencil"></i>
+                                                        </a>
+                                                        <a href="#" class="badge bg-danger text-decoration-none"
+                                                            onclick="event.preventDefault(); document.getElementById('delete-{{ $p->id }}').submit();">
+                                                            Hapus <i class="psi-trash"></i>
+                                                        </a>
+
+                                                        <form id="delete-{{ $p->id }}"
+                                                            action="{{ route('perintah-sanksi.destroy', $p->id) }}"
+                                                            method="POST" style="display:none;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach

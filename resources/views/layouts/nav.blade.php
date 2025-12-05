@@ -59,8 +59,8 @@
                     <!-- Pengenaan Sanksi -->
                     <li class="nav-item">
                         <a href="{{ url('penindakan') }}"
-                            class="nav-link mininav-toggle collapsed {{ request()->is('penindakan') ? 'active' : '' }}"><i
-                                class="psi-building fs-5 me-2"></i>
+                            class="nav-link mininav-toggle collapsed {{ request()->is('penindakan*') && !request()->is('penindakan/laporan') ? 'active' : '' }}"><i
+                                class="psi-board fs-5 me-2"></i>
 
                             <span class="nav-label mininav-content ms-1">Pengenaan Sanksi</span>
                         </a>
@@ -71,7 +71,7 @@
                     <li class="nav-item">
                         <a href="{{ url('penindakan/laporan') }}"
                             class="nav-link mininav-toggle collapsed {{ request()->is('penindakan/laporan') ? 'active' : '' }}"><i
-                                class="psi-building fs-5 me-2"></i>
+                                class="psi-notepad fs-5 me-2"></i>
 
                             <span class="nav-label mininav-content ms-1">Laporan Pengenaan Sanksi</span>
                         </a>

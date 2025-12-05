@@ -13,9 +13,9 @@
                         </div>
 
                         <!-- Network - Area Chart -->
-                        <div class="card-body py-0" style="height: 250px; max-height: 275px">
+                        <div class="card-body py-0">
                             <div class="table-responsive">
-                                <table class="table table-striped">
+                                <table class="table table-striped" id="dataTables">
                                     <thead>
                                         <tr>
                                             <th>No</th>

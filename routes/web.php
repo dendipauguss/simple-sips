@@ -21,7 +21,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/pengaturan/perintah-sanksi', [PerintahSanksiController::class, 'index'])->name('perintah-sanksi');
+    // Route::get('/pengaturan/perintah-sanksi', [PerintahSanksiController::class, 'index'])->name('perintah-sanksi');
     Route::get('/penindakan/laporan', [PenindakanController::class, 'laporan']);
     Route::get('/penindakan/export-excel', [PenindakanController::class, 'exportExcel'])->name('penindakan.export.excel');
     Route::get('/penindakan/export-pdf',   [PenindakanController::class, 'exportPdf'])->name('penindakan.export.pdf');
@@ -31,10 +31,11 @@ Route::middleware('auth')->group(function () {
         return redirect()->back()->with('success', 'Status perintah berhasil diperbarui!');
     });
     Route::post('penindakan/upload-file', [PenindakanController::class, 'uploadDokumen']);
-    Route::get('/pengaturan/perintah-sanksi/{id}', [PerintahSanksiController::class, 'show']);
+    // Route::get('/pengaturan/perintah-sanksi/{id}', [PerintahSanksiController::class, 'show']);
     Route::get('/perusahaan/import', [PerusahaanController::class, 'importView']);
     Route::post('/perusahaan/import', [PerusahaanController::class, 'import'])->name('perusahaan.import');
     Route::resource('/perusahaan', PerusahaanController::class);
     Route::resource('/pengaturan/sanksi', SanksiController::class);
+    Route::resource('/pengaturan/perintah-sanksi', PerintahSanksiController::class);
     Route::resource('/penindakan', PenindakanController::class);
 });

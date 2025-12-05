@@ -9,7 +9,7 @@
             content="Nifty is a responsive admin dashboard template based on Bootstrap 5 framework. There are a lot of useful components.">
         <title>{{ $title }}</title>
 
-        <link rel="shortcut icon" href="/img/kemendag-logo.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/img/kemendag-bappebti-logo.ico" type="image/x-icon">
         <!-- STYLESHEETS -->
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~--- -->
 
@@ -60,6 +60,43 @@
             .imageye-selected {
                 outline: 2px solid black !important;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+            }
+
+            /* Pagination container */
+            .dataTables_wrapper .dataTables_paginate .paginate_button {
+                color: #0d6efd !important;
+                border: 1px solid #0d6efd33;
+                padding: 6px 12px;
+                margin: 0 3px;
+                border-radius: 6px;
+                background: transparent;
+                transition: 0.3s;
+            }
+
+            /* Hover */
+            .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+                background: #0d6efd !important;
+                color: #fff !important;
+                border-color: #0d6efd !important;
+            }
+
+            /* Active (Halaman yang sedang dibuka) */
+            .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+                background: #0d6efd !important;
+                color: #fff !important;
+                border-color: #0d6efd !important;
+            }
+
+            /* Disabled button */
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+                color: #aaa !important;
+                border-color: #ddd !important;
+                background: transparent !important;
+            }
+
+            /* Remove default shadows/border */
+            .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+                box-shadow: none !important;
             }
         </style>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -141,22 +178,17 @@
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
             <header class="header">
                 <div class="header__inner">
-
                     <!-- Brand -->
                     <div class="header__brand">
                         <div class="brand-wrap">
-
                             <!-- Brand logo -->
-                            {{-- <a href="./index.html" class="brand-img stretched-link">
-                                <img src="./assets/img/logo.svg" alt="Nifty Logo" class="Nifty logo" width="40"
-                                    height="40">
-                            </a> --}}
-
+                            <a href="#" class="brand-img stretched-link">
+                                <img src="/img/kemendag-bappebti-logo.svg" alt="Bappebti Logo" class="rounded-4"
+                                    width="40" height="40">
+                            </a>
                             <!-- Brand title -->
                             <div class="brand-title">SIPS</div>
-
                             <!-- You can also use IMG or SVG instead of a text element. -->
-
                         </div>
                     </div>
                     <!-- End - Brand -->
@@ -169,7 +201,7 @@
                             <!-- Navigation Toggler -->
                             <button type="button" class="nav-toggler header__btn btn btn-icon btn-sm"
                                 aria-label="Nav Toggler">
-                                <i class="demo-psi-view-list"></i>
+                                <i class="psi-list-view"></i>
                             </button>
 
                             <!-- Searchbox -->

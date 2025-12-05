@@ -4,7 +4,6 @@
         <div class="content__wrap">
             <div class="row">
                 <div class="col-xl-12 mb-3 mb-xl-0">
-
                     <div class="card h-100">
                         <div class="card-header d-flex align-items-center border-0">
                             <form class="row row-cols-md-auto g-3 align-items-center" action="{{ url('penindakan/laporan') }}"
