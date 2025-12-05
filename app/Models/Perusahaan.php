@@ -18,4 +18,9 @@ class Perusahaan extends Model
         return $this->hasMany(FilesModel::class, 'tabel_id')
             ->where('tabel_name', 'perusahaan');
     }
+
+    public function jenis_perusahaan()
+    {
+        return $this->belongsTo(JenisPerusahaan::class, 'jenis_id');
+    }
 }

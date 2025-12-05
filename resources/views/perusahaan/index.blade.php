@@ -15,19 +15,21 @@
                                     </div>
                                 </div>
                             @endif
-                            <form class="row row-cols-md-auto g-3 align-items-center"
-                                action="{{ url('penindakan/laporan') }}" method="GET">
+                            <form class="row row-cols-md-auto g-3 align-items-center" action="{{ url('perusahaan') }}"
+                                method="GET">
                                 <div class="col-12">
-                                    <label for="tanggal_selesai" class="visually-hidden">Tanggal Selesai</label>
-                                    <input type="date" class="form-control" id="tanggal_selesai" name="end"
-                                        value="{{ request('end') }}">
-                                    <select name="jenis_perusahaan" id="jenis_perusahaan">
-                                        <option value=""></option>
+                                    {{-- <input type="date" class="form-control" id="tanggal_selesai" name="end"
+                                        value="{{ request('end') }}"> --}}
+                                    <select name="jenis_perusahaan" id="jenis_perusahaan" class="form-select">
+                                        <option value="">Jenis Perusahaan</option>
+                                        @foreach ($jenis_perusahaan as $jp)
+                                            <option value="{{ $jp->id }}">{{ $jp->nama }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-sm btn-primary">Filter</button>
-                                    <a href="{{ url('penindakan/laporan') }}" class="btn btn-sm btn-light">Reset</a>
+                                    <a href="{{ url('perusahaan') }}" class="btn btn-sm btn-light">Reset</a>
                                 </div>
                             </form>
                         </div>
@@ -48,7 +50,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $p->nama }}</td>
                                                 <td>
-                                                    {{ $p->jenis_perusahaan }}
+                                                    {{ $p->jenis_perusahaan->nama }}
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="btn-group" role="group">

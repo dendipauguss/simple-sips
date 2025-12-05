@@ -12,8 +12,8 @@ class PerusahaanImport implements ToModel, WithHeadingRow
     {
         return new Perusahaan([
             'nama' => $row['nama_perusahaan'],
-            'alamat' => 'Import Excel',
-            'jenis_perusahaan' => $row['jenis_perusahaan'],
+            'alamat' => $row['alamat'],
+            'jenis_id' => $row['jenis_perusahaan'],
         ]);
     }
 }

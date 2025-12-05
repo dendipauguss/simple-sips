@@ -5,15 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Perusahaan;
 use App\Imports\PerusahaanImport;
+use App\Models\JenisPerusahaan;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PerusahaanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->jenis_perusahaan) {
+            $perusahaan = Perusahaan::where('jenis_id', $request->jenis_perusahaan)->get();
+        } else {
+            $perusahaan = Perusahaan::all();
+        }
+
         return view('perusahaan.index', [
             'title' => 'List Perusahaan',
-            'perusahaan' => Perusahaan::all()
+            'perusahaan' => $perusahaan,
+            'jenis_perusahaan' => JenisPerusahaan::all()
         ]);
     }
 
