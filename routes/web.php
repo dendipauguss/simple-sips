@@ -7,6 +7,7 @@ use App\Http\Controllers\PelakuUsahaController;
 use App\Http\Controllers\SanksiController;
 use App\Http\Controllers\PerintahSanksiController;
 use App\Http\Controllers\PengenaanSanksiController;
+use App\Http\Controllers\JenisPelakuUsahaController;
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -32,10 +33,11 @@ Route::middleware('auth')->group(function () {
     });
     Route::post('penindakan/upload-file', [PengenaanSanksiController::class, 'uploadDokumen']);
     // Route::get('/pengaturan/perintah-sanksi/{id}', [PerintahSanksiController::class, 'show']);
-    Route::get('/perusahaan/import', [PelakuUsahaController::class, 'importView']);
-    Route::post('/perusahaan/import', [PelakuUsahaController::class, 'import'])->name('perusahaan.import');
+    Route::get('/pelaku-usaha/import', [PelakuUsahaController::class, 'importView']);
+    Route::post('/pelaku-usaha/import', [PelakuUsahaController::class, 'import'])->name('pelaku-usaha.import');
     Route::get('/get-perusahaan/{jenis_id}', [PelakuUsahaController::class, 'getPerusahaanByJenis']);
-    Route::resource('/perusahaan', PelakuUsahaController::class);
+    Route::resource('/pelaku-usaha', PelakuUsahaController::class);
+    Route::resource('/jenis-pelaku-usaha', JenisPelakuUsahaController::class);
     Route::resource('/pengaturan/sanksi', SanksiController::class);
     Route::resource('/pengaturan/perintah-sanksi', PerintahSanksiController::class);
     Route::resource('/penindakan', PengenaanSanksiController::class);

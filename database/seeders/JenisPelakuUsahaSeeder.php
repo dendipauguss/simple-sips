@@ -11,15 +11,7 @@ class JenisPelakuUsahaSeeder extends Seeder
     public function run(): void
     {
         JenisPelakuUsaha::create([
-            'nama' => 'Pialang Berjangka'
-        ]);
-
-        JenisPelakuUsaha::create([
-            'nama' => 'Pedagang Berjangka'
-        ]);
-
-        JenisPelakuUsaha::create([
-            'nama' => 'Pedagang Fisik Emas Digital'
+            'nama' => 'Bank'
         ]);
 
         JenisPelakuUsaha::create([
@@ -27,7 +19,27 @@ class JenisPelakuUsahaSeeder extends Seeder
         ]);
 
         JenisPelakuUsaha::create([
-            'nama' => 'Lembaga Kliring Berjangka'
+            'nama' => 'Calon Pedagang Fisik Kripto'
+        ]);
+
+        JenisPelakuUsaha::create([
+            'nama' => 'Kliring Berjangka'
+        ]);
+
+        JenisPelakuUsaha::create([
+            'nama' => 'Pedagang Berjangka'
+        ]);
+
+        JenisPelakuUsaha::create([
+            'nama' => 'Pedagang Fisik Emas'
+        ]);
+
+        JenisPelakuUsaha::create([
+            'nama' => 'Pedagang Fisik Timah'
+        ]);
+
+        JenisPelakuUsaha::create([
+            'nama' => 'Pialang Berjangka'
         ]);
     }
 }

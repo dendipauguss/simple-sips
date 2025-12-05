@@ -79,23 +79,23 @@
                             <ul class="mininav-content nav collapse">
                                 <!-- Pelaku Usaha -->
                                 <li class="nav-item">
-                                    <a href="{{ url('perusahaan') }}"
-                                        class="nav-link mininav-toggle collapsed {{ request()->is('perusahaan*') ? 'active' : '' }}">
+                                    <a href="{{ url('pelaku-usaha') }}"
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('pelaku-usaha*') ? 'active' : '' }}">
                                         {{-- <i class="psi-building fs-5 me-2"></i> --}}
-                                        Perusahaan
+                                        Pelaku Usaha
                                     </a>
                                 </li>
                                 <!-- END : Pelaku Usaha -->
 
-                                <!-- Perusahaan -->
+                                <!-- Jenis Pelaku Usaha -->
                                 <li class="nav-item">
-                                    <a href="{{ url('perusahaan') }}"
-                                        class="nav-link mininav-toggle collapsed {{ request()->is('perusahaan*') ? 'active' : '' }}">
+                                    <a href="{{ url('jenis-pelaku-usaha') }}"
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('jenis-pelaku-usaha*') ? 'active' : '' }}">
                                         {{-- <i class="psi-building fs-5 me-2"></i> --}}
-                                        Perusahaan
+                                        Jenis Pelaku Usaha
                                     </a>
                                 </li>
-                                <!-- END : Perusahaan -->
+                                <!-- END : Jenis Pelaku Usaha -->
 
                                 <li class="nav-item">
                                     <a href="{{ url('pengaturan/sanksi') }}"

@@ -19,7 +19,7 @@ class PelakuUsaha extends Model
             ->where('tabel_name', 'pelaku_usaha');
     }
 
-    public function jenis_perusahaan()
+    public function jenis_pelaku_usaha()
     {
         return $this->belongsTo(JenisPelakuUsaha::class, 'jenis_id');
     }

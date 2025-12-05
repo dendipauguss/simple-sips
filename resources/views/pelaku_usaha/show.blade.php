@@ -1,0 +1,41 @@
+@extends('layouts.app')
+@section('content')
+    <div class="content__boxed">
+        <div class="content__wrap">
+            <div class="row">
+                <div class="col-xl-12 mb-3 mb-xl-0">
+
+                    <div class="card h-100">
+
+                        <!-- Network - Area Chart -->
+                        <div class="card-body py-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Jenis Pelaku Usaha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ $pelaku_usaha->nama }}</td>
+                                            <td>
+                                                {{ $pelaku_usaha->jenis_pelaku_usaha->nama }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- END : Network - Area Chart -->
+                        <div class="card-footer d-flex align-items-center border-0">
+                            <button onclick="window.history.back()" class="btn btn-sm btn-dark"> ⬅ Kembali</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+@endsection

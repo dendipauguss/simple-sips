@@ -12,24 +12,24 @@ class PelakuUsahaController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->jenis_perusahaan) {
-            $perusahaan = PelakuUsaha::where('jenis_id', $request->jenis_perusahaan)->get();
+        if ($request->jenis_pelaku_usaha) {
+            $pelaku_usaha = PelakuUsaha::where('jenis_id', $request->jenis_pelaku_usaha)->get();
         } else {
-            $perusahaan = PelakuUsaha::all();
+            $pelaku_usaha = PelakuUsaha::all();
         }
 
-        return view('perusahaan.index', [
-            'title' => 'List Perusahaan',
-            'perusahaan' => $perusahaan,
-            'jenis_perusahaan' => JenisPelakuUsaha::all()
+        return view('pelaku_usaha.index', [
+            'title' => 'List Pelaku Usaha',
+            'pelaku_usaha' => $pelaku_usaha,
+            'jenis_pelaku_usaha' => JenisPelakuUsaha::all()
         ]);
     }
 
     public function create()
     {
-        return view('perusahaan.create', [
-            'title' => 'Tambah Perusahaan Baru',
-            'jenis_perusahaan' => JenisPelakuUsaha::all()
+        return view('pelaku_usaha.create', [
+            'title' => 'Tambah Pelaku Usaha Baru',
+            'jenis_pelaku_usaha' => JenisPelakuUsaha::all()
         ]);
     }
 
@@ -48,50 +48,52 @@ class PelakuUsahaController extends Controller
         ]);
 
         // Redirect dengan pesan sukses
-        return redirect('perusahaan')->with('success', 'Data perusahaan berhasil disimpan!');
+        return redirect('pelaku_usaha')->with('success', 'Data Pelaku Usaha berhasil disimpan!');
     }
 
     public function show($id)
     {
-        $perusahaan = PelakuUsaha::findOrFail($id);
-        $title = 'Perusahaan';
-        return view('perusahaan.show', compact('perusahaan', 'title'));
+        $pelaku_usaha = PelakuUsaha::findOrFail($id);
+        $title = 'Detail Pelaku Usaha';
+        return view('pelaku_usaha.show', compact('pelaku_usaha', 'title'));
     }
 
     public function edit($id)
     {
-        $perusahaan = PelakuUsaha::findOrFail($id);
-        $title = 'Edit Perusahaan';
-        return view('perusahaan.edit', compact('perusahaan', 'title'));
+        $pelaku_usaha = PelakuUsaha::findOrFail($id);
+        $jenis_pelaku_usaha = JenisPelakuUsaha::all();
+        $title = 'Edit Pelaku Usaha';
+        return view('pelaku_usaha.edit', compact('pelaku_usaha', 'jenis_pelaku_usaha', 'title'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'nama' => 'required',
-            'alamat' => 'required',
+            'jenis_id' => 'required',
         ]);
 
-        $perusahaan = PelakuUsaha::findOrFail($id);
-        $perusahaan->nama = $request->nama;
-        $perusahaan->alamat = $request->alamat;
-        $perusahaan->save();
+        $pelaku_usaha = PelakuUsaha::findOrFail($id);
+        $pelaku_usaha->nama = $request->nama;
+        $pelaku_usaha->jenis_id = $request->jenis_id;
+        $pelaku_usaha->save();
 
-        return redirect()->route('perusahaan.index')->with('success', 'Data perusahaan berhasil diperbarui!');
+        return redirect()->route('pelaku-usaha.index')->with('success', 'Data Pelaku Usaha berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
-        $perusahaan = PelakuUsaha::findOrFail($id);
-        $perusahaan->delete();
+        $pelaku_usaha = PelakuUsaha::findOrFail($id);
+        $pelaku_usaha->delete();
 
-        return redirect()->route('perusahaan.index')->with('success', 'Data perusahaan berhasil dihapus!');
+        return redirect()->route('pelaku-usaha.index')->with('success', 'Data Pelaku Usaha berhasil dihapus!');
     }
 
     public function importView()
     {
-        return view('perusahaan.import', [
-            'title' => 'Import Excel'
+        return view('pelaku_usaha.import', [
+            'title' => 'Import Excel',
+            'jenis_pelaku_usaha' => JenisPelakuUsaha::all()
         ]);
     }
 
@@ -103,13 +105,13 @@ class PelakuUsahaController extends Controller
 
         Excel::import(new PelakuUsahaImport, $request->file('file'));
 
-        return back()->with('success', 'Data perusahaan berhasil diimport!');
+        return back()->with('success', 'Data Pelaku Usaha berhasil diimport!');
     }
 
-    public function getPerusahaanByJenis($jenis_id)
+    public function getpelaku_usahaByJenis($jenis_id)
     {
-        $perusahaan = PelakuUsaha::where('jenis_id', $jenis_id)->get();
+        $pelaku_usaha = PelakuUsaha::where('jenis_id', $jenis_id)->get();
 
-        return response()->json($perusahaan);
+        return response()->json($pelaku_usaha);
     }
 }
