@@ -14,15 +14,11 @@
                                     <thead>
                                         <tr>
                                             <th>Nama</th>
-                                            <th>Alamat</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ $perusahaan->nama }}</td>
-                                            <td>
-                                                {{ $perusahaan->alamat }}
-                                            </td>
+                                            <td>{{ $jenis_pelaku_usaha->nama }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

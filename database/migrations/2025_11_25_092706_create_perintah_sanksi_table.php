@@ -12,6 +12,7 @@ class CreatePerintahSanksiTable extends Migration
             $table->id();
             $table->string('nama');
             $table->bigInteger('sanksi_id');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

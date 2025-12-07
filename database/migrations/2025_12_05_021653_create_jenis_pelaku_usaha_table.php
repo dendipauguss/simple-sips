@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('jenis_pelaku_usaha', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

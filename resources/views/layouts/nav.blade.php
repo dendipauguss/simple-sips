@@ -79,8 +79,8 @@
                             <ul class="mininav-content nav collapse">
                                 <!-- Pelaku Usaha -->
                                 <li class="nav-item">
-                                    <a href="{{ url('pelaku-usaha') }}"
-                                        class="nav-link mininav-toggle collapsed {{ request()->is('pelaku-usaha*') ? 'active' : '' }}">
+                                    <a href="{{ url('pengaturan/pelaku-usaha') }}"
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/pelaku-usaha*') ? 'active' : '' }}">
                                         {{-- <i class="psi-building fs-5 me-2"></i> --}}
                                         Pelaku Usaha
                                     </a>
@@ -90,7 +90,7 @@
                                 <!-- Jenis Pelaku Usaha -->
                                 <li class="nav-item">
                                     <a href="{{ url('jenis-pelaku-usaha') }}"
-                                        class="nav-link mininav-toggle collapsed {{ request()->is('jenis-pelaku-usaha*') ? 'active' : '' }}">
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/jenis-pelaku-usaha*') ? 'active' : '' }}">
                                         {{-- <i class="psi-building fs-5 me-2"></i> --}}
                                         Jenis Pelaku Usaha
                                     </a>
@@ -107,6 +107,10 @@
                                     <a href="{{ url('pengaturan/perintah-sanksi') }}"
                                         class="nav-link {{ request()->is('pengaturan/perintah-sanksi*') ? 'active' : '' }}">Perintah
                                         Bentuk Sanksi</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('pengaturan/users') }}"
+                                        class="nav-link {{ request()->is('pengaturan/users*') ? 'active' : '' }}">Users</a>
                                 </li>
                             </ul>
                             <!-- END : Menu Levels submenu list -->

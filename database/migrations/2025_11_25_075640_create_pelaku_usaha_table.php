@@ -12,6 +12,7 @@ class CreatePelakuUsahaTable extends Migration
             $table->id();
             $table->string('nama');
             $table->unsignedBigInteger('jenis_id');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

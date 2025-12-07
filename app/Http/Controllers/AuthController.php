@@ -12,7 +12,7 @@ class AuthController extends Controller
     // Tampilkan halaman login
     public function showLogin()
     {
-        return view('auth.login2', [
+        return view('auth.login', [
             'title' => 'Login'
         ]);
     }
@@ -21,21 +21,27 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'username'    => 'required|string',
+            'username_or_email'    => 'required|string',
             'password' => 'required',
+        ], [
+            'username_or_email.required' => 'Username/Email tidak boleh kosong kakak',
+            'password.required' => 'Password tidak boleh kosong kakak',
         ]);
 
-        $credentials = $request->only('username', 'password');
+        $loginField = filter_var($request->username_or_email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $credentials = [
+            $loginField => $request->username_or_email,
+            'password'  => $request->password,
+        ];
 
         if (Auth::attempt($credentials)) {
             // regenerate session
             $request->session()->regenerate();
-
             return redirect()->route('dashboard');
         }
 
         return back()->withErrors([
-            'username' => 'Username atau password salah.',
+            'username_or_email' => 'Username/Email atau password salah.',
         ]);
     }
 

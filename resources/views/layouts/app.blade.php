@@ -67,7 +67,7 @@
 
             /* Pagination container */
             .dataTables_wrapper .dataTables_paginate .paginate_button {
-                color: #0d6efd !important;
+                color: #00327d !important;
                 border: 1px solid #0d6efd33;
                 padding: 6px 12px;
                 margin: 0 3px;
@@ -78,16 +78,16 @@
 
             /* Hover */
             .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-                background: #0d6efd !important;
+                background: #00327d !important;
                 color: #fff !important;
-                border-color: #0d6efd !important;
+                border-color: #00327d !important;
             }
 
             /* Active (Halaman yang sedang dibuka) */
             .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-                background: #0d6efd !important;
+                background: #00327d !important;
                 color: #fff !important;
-                border-color: #0d6efd !important;
+                border-color: #00327d !important;
             }
 
             /* Disabled button */

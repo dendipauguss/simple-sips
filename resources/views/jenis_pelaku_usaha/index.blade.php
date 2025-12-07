@@ -48,7 +48,7 @@
                                                                 Edit <i class="psi-pencil"></i>
                                                             </a>
                                                             <a href="#" class="badge bg-danger text-decoration-none"
-                                                                onclick="event.preventDefault(); document.getElementById('delete-{{ $jp->id }}').submit();">
+                                                                onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $jp->id }}').submit();">
                                                                 Hapus <i class="psi-trash"></i>
                                                             </a>
 

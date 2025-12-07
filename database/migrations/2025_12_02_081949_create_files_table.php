@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('filename');
             $table->string('original_name')->nullable();
             $table->string('url_path');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

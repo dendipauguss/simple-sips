@@ -12,9 +12,13 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'users';
+
     protected $fillable = [
-        'name',
+        'nama',
+        'username',
         'email',
+        'role',
         'password',
     ];
 
@@ -28,8 +32,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function penindakan()
+    public function pengenaan_sanksi()
     {
-        return $this->hasMany(Penindakan::class, 'user_id');
+        return $this->hasMany(PengenaanSanksi::class, 'user_id');
     }
 }

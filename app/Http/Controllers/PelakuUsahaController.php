@@ -13,9 +13,9 @@ class PelakuUsahaController extends Controller
     public function index(Request $request)
     {
         if ($request->jenis_pelaku_usaha) {
-            $pelaku_usaha = PelakuUsaha::where('jenis_id', $request->jenis_pelaku_usaha)->get();
+            $pelaku_usaha = PelakuUsaha::where('jenis_id', $request->jenis_pelaku_usaha)->latest()->get();
         } else {
-            $pelaku_usaha = PelakuUsaha::all();
+            $pelaku_usaha = PelakuUsaha::latest()->get();
         }
 
         return view('pelaku_usaha.index', [
@@ -38,17 +38,20 @@ class PelakuUsahaController extends Controller
         // Validasi input
         $request->validate([
             'nama'    => 'required|string|max:255',
-            'alamat'  => 'nullable|string'
+            'jenis_id'  => 'required'
+        ], [
+            'nama.required' => 'Nama tidak boleh kosong',
+            'nama.max' => 'Maksimal 255 karakter',
         ]);
 
         // Simpan ke database
         PelakuUsaha::create([
             'nama'    => $request->nama,
-            'alamat'  => $request->alamat
+            'jenis_id'  => $request->jenis_id
         ]);
 
         // Redirect dengan pesan sukses
-        return redirect('pelaku_usaha')->with('success', 'Data Pelaku Usaha berhasil disimpan!');
+        return redirect('pengaturan/pelaku-usaha')->with('success', 'Data Pelaku Usaha berhasil disimpan!');
     }
 
     public function show($id)
@@ -69,8 +72,11 @@ class PelakuUsahaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required',
+            'nama' => 'required|max:255',
             'jenis_id' => 'required',
+        ], [
+            'nama.required' => 'Nama tidak boleh kosong',
+            'nama.max' => 'Maksimal 255 karakter',
         ]);
 
         $pelaku_usaha = PelakuUsaha::findOrFail($id);

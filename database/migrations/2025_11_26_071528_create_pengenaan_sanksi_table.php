@@ -20,6 +20,7 @@ class CreatePengenaanSanksiTable extends Migration
             $table->unsignedBigInteger('perihal_id');
             $table->enum('status_lainnya', ['belum', 'sudah'])->default('belum');
             $table->unsignedBigInteger('user_id');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
 
             $table->foreign('pelaku_usaha_id')->references('id')->on('pelaku_usaha')->onDelete('cascade');

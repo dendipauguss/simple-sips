@@ -8,6 +8,7 @@ use App\Http\Controllers\SanksiController;
 use App\Http\Controllers\PerintahSanksiController;
 use App\Http\Controllers\PengenaanSanksiController;
 use App\Http\Controllers\JenisPelakuUsahaController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -33,12 +34,13 @@ Route::middleware('auth')->group(function () {
     });
     Route::post('penindakan/upload-file', [PengenaanSanksiController::class, 'uploadDokumen']);
     // Route::get('/pengaturan/perintah-sanksi/{id}', [PerintahSanksiController::class, 'show']);
-    Route::get('/pelaku-usaha/import', [PelakuUsahaController::class, 'importView']);
-    Route::post('/pelaku-usaha/import', [PelakuUsahaController::class, 'import'])->name('pelaku-usaha.import');
+    Route::get('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'importView']);
+    Route::post('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'import'])->name('pelaku-usaha.import');
     Route::get('/get-perusahaan/{jenis_id}', [PelakuUsahaController::class, 'getPerusahaanByJenis']);
-    Route::resource('/pelaku-usaha', PelakuUsahaController::class);
-    Route::resource('/jenis-pelaku-usaha', JenisPelakuUsahaController::class);
-    Route::resource('/pengaturan/sanksi', SanksiController::class);
-    Route::resource('/pengaturan/perintah-sanksi', PerintahSanksiController::class);
+    Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
+    Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
+    Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');
+    Route::resource('/pengaturan/perintah-sanksi', PerintahSanksiController::class)->middleware('admin');
+    Route::resource('/pengaturan/users', UserController::class)->middleware('admin');
     Route::resource('/penindakan', PengenaanSanksiController::class);
 });

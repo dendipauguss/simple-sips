@@ -2,51 +2,71 @@
 @section('content')
     <div class="content__boxed">
         <div class="content__wrap">
-            <div class="row">
-                <div class="col-xl-12 mb-3 mb-xl-0">
-
-                    <div class="card h-100">
-
-                        <div class="card-body">
-
-                            <h5 class="card-title"></h5>
-
-                            <!-- Horizontal Form -->
-                            <form action="{{ url('perusahaan') }}" method="POST">
-                                @csrf
-                                <div class="row mb-3">
-                                    <label for="nama" class="col-sm-2 col-form-label">Nama Perusahaan</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="nama" name="nama">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="nama" class="col-sm-2 col-form-label">Jenis Perusahaan</label>
-                                    <div class="col-sm-10">
-                                        <select name="jenis_id" id="jenis_id">
-                                            @foreach ($jenis_perusahaan as $jp)
-                                                <option value="{{ $jp->id }}">{{ $jp->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="alamat" class="col-sm-2 col-form-label">Alamat Perusahaan</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="alamat" name="alamat">
-                                    </div>
-                                </div>
-
+            @php $jumlah = !empty(old('nama')) ? count(old('nama')) : 1;  @endphp
+            <form action="{{ url('jenis-pelaku-usaha') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="col-xl-12 mb-3 mb-xl-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-success me-1" onclick="addRow()">Tambah
+                                    lagi</button>
                                 <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
                                 <button onclick="window.history.back()" class="btn btn-sm btn-light"> ⬅ Kembali</button>
-                            </form>
-                            <!-- END : Horizontal Form -->
-
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+                <div class="d-flex flex-wrap gap-3" id="dataContainer">
+                    @for ($i = 0; $i < $jumlah; $i++)
+                        <div class="col mt-1 data-item" style="flex: 1 1 300px;">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="mb-2">
+                                            <label for="nama" class="col col-form-label">Nama Jenis Pelaku
+                                                Usaha</label>
+                                            <input type="text"
+                                                class="form-control @error("nama.$i") is-invalid @enderror" id="nama"
+                                                name="nama[]" value="{{ old('nama.' . $i) }}" autofocus>
+                                            @error("nama.$i")
+                                                <div class="invalid-feedback"> {{ str_replace(':number', $i + 1, $message) }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="row text-end">
+                                        <button type="button" class="btn btn-danger btn-remove"
+                                            onclick="removeRow(this)">Hapus</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endfor
+                </div>
+            </form>
         </div>
     </div>
+    <script>
+        function addRow() {
+            let container = document.getElementById("dataContainer");
+            let firstRow = document.querySelector(".data-item");
+            let newRow = firstRow.cloneNode(true); // Clone seluruh elemen
+
+            // Kosongkan input baru
+            newRow.querySelectorAll("input").forEach(input => input.value = "");
+
+            container.appendChild(newRow);
+        }
+
+        function removeRow(button) {
+            let row = button.closest(".data-item");
+
+            if (document.querySelectorAll(".data-item").length > 1) {
+                row.remove();
+            } else {
+                alert("Minimal harus ada satu data.");
+            }
+        }
+    </script>
 @endsection

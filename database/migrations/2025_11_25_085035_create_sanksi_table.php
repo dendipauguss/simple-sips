@@ -11,6 +11,7 @@ class CreateSanksiTable extends Migration
         Schema::create('sanksi', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

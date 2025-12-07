@@ -9,72 +9,63 @@
                             @if (auth()->user()->role == 'admin')
                                 <div class="row row-cols-md-auto">
                                     <div class="input-group me-2">
-                                        <a href="{{ url('pengaturan/pelaku-usaha/create') }}" class="btn btn-sm btn-primary">+
+                                        <a href="{{ url('pengaturan/users/create') }}" class="btn btn-sm btn-primary">+
                                             Tambah</a>
-                                        <a href="{{ url('pengaturan/pelaku-usaha/import') }}"
-                                            class="btn btn-sm btn-success">+ Import
-                                            Excel</a>
+                                        {{-- <a href="{{ url('jenis-pelaku-usaha/import') }}" class="btn btn-sm btn-success">+
+                                            Import
+                                            Excel</a> --}}
                                     </div>
                                 </div>
                             @endif
-                            <form class="row row-cols-md-auto g-3 align-items-center"
-                                action="{{ url('pengaturan/pelaku-usaha') }}" method="GET">
-                                <div class="col-12">
-                                    {{-- <input type="date" class="form-control" id="tanggal_selesai" name="end"
-                                        value="{{ request('end') }}"> --}}
-                                    <select name="jenis_pelaku_usaha" id="jenis_pelaku_usaha" class="form-select">
-                                        <option>-- Jenis Pelaku Usaha --</option>
-                                        @foreach ($jenis_pelaku_usaha as $jp)
-                                            <option value="{{ $jp->id }}"
-                                                {{ request('jenis_pelaku_usaha') == $jp->id ? 'selected' : '' }}>
-                                                {{ $jp->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-sm btn-primary">Filter</button>
-                                    <a href="{{ url('pengaturan/pelaku-usaha') }}" class="btn btn-sm btn-light">Reset</a>
-                                </div>
-                            </form>
                         </div>
                         <div class="card-body py-0">
                             <div class="table-responsive">
                                 <table class="table table-hover" id="dataTables">
                                     <thead class="table-primary">
                                         <tr>
-                                            <th class="text-dark text-center">No</th>
-                                            <th class="text-dark text-center">Nama Pelaku Usaha</th>
-                                            <th class="text-dark text-center">Jenis Pelaku Usaha</th>
+                                            <th class="text-dark text-center" style="width: 5%;">No</th>
+                                            <th class="text-dark text-center">Nama</th>
+                                            <th class="text-dark text-center">Email</th>
+                                            <th class="text-dark text-center">Username</th>
+                                            <th class="text-dark text-center">Role</th>
                                             <th class="text-dark text-center" style="width: 15%;">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($pelaku_usaha as $p)
+                                        @foreach ($users as $user)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $p->nama }}</td>
                                                 <td>
-                                                    {{ $p->jenis_pelaku_usaha->nama }}
+                                                    {{ $user->nama }}
+                                                </td>
+                                                <td>
+                                                    {{ $user->email }}
+                                                </td>
+                                                <td>
+                                                    {{ $user->username }}
+                                                </td>
+                                                <td>
+                                                    {{ ucfirst($user->role) }}
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="btn-group" role="group">
-                                                        <a href="{{ route('pelaku-usaha.show', $p->id) }}"
+                                                        <a href="{{ route('users.show', $user->id) }}"
                                                             class="badge bg-info me-1 text-decoration-none" title="Detail">
                                                             Detail <i class="psi-paper"></i>
                                                         </a>
                                                         @if (auth()->user()->role == 'admin')
-                                                            <a href="{{ route('pelaku-usaha.edit', $p->id) }}"
+                                                            <a href="{{ route('users.edit', $user->id) }}"
                                                                 class="badge bg-warning me-1 text-decoration-none"
                                                                 title="Edit">
                                                                 Edit <i class="psi-pencil"></i>
                                                             </a>
                                                             <a href="#" class="badge bg-danger text-decoration-none"
-                                                                onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $p->id }}').submit();">
+                                                                onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $user->id }}').submit();">
                                                                 Hapus <i class="psi-trash"></i>
                                                             </a>
 
-                                                            <form id="delete-{{ $p->id }}"
-                                                                action="{{ route('pelaku-usaha.destroy', $p->id) }}"
+                                                            <form id="delete-{{ $user->id }}"
+                                                                action="{{ route('users.destroy', $user->id) }}"
                                                                 method="POST" style="display:none;">
                                                                 @csrf
                                                                 @method('DELETE')

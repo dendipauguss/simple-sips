@@ -8,24 +8,18 @@
                     <div class="card h-100">
                         <div class="card-body">
 
-                            <form action="{{ route('perusahaan.update', $perusahaan->id) }}" method="POST">
+                            <form action="{{ route('jenis-pelaku-usaha.update', $jenis_pelaku_usaha->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
                                 <div class="mb-3">
-                                    <label class="form-label">Nama Perusahaan</label>
+                                    <label class="form-label">Nama Jenis Pelaku Usaha</label>
                                     <input type="text" name="nama" class="form-control"
-                                        value="{{ $perusahaan->nama }}" required>
+                                        value="{{ $jenis_pelaku_usaha->nama }}" required>
                                 </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Alamat</label>
-                                    <textarea name="alamat" class="form-control" required>{{ $perusahaan->alamat }}</textarea>
-                                </div>
-
 
                                 <button type="submit" class="btn btn-primary">Update</button>
-                                <a href="{{ route('perusahaan.index') }}" class="btn btn-secondary">Kembali</a>
+                                <a href="{{ route('jenis-pelaku-usaha.index') }}" class="btn btn-secondary">Kembali</a>
                             </form>
 
                         </div>
