@@ -39,22 +39,24 @@
                                                             class="badge bg-info me-1 text-decoration-none" title="Detail">
                                                             Detail <i class="psi-paper"></i>
                                                         </a>
-                                                        <a href="{{ route('sanksi.edit', $p->id) }}"
-                                                            class="badge bg-warning me-1 text-decoration-none"
-                                                            title="Edit">
-                                                            Edit <i class="psi-pencil"></i>
-                                                        </a>
-                                                        <a href="#" class="badge bg-danger text-decoration-none"
-                                                            onclick="event.preventDefault(); document.getElementById('delete-{{ $p->id }}').submit();">
-                                                            Hapus <i class="psi-trash"></i>
-                                                        </a>
+                                                        @if (auth()->user()->role == 'admin')
+                                                            <a href="{{ route('sanksi.edit', $p->id) }}"
+                                                                class="badge bg-warning me-1 text-decoration-none"
+                                                                title="Edit">
+                                                                Edit <i class="psi-pencil"></i>
+                                                            </a>
+                                                            <a href="#" class="badge bg-danger text-decoration-none"
+                                                                onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $p->id }}').submit();">
+                                                                Hapus <i class="psi-trash"></i>
+                                                            </a>
 
-                                                        <form id="delete-{{ $p->id }}"
-                                                            action="{{ route('sanksi.destroy', $p->id) }}" method="POST"
-                                                            style="display:none;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form>
+                                                            <form id="delete-{{ $p->id }}"
+                                                                action="{{ route('sanksi.destroy', $p->id) }}"
+                                                                method="POST" style="display:none;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            </form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>

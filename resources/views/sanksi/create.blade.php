@@ -13,7 +13,13 @@
                                 <div class="row mb-3">
                                     <label for="nama" class="col-sm-2 col-form-label">Nama Bentuk Sanksi</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="nama" name="nama">
+                                        <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                            id="nama" name="nama">
+                                        @error('nama')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-sm btn-primary">Simpan</button>

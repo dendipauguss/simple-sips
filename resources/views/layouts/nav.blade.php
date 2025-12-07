@@ -45,6 +45,17 @@
                     </li>
                     <!-- END : Dashboard -->
 
+                    <!-- Pengenaan SP -->
+                    <li class="nav-item">
+                        <a href="{{ url('pengenaan-sp') }}"
+                            class="nav-link mininav-toggle collapsed {{ request()->is('pengenaan-sp*') && !request()->is('pengenaan-sp/laporan') ? 'active' : '' }}"><i
+                                class="psi-pantheon fs-5 me-2"></i>
+
+                            <span class="nav-label mininav-content ms-1">Pengenaan SP</span>
+                        </a>
+                    </li>
+                    <!-- END : Pengenaan SP -->
+
                     <!-- Pengenaan Sanksi -->
                     <li class="nav-item">
                         <a href="{{ url('penindakan') }}"
@@ -89,7 +100,7 @@
 
                                 <!-- Jenis Pelaku Usaha -->
                                 <li class="nav-item">
-                                    <a href="{{ url('jenis-pelaku-usaha') }}"
+                                    <a href="{{ url('pengaturan/jenis-pelaku-usaha') }}"
                                         class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/jenis-pelaku-usaha*') ? 'active' : '' }}">
                                         {{-- <i class="psi-building fs-5 me-2"></i> --}}
                                         Jenis Pelaku Usaha

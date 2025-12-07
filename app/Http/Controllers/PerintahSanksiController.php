@@ -45,15 +45,18 @@ class PerintahSanksiController extends Controller
 
     public function show($id)
     {
-        $perintah_sanksi = PerintahSanksi::findOrFail($id);
-        return view('sanksi_perintah.show', compact('perintah_sanksi'));
+        return view('sanksi_perintah.show', [
+            'title' => 'Detail Perintah Sanksi',
+            'perintah_sanksi' => PerintahSanksi::findOrFail($id)
+        ]);
     }
 
     public function edit($id)
     {
         $perintah_sanksi = PerintahSanksi::findOrFail($id);
+        $sanksi = Sanksi::all();
         $title = 'Edit Bentuk Sanksi';
-        return view('sanksi_perintah.edit', compact('perintah_sanksi', 'title'));
+        return view('sanksi_perintah.create', compact('perintah_sanksi', 'sanksi', 'title'));
     }
 
     public function update(Request $request, $id)
@@ -67,7 +70,7 @@ class PerintahSanksiController extends Controller
         $perintah_sanksi->sanksi_id = $request->sanksi_id;
         $perintah_sanksi->save();
 
-        return redirect()->route('sanksi_perintah.index')->with('success', 'Data berhasil diperbarui!');
+        return redirect()->route('perintah-sanksi.index')->with('success', 'Data berhasil diperbarui!');
     }
 
     public function destroy($id)

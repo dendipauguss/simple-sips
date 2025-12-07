@@ -16,7 +16,7 @@ class CreatePengenaanSanksiTable extends Migration
             $table->unsignedBigInteger('sanksi_id');
             $table->text('perintah_sanksi_lainnya')->nullable();
             $table->string('deskripsi')->nullable();
-            $table->enum('status', ['belum', 'pending', 'selesai'])->default('belum');
+            $table->enum('status_pengenaan_sanksi', ['belum', 'pending', 'selesai'])->default('belum');
             $table->unsignedBigInteger('perihal_id');
             $table->enum('status_lainnya', ['belum', 'sudah'])->default('belum');
             $table->unsignedBigInteger('user_id');

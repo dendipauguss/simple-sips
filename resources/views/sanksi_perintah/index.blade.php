@@ -40,6 +40,10 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group" role="group">
+                                                        <a href="{{ route('perintah-sanksi.show', $p->id) }}"
+                                                            class="badge bg-info me-1 text-decoration-none" title="Detail">
+                                                            Detail <i class="psi-paper"></i>
+                                                        </a>
                                                         <a href="{{ route('perintah-sanksi.edit', $p->id) }}"
                                                             class="badge bg-warning me-1 text-decoration-none"
                                                             title="Edit">

@@ -27,6 +27,9 @@ class SanksiController extends Controller
         // Validasi input
         $request->validate([
             'nama'    => 'required|string|max:255'
+        ], [
+            'nama.required' => 'Nama tidak boleh kosong.',
+            'nama.max' => 'Maksimal 255 karakter',
         ]);
 
         // Simpan ke database

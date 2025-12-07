@@ -8,7 +8,7 @@
                         <div class="card-body">
                             <h5 class="card-title"></h5>
                             <!-- Horizontal Form -->
-                            <form action="{{ url('pengaturan/sanksi' . $sanksi->id) }}" method="POST">
+                            <form action="{{ url('pengaturan/sanksi/' . $sanksi->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="row mb-3">
@@ -18,7 +18,7 @@
                                             value="{{ $sanksi->nama }}">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
                                 <a href="{{ url('pengaturan/sanksi') }}" class="btn btn-sm btn-light"> ⬅ Kembali</a>
                             </form>
                             <!-- END : Horizontal Form -->

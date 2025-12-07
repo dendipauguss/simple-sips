@@ -4,10 +4,7 @@
         <div class="content__wrap">
             <div class="row">
                 <div class="col-xl-12 mb-3 mb-xl-0">
-
                     <div class="card h-100">
-
-
                         <!-- Network - Area Chart -->
                         <div class="card-body py-0" style="height: 250px; max-height: 275px">
                             <div class="table-responsive">
@@ -15,21 +12,11 @@
                                     <thead>
                                         <tr>
                                             <th>Nama</th>
-                                            <th>Perintah</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ $sanksi->nama }}</td>
-                                            <td>
-                                                <ul>
-                                                    @foreach ($sanksi->perintah_sanksi as $p)
-                                                        <li>
-                                                            {{ $p->nama }}
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </td>
+                                            <td>{{ $perintah_sanksi->nama }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -42,7 +29,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 @endsection

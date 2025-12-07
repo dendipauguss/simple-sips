@@ -8,14 +8,27 @@
                         <div class="card-body">
                             <h5 class="card-title"></h5>
                             <!-- Horizontal Form -->
-                            <form action="{{ url('pengaturan/perintah-sanksi') }}" method="POST">
+                            <form
+                                action="{{ isset($perintah_sanksi) ? url('pengaturan/perintah-sanksi', $perintah_sanksi->id) : url('pengaturan/perintah-sanksi') }}"
+                                method="POST">
                                 @csrf
+                                @isset($perintah_sanksi)
+                                    @method('PUT')
+                                @endisset
                                 <div class="row mb-3">
                                     <label for="nama" class="col-sm-2 col-form-label">Bentuk Sanksi</label>
                                     <div class="col-sm-10">
                                         <select name="sanksi_id" id="sanksi_id" class="form-select">
+                                            @php
+                                                $selected = old(
+                                                    'sanksi_id',
+                                                    isset($perintah_sanksi) ? $perintah_sanksi->sanksi_id : null,
+                                                );
+                                            @endphp
                                             @foreach ($sanksi as $s)
-                                                <option value="{{ $s->id }}">{{ $s->nama }}</option>
+                                                <option value="{{ $s->id }}"
+                                                    {{ $selected == $s->id ? 'selected' : '' }}>{{ $s->nama }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -23,10 +36,15 @@
                                 <div class="row mb-3">
                                     <label for="nama" class="col-sm-2 col-form-label">Nama Perintah Sanksi</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="nama" name="nama">
+                                        <input type="text" class="form-control" id="nama" name="nama"
+                                            value="{{ isset($perintah_sanksi) ? $perintah_sanksi->nama : old('nama') }}">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                                @if (isset($perintah_sanksi))
+                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                @else
+                                    <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                                @endif
                                 <a href="{{ url('pengaturan/perintah-sanksi') }}" class="btn btn-sm btn-light"> ⬅
                                     Kembali</a>
                             </form>

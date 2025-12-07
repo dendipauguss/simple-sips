@@ -19,7 +19,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Update</button>
-                                <a href="{{ route('jenis-pelaku-usaha.index') }}" class="btn btn-secondary">Kembali</a>
+                                <a href="{{ route('jenis-pelaku-usaha.index') }}" class="btn btn-light">⬅ Kembali</a>
                             </form>
 
                         </div>

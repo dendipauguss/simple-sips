@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PelakuUsahaController;
 use App\Http\Controllers\SanksiController;
 use App\Http\Controllers\PerintahSanksiController;
-use App\Http\Controllers\PengenaanSanksiController;
+use App\Http\Controllers\PelakuUsahaController;
 use App\Http\Controllers\JenisPelakuUsahaController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\PengenaanSanksiController;
+use App\Http\Controllers\PengenaanSPController;
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -43,4 +44,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('/pengaturan/perintah-sanksi', PerintahSanksiController::class)->middleware('admin');
     Route::resource('/pengaturan/users', UserController::class)->middleware('admin');
     Route::resource('/penindakan', PengenaanSanksiController::class);
+    Route::resource('/pengenaan-sp', PengenaanSPController::class);
 });
