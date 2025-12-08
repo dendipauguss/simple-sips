@@ -33,10 +33,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($penindakan as $p)
+                                        @foreach ($pengenaan_sp as $sp)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
-
                                                 <td class="text-center">{{ $p->tanggal_mulai }} s/d
                                                     {{ $p->tanggal_selesai }}
                                                 </td>
