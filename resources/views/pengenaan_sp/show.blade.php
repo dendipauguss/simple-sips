@@ -6,7 +6,7 @@
                 <div class="col-xl-7 mb-3 mb-xl-0">
                     <div class="card h-100">
                         <div class="card-header d-flex align-items-center border-0">
-                            <button onclick="window.history.back()" class="btn btn-sm btn-dark"> ⬅ Kembali</button>
+                            <a href="{{ route('pengenaan-sp.index') }}" class="btn btn-sm btn-dark"> ⬅ Kembali</a>
                         </div>
                         <div class="card-body py-4">
                             <ul class="list-group">

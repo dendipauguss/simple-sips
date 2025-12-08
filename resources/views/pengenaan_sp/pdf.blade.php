@@ -6,14 +6,43 @@
         <title>Surat Peringatan</title>
         <style>
             body {
-                font-family: sans-serif;
+                font-family: Calibri, Arial, sans-serif;
                 font-size: 12px;
+                line-height: 1.4;
+            }
+
+            .kop-container {
+                width: 100%;
+                border-bottom: 3px solid #000;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+
+            .kop-table {
+                width: 100%;
+            }
+
+            .kop-table td {
+                vertical-align: top;
+            }
+
+            .kop-title {
+                text-align: center;
+                font-weight: bold;
+                font-size: 14px;
+            }
+
+            .kop-subtitle {
+                text-align: center;
+                font-size: 11px;
             }
 
             .title {
                 text-align: center;
                 font-size: 16px;
-                margin-bottom: 20px;
+                margin-bottom: 10px;
+                margin-top: 20px;
+                font-weight: bold;
             }
 
             table {
@@ -31,7 +60,38 @@
 
     <body>
 
-        <div class="title"><strong>SURAT PERINGATAN</strong></div>
+        <!-- KOP SURAT -->
+        <div class="kop-container">
+            <table class="kop-table">
+                <tr>
+                    <td width="20%">
+                        <img src="logo.png" width="90">
+                    </td>
+                    <td width="80%">
+                        <div class="kop-title">KEMENTERIAN PERDAGANGAN</div>
+                        <div class="kop-title">BADAN PENGAWAS PERDAGANGAN BERJANGKA KOMODITI</div>
+                        <div class="kop-subtitle">
+                            Gedung Utama Lantai 4 Kementerian Perdagangan<br>
+                            Jalan M. I. Ridwan Rais No. 5 Jakarta 10110<br>
+                            Tel. 021-23528400 Ext 39900 Fax. 021-2352 8690<br>
+                            www.kemendag.go.id
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Bagian Kepada Yth -->
+        <p>
+            Kepada Yth:<br>
+            1. Direktur Utama Pialang Berjangka Peserta Sistem Perdagangan Alternatif;<br>
+            2. Direktur Utama Pialang Berjangka yang mengajukan permohonan persetujuan sebagai Pialang Berjangka Peserta
+            Sistem Perdagangan Alternatif;<br>
+            3. Direktur Utama Bursa Berjangka;<br>
+            4. Ketua Aspebtindo.
+        </p>
+
+        <div class="title">SURAT PERINGATAN</div>
 
         <p><strong>No:</strong> {{ $sp->no_sp }}</p>
 

@@ -108,7 +108,17 @@
                                 </li>
                                 <!-- END : Jenis Pelaku Usaha -->
 
+                                <!-- Jenis Pelanggaran -->
                                 <li class="nav-item">
+                                    <a href="{{ url('pengaturan/jenis-pelaku-usaha') }}"
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/jenis-pelaku-usaha*') ? 'active' : '' }}">
+                                        {{-- <i class="psi-building fs-5 me-2"></i> --}}
+                                        Jenis Pelanggaran
+                                    </a>
+                                </li>
+                                <!-- END : Jenis Pelanggaran -->
+
+                                {{-- <li class="nav-item">
                                     <a href="{{ url('pengaturan/sanksi') }}"
                                         class="nav-link {{ request()->is('pengaturan/sanksi*') ? 'active' : '' }}">
                                         Bentuk Sanksi
@@ -122,7 +132,7 @@
                                 <li class="nav-item">
                                     <a href="{{ url('pengaturan/users') }}"
                                         class="nav-link {{ request()->is('pengaturan/users*') ? 'active' : '' }}">Users</a>
-                                </li>
+                                </li> --}}
                             </ul>
                             <!-- END : Menu Levels submenu list -->
                         </li>
