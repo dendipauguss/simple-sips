@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KategoriSP;
 use Illuminate\Http\Request;
+use App\Models\KategoriSP;
+use App\Models\JenisPelanggaran;
 
 class JenisPelanggaranController extends Controller
 {
     public function index()
     {
-        //
+        return view('jenis_pelanggaran', [
+            'title' => 'Jenis Pelanggaran',
+            'jenis_pelanggaran' => JenisPelanggaran::all()
+        ]);
     }
 
     public function create()

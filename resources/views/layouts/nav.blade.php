@@ -88,15 +88,6 @@
                             </a>
                             <!-- Menu Levels submenu list -->
                             <ul class="mininav-content nav collapse">
-                                <!-- Pelaku Usaha -->
-                                <li class="nav-item">
-                                    <a href="{{ url('pengaturan/pelaku-usaha') }}"
-                                        class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/pelaku-usaha*') ? 'active' : '' }}">
-                                        {{-- <i class="psi-building fs-5 me-2"></i> --}}
-                                        Pelaku Usaha
-                                    </a>
-                                </li>
-                                <!-- END : Pelaku Usaha -->
 
                                 <!-- Jenis Pelaku Usaha -->
                                 <li class="nav-item">
@@ -108,15 +99,35 @@
                                 </li>
                                 <!-- END : Jenis Pelaku Usaha -->
 
+                                <!-- Pelaku Usaha -->
+                                <li class="nav-item">
+                                    <a href="{{ url('pengaturan/pelaku-usaha') }}"
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/pelaku-usaha*') ? 'active' : '' }}">
+                                        {{-- <i class="psi-building fs-5 me-2"></i> --}}
+                                        Pelaku Usaha
+                                    </a>
+                                </li>
+                                <!-- END : Pelaku Usaha -->
+
                                 <!-- Jenis Pelanggaran -->
                                 <li class="nav-item">
-                                    <a href="{{ url('pengaturan/jenis-pelaku-usaha') }}"
-                                        class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/jenis-pelaku-usaha*') ? 'active' : '' }}">
+                                    <a href="{{ url('pengaturan/jenis-pelanggaran') }}"
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/jenis-pelanggaran*') ? 'active' : '' }}">
                                         {{-- <i class="psi-building fs-5 me-2"></i> --}}
                                         Jenis Pelanggaran
                                     </a>
                                 </li>
                                 <!-- END : Jenis Pelanggaran -->
+
+                                <!-- Kategori SP -->
+                                <li class="nav-item">
+                                    <a href="{{ url('pengaturan/kategori-sp') }}"
+                                        class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/kategori-sp*') ? 'active' : '' }}">
+                                        {{-- <i class="psi-building fs-5 me-2"></i> --}}
+                                        Kategori SP
+                                    </a>
+                                </li>
+                                <!-- END : Kategori SP -->
 
                                 {{-- <li class="nav-item">
                                     <a href="{{ url('pengaturan/sanksi') }}"
