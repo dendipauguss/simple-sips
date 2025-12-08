@@ -114,7 +114,7 @@ class PelakuUsahaController extends Controller
         return back()->with('success', 'Data Pelaku Usaha berhasil diimport!');
     }
 
-    public function getpelaku_usahaByJenis($jenis_id)
+    public function getPelakuUsahaByJenis($jenis_id)
     {
         $pelaku_usaha = PelakuUsaha::where('jenis_id', $jenis_id)->get();
 

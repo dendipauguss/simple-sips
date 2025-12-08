@@ -14,7 +14,7 @@ class PengenaanSPSeeder extends Seeder
         PengenaanSP::create([
             'no_sp' => 'UD.02.01/001/BAPPEBTI/SP/',
             'tanggal_mulai' => Carbon::create(2023, 10, 26)->toDateTimeString(),
-            'tanggal_selesai' => Carbon::create(2023, 10, 26)->toDateTimeString(),
+            'tanggal_selesai' => Carbon::create(2023, 11, 26)->toDateTimeString(),
             'pelaku_usaha_id' => 1,
             'jenis_pelanggaran_id' => 1,
             'kategori_sp_id' => 1,

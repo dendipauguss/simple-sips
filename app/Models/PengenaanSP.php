@@ -22,4 +22,20 @@ class PengenaanSP extends Model
     {
         return $this->belongsTo(KategoriSP::class);
     }
+
+    public function jenis_pelaku_usaha()
+    {
+        return $this->belongsTo(JenisPelakuUsaha::class);
+    }
+
+    public function pelaku_usaha()
+    {
+        return $this->belongsTo(PelakuUsaha::class);
+    }
+
+    public function file()
+    {
+        return $this->hasOne(Files::class, 'table_id')
+            ->where('table_name', 'pengenaan_sp');
+    }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\PelakuUsahaController;
 use App\Http\Controllers\JenisPelakuUsahaController;
 use App\Http\Controllers\PengenaanSanksiController;
 use App\Http\Controllers\PengenaanSPController;
+use App\Http\Controllers\JenisPelanggaranController;
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -37,7 +38,10 @@ Route::middleware('auth')->group(function () {
     // Route::get('/pengaturan/perintah-sanksi/{id}', [PerintahSanksiController::class, 'show']);
     Route::get('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'importView']);
     Route::post('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'import'])->name('pelaku-usaha.import');
-    Route::get('/get-perusahaan/{jenis_id}', [PelakuUsahaController::class, 'getPerusahaanByJenis']);
+    Route::get('/get-pelaku-usaha/{jenis_id}', [PelakuUsahaController::class, 'getPelakuUsahaByJenis']);
+    Route::get('/get-kategori-sp/{jenis_pelanggaran_id}', [JenisPelanggaranController::class, 'getKategoriSPByJenis']);
+    Route::get('/pengenaan-sp/{id}/export-pdf', [PengenaanSpController::class, 'exportPdf'])
+        ->name('pengenaan_sp.export_pdf');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');

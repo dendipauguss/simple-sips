@@ -37,7 +37,7 @@
                     <!-- Dashboard -->
                     <li class="nav-item">
                         <a href="{{ url('dashboard') }}"
-                            class="nav-link mininav-toggle collapsed {{ request()->is('dashboard') ? 'active' : '' }}"><i
+                            class="nav-link mininav-toggle collapsed {{ request()->is('dashboard') || request()->is('/') ? 'active' : '' }}"><i
                                 class="psi-home fs-5 me-2"></i>
 
                             <span class="nav-label mininav-content ms-1">Dashboard</span>
@@ -57,14 +57,14 @@
                     <!-- END : Pengenaan SP -->
 
                     <!-- Pengenaan Sanksi -->
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ url('penindakan') }}"
                             class="nav-link mininav-toggle collapsed {{ request()->is('penindakan*') && !request()->is('penindakan/laporan') ? 'active' : '' }}"><i
                                 class="psi-board fs-5 me-2"></i>
 
                             <span class="nav-label mininav-content ms-1">Pengenaan Sanksi</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <!-- END : Pengenaan Sanksi -->
 
                     <!-- Buat Laporan -->

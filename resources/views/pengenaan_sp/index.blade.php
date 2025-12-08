@@ -19,13 +19,13 @@
                                             <th class="text-dark text-center">Bulan</th>
                                             <th class="text-dark text-center">Jenis Pelaku Usaha</th>
                                             <th class="text-dark text-center">Perusahaan</th>
-                                            <th class="text-dark text-center">Jenis Pelanggaran</th>
-                                            <th class="text-dark text-center">Kategori SP</th>
-                                            <th class="text-dark text-center">Detail Pelanggaran</th>
-                                            <th class="text-dark text-center">Jangka Waktu Hari</th>
+                                            {{-- <th class="text-dark text-center">Jenis Pelanggaran</th> --}}
+                                            {{-- <th class="text-dark text-center">Kategori SP</th> --}}
+                                            {{-- <th class="text-dark text-center">Detail Pelanggaran</th> --}}
+                                            {{-- <th class="text-dark text-center">Jangka Waktu Hari</th> --}}
                                             <th class="text-dark text-center">Tanggal Jatuh Tempo</th>
                                             {{-- <th class="text-dark text-center">Bukti Perbaikan</th> --}}
-                                            <th class="text-dark text-center">Tanggapan Atas Perbaikan</th>
+                                            {{-- <th class="text-dark text-center">Tanggapan Atas Perbaikan</th> --}}
                                             <th class="text-dark text-center" style="width: 15%;">Status</th>
                                             @if (auth()->user()->role == 'admin')
                                                 <th class="text-dark text-center">Aksi</th>
@@ -36,47 +36,34 @@
                                         @foreach ($pengenaan_sp as $sp)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">{{ $p->tanggal_mulai }} s/d
-                                                    {{ $p->tanggal_selesai }}
-                                                </td>
                                                 <td class="text-center">
-                                                    {{ $p->perihal->nama }}
+                                                    <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
+                                                        class="text-decoration-none">
+                                                        {{ $sp->no_sp }}
+                                                    </a>
                                                 </td>
-                                                <td class="text-center">{{ $p->perusahaan->nama }}</td>
+                                                <td class="text-center">{{ $sp->tanggal_mulai }}</td>
+                                                <td class="text-center">
+                                                    {{ \Carbon\Carbon::parse($sp->tanggal_mulai)->translatedFormat('F') }}
+                                                </td>
+                                                <td class="text-center">{{ $sp->pelaku_usaha->jenis_pelaku_usaha->nama }}
+                                                </td>
+                                                <td class="text-center">{{ $sp->pelaku_usaha->nama }}</td>
+                                                {{-- <td>
+                                                    <strong>{{ $sp->jenis_pelanggaran->nama }}</strong>
+                                                </td>
                                                 <td>
-                                                    <strong>{{ $p->sanksi->nama }}</strong>
-
-                                                    <ul style="list-style:none; margin:0; padding-left:0;">
-                                                        @foreach ($p->perintah as $pr)
-                                                            <li>
-                                                                <label class="d-flex justify-content-between">
-                                                                    {{ $pr->nama }}
-                                                                    <input type="checkbox" data-id="{{ $pr->pivot->id }}"
-                                                                        data-type="bawaan"
-                                                                        class="update-status form-check-input"
-                                                                        {{ $pr->pivot->status == 'sudah' ? 'checked' : '' }}>
-                                                                </label>
-                                                            </li>
-                                                        @endforeach
-
-                                                        {{-- Perintah lainnya --}}
-                                                        @if ($p->perintah_lainnya)
-                                                            <li>
-                                                                <label class="d-flex justify-content-between">
-                                                                    {{ $p->perintah_lainnya }}
-                                                                    <input type="checkbox" data-id="{{ $p->id }}"
-                                                                        data-type="lainnya"
-                                                                        class="update-status form-check-input"
-                                                                        {{ $p->status_lainnya == 'sudah' ? 'checked' : '' }}>
-                                                                </label>
-                                                            </li>
-                                                        @endif
-                                                    </ul>
+                                                    <strong>{{ $sp->kategori_sp->nama }}</strong>
                                                 </td>
-                                                {{-- <td>{{ $p->deskripsi }}</td> --}}
-                                                <td class="text-center">
-                                                    @if (!empty($p->files))
-                                                        @foreach ($p->files as $file)
+                                                <td>{{ $sp->detail_pelanggaran }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($sp->tanggal_mulai)->diffInDays(\Carbon\Carbon::parse($sp->tanggal_selesai)) }}
+                                                </td> --}}
+                                                <td>{{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                                                </td>
+                                                {{-- <td class="text-center">
+                                                    {{ $sp->tanggapan }}
+                                                    @if (!empty($sp->files))
+                                                        @foreach ($sp->files as $file)
                                                             <a href="{{ asset('storage/' . $file->url_path) }}"
                                                                 target="_blank" class="text-decoration-none">
                                                                 <span>{{ $file->original_name }}</span>
@@ -88,17 +75,17 @@
                                                     @endif
                                                     <br>
                                                     <button class="btn btn-sm btn-primary upload-btn mt-1"
-                                                        data-id="{{ $p->id }}" data-bs-toggle="modal"
+                                                        data-id="{{ $sp->id }}" data-bs-toggle="modal"
                                                         data-bs-target="#modalUpload">
                                                         Upload Bukti
                                                     </button>
-                                                </td>
+                                                </td> --}}
                                                 <td class="text-center">
-                                                    <span id="status-penindakan-{{ $p->id }}"
-                                                        class="badge {{ $p->status == 'belum' ? 'bg-danger' : ($p->status == 'pending' ? 'bg-warning text-dark' : 'bg-success') }}">{{ ucfirst($p->status) }}</span>
+                                                    <span id="status-penindakan-{{ $sp->id }}"
+                                                        class="badge {{ $sp->status_sp == 'belum' ? 'bg-danger' : ($sp->status_sp == 'pending' ? 'bg-warning text-dark' : 'bg-success') }}">{{ ucfirst($sp->status_sp) }}</span>
 
                                                     {{-- 
-                                                    <form action="{{ route('penindakan.updateStatus', $p->id) }}"
+                                                    <form action="{{ route('penindakan.updateStatus', $sp->id) }}"
                                                         method="POST" style="margin-top:6px;">
                                                         @csrf
                                                         @method('PUT')
@@ -108,23 +95,23 @@
                                                 @if (auth()->user()->role == 'admin')
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <a href="{{ route('penindakan.show', $p->id) }}"
+                                                            <a href="{{ route('penindakan.show', $sp->id) }}"
                                                                 class="badge bg-info me-1 text-decoration-none"
                                                                 title="Detail">
                                                                 Detail <i class="psi-paper"></i>
                                                             </a>
-                                                            <a href="{{ route('penindakan.edit', $p->id) }}"
+                                                            <a href="{{ route('penindakan.edit', $sp->id) }}"
                                                                 class="badge bg-warning me-1 text-decoration-none"
                                                                 title="Edit">
                                                                 Edit <i class="psi-pencil"></i>
                                                             </a>
                                                             <a href="#" class="badge bg-danger text-decoration-none"
-                                                                onclick="event.preventDefault(); document.getElementById('delete-{{ $p->id }}').submit();">
+                                                                onclick="event.preventDefault(); document.getElementById('delete-{{ $sp->id }}').submit();">
                                                                 Hapus <i class="psi-trash"></i>
                                                             </a>
 
-                                                            <form id="delete-{{ $p->id }}"
-                                                                action="{{ route('penindakan.destroy', $p->id) }}"
+                                                            <form id="delete-{{ $sp->id }}"
+                                                                action="{{ route('penindakan.destroy', $sp->id) }}"
                                                                 method="POST" style="display:none;">
                                                                 @csrf
                                                                 @method('DELETE')
