@@ -40,11 +40,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'import'])->name('pelaku-usaha.import');
     Route::get('/get-pelaku-usaha/{jenis_id}', [PelakuUsahaController::class, 'getPelakuUsahaByJenis']);
     Route::get('/get-kategori-sp/{jenis_pelanggaran_id}', [JenisPelanggaranController::class, 'getKategoriSPByJenis']);
-    Route::get('/pengenaan-sp/{id}/export-pdf', [PengenaanSPController::class, 'exportPdf'])
-        ->name('pengenaan-sp.export-pdf');
+    Route::get('/pengenaan-sp/export-excel', [PengenaanSPController::class, 'exportExcel'])->name('pengenaan-sp.export.excel');
+    Route::get('/pengenaan-sp/export-pdf',   [PengenaanSPController::class, 'exportPdf'])->name('pengenaan-sp.export.pdf');
+    Route::get('/pengenaan-sp/{id}/generate-pdf', [PengenaanSPController::class, 'generatePdf'])
+        ->name('pengenaan-sp.generate-pdf');
     Route::get('/pengenaan-sp/{id}/tindak-lanjut', [PengenaanSPController::class, 'tindakLanjut'])
         ->name('pengenaan-sp.tindak-lanjut');
     Route::post('/pengenaan-sp/upload-dokumen', [PengenaanSPController::class, 'uploadDokumen'])->name('pengenaan-sp.upload-dokumen');
+    Route::get('/pengenaan-sp/laporan', [PengenaanSPController::class, 'laporan'])->name('pengenaan-sp.laporan');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');

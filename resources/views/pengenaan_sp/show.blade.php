@@ -86,7 +86,7 @@
                                     <strong class="me-3" style="width: 150px;">Status</strong>
                                     <span>:
                                         <span
-                                            class="badge {{ $sp->status_surat == 'belum_diterima' ? 'bg-danger' : 'bg-success' }}">
+                                            class="badge {{ $sp->status_surat == 'belum_direspon' ? 'bg-danger' : 'bg-success' }}">
                                             {{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
                                     </span>
                                 </li>

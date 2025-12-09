@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PengenaanSPExport;
 use PDF;
 use App\Models\PengenaanSP;
 use App\Models\PelakuUsaha;
@@ -117,7 +119,7 @@ class PengenaanSPController extends Controller
         //
     }
 
-    public function exportPdf($id)
+    public function generatePdf($id)
     {
         $sp = PengenaanSP::with(['pelaku_usaha', 'jenis_pelanggaran', 'kategori_sp', 'sanksi'])
             ->findOrFail($id);
@@ -158,7 +160,7 @@ class PengenaanSPController extends Controller
         $this->uploadFile($request, 'pengenaan_sp', $request->pengenaan_sp_id, 'bebas');
         $pengenaan_sp = PengenaanSP::findOrFail($request->pengenaan_sp_id);
         $pengenaan_sp->tanggapan = $request->tanggapan;
-        $pengenaan_sp->status_surat = 'sudah_diterima';
+        $pengenaan_sp->status_surat = 'sudah_direspon';
         $pengenaan_sp->save();
 
         return back()->with('success', 'Bukti pendukung berhasil diupload.');
@@ -187,5 +189,80 @@ class PengenaanSPController extends Controller
                 'url_path'      => 'storage/' . $path, // ← perbaikan
             ]);
         }
+    }
+
+    public function laporan(Request $request)
+    {
+        $query = PengenaanSP::query();
+
+        if ($request->start && $request->end) {
+            // Filter rentang
+            $query->whereBetween('tanggal_mulai', [$request->start, $request->end]);
+        } elseif ($request->start) {
+            // Filter tanggal mulai saja
+            $query->whereDate('tanggal_mulai', '>=', $request->start);
+        } elseif ($request->end) {
+            // Filter tanggal selesai saja
+            $query->whereDate('tanggal_mulai', '<=', $request->end);
+        }
+
+        $pengenaan_sp = $query->orderBy('tanggal_mulai', 'desc')->get();
+
+        return view('pengenaan_sp.laporan', [
+            'title' => 'Laporan Pengenaan Sanksi',
+            'pengenaan_sp' => $pengenaan_sp
+        ]);
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $start = $request->start;
+        $end = $request->end;
+
+        $query = PengenaanSP::with(['pelaku_usaha', 'sanksi']);
+
+        if ($start && $end) {
+            $query->whereBetween('tanggal_mulai', [$start, $end]);
+        }
+
+        $query->orderByRaw("ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC");
+        if ($start && $end) {
+            $reportname = Excel::download(new PengenaanSPExport($query->get()), "pengenaan-sp-{$start}-{}$end.xlsx");
+        } else {
+            $reportname = Excel::download(new PengenaanSPExport($query->get()), 'pengenaan-sp-all-periode.xlsx');
+        }
+
+        return $reportname;
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $start = $request->start;
+        $end = $request->end;
+
+        $query = PengenaanSP::with(['pelaku_usaha', 'sanksi']);
+
+        // pakai filter kalau ada tanggal
+        if ($start && $end) {
+            $query->whereBetween('tanggal_mulai', [$start, $end]);
+        }
+
+        // urutkan berdasarkan tanggal selesai terdekat ke tanggal hari ini
+        $query->orderByRaw("ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC");
+
+        $data = $query->get();
+
+        $pdf = PDF::loadView('pengenaan-sp.pdf', [
+            'data' => $data
+        ]);
+
+        if ($start && $end) {
+            $report = $pdf->download("pengenaan-sp-{$start}-{$end}.pdf");
+        } else {
+            $report = $pdf->download('pengenaan-sp-all-periode.pdf');
+        }
+
+
+        return $report;
     }
 }

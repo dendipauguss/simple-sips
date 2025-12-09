@@ -6,8 +6,8 @@
                 <div class="col-xl-12 mb-3 mb-xl-0">
                     <div class="card h-100">
                         <div class="card-header d-flex align-items-center border-0">
-                            <form class="row row-cols-md-auto g-3 align-items-center" action="{{ url('penindakan/laporan') }}"
-                                method="GET">
+                            <form class="row row-cols-md-auto g-3 align-items-center"
+                                action="{{ url('pengenaan-sp/laporan') }}" method="GET">
                                 <div class="col-12">
                                     <label for="tanggal_mulai" class="visually-hidden">Tanggal Mulai</label>
                                     <input type="date" class="form-control" id="tanggal_mulai" name="start"
@@ -20,15 +20,15 @@
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-sm btn-primary">Filter</button>
-                                    <a href="{{ url('penindakan/laporan') }}" class="btn btn-sm btn-light">Reset</a>
+                                    <a href="{{ url('pengenaan-sp/laporan') }}" class="btn btn-sm btn-light">Reset</a>
                                 </div>
                             </form>
 
                             <div class="row row-cols-md-auto">
                                 <div class="input-group ms-2">
-                                    <a href="{{ route('penindakan.export.excel', request()->all()) }}"
+                                    <a href="{{ route('pengenaan-sp.export.excel', request()->all()) }}"
                                         class="btn btn-sm btn-success">Export Excel</a>
-                                    <a href="{{ route('penindakan.export.pdf', request()->all()) }}"
+                                    <a href="{{ route('pengenaan-sp.export.pdf', request()->all()) }}"
                                         class="btn btn-sm btn-danger">Export PDF</a>
                                 </div>
                             </div>
@@ -53,38 +53,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($penindakan as $p)
+                                        @foreach ($pengenaan_sp as $p)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
 
                                                 <td class="text-center">{{ $p->tanggal_mulai }} s/d
                                                     {{ $p->tanggal_selesai }}
                                                 </td>
-                                                <td class="text-center">{{ $p->perusahaan->nama }}</td>
+                                                <td class="text-center">{{ $p->pelaku_usaha->nama }}</td>
                                                 <td>
                                                     {{ $p->sanksi->nama }}
-                                                    <ul>
-                                                        @foreach ($p->sanksi->perintah_sanksi as $ps)
-                                                            <li>{{ $ps->nama }}</li>
-                                                        @endforeach
-                                                        <li>{{ $p->perintah_lainnya }}</li>
-                                                    </ul>
                                                 </td>
-                                                <td>{{ $p->deskripsi }}</td>
+                                                <td>{{ $p->detail_pelanggaran }}</td>
                                                 <td class="text-center">
 
                                                     <span
-                                                        class="badge {{ $p->status == 'belum' ? 'bg-danger' : ($p->status == 'selesai' ? 'bg-success' : 'bg-warning text-dark') }}">{{ Str::ucfirst($p->status) }}</span>
+                                                        class="badge {{ $p->status_surat == 'belum' ? 'bg-danger' : ($p->status_surat == 'selesai' ? 'bg-success' : 'bg-warning text-dark') }}">{{ Str::ucfirst($p->status_surat) }}</span>
                                                 </td>
                                                 @if (auth()->user()->role == 'admin')
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <a href="{{ route('penindakan.show', $p->id) }}"
+                                                            <a href="{{ route('pengenaan-sp.show', $p->id) }}"
                                                                 class="badge bg-info me-1 text-decoration-none"
                                                                 title="Detail">
                                                                 Detail <i class="psi-paper"></i>
                                                             </a>
-                                                            <a href="{{ route('penindakan.edit', $p->id) }}"
+                                                            <a href="{{ route('pengenaan-sp.edit', $p->id) }}"
                                                                 class="badge bg-warning me-1 text-decoration-none"
                                                                 title="Edit">
                                                                 Edit <i class="psi-pencil"></i>
@@ -95,7 +89,7 @@
                                                             </a>
 
                                                             <form id="delete-{{ $p->id }}"
-                                                                action="{{ route('penindakan.destroy', $p->id) }}"
+                                                                action="{{ route('pengenaan-sp.destroy', $p->id) }}"
                                                                 method="POST" style="display:none;">
                                                                 @csrf
                                                                 @method('DELETE')

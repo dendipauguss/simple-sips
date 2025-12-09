@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\PenindakanExport;
+use App\Exports\PengenaanSPExport;
 use PDF;
 use Illuminate\Support\Facades\DB;
 use App\Models\PengenaanSanksi;

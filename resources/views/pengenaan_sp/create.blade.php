@@ -68,7 +68,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Kategori SP</label>
+                                    <label class="form-label">Kategori Sanksi</label>
                                     <select name="kategori_sp_id" id="kategori_sp_id" class="form-select">
                                         <option value="">-- Pilih Jenis Pelanggaran Terlebih Dahulu --</option>
                                     </select>

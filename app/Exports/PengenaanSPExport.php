@@ -3,9 +3,9 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use App\Models\Penindakan;
+use App\Models\PengenaanSP;
 
-class PenindakanExport implements FromCollection
+class PengenaanSPExport implements FromCollection
 {
     protected $mulai;
     protected $selesai;
@@ -18,7 +18,7 @@ class PenindakanExport implements FromCollection
 
     public function collection()
     {
-        $query = Penindakan::query();
+        $query = PengenaanSP::query();
 
         if ($this->mulai && $this->selesai) {
             $query->whereBetween('tanggal_mulai', [
