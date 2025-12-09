@@ -2,14 +2,13 @@
 @section('content')
     <div class="content__boxed">
         <div class="content__wrap">
-            <div class="row">
-                <div class="col-xl-8 mb-3 mb-xl-0">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <!-- Horizontal Form -->
-                            <form action="{{ route('pengenaan-sp.store') }}" method="POST">
+            <form action="{{ route('pengenaan-sp.store') }}" method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col mb-3 mb-xl-0">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <!-- Horizontal Form -->
                                 @csrf
-
                                 <div class="mb-3">
                                     <label class="form-label">No. Surat</label>
                                     <input type="text" name="no_surat" class="form-control"
@@ -52,6 +51,13 @@
                                     </select>
                                 </div>
 
+                                <!-- END : Horizontal Form -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-3 mb-xl-0">
+                        <div class="card h-100">
+                            <div class="card-body">
                                 <div class="mb-3">
                                     <label class="form-label">Jenis Pelanggaran</label>
                                     <select name="jenis_pelanggaran_id" id="jenis_pelanggaran_id" class="form-select">
@@ -70,31 +76,34 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Detail Pelanggaran</label>
-                                    <textarea name="detail_pelanggaran" class="form-control"></textarea>
+                                    <textarea name="detail_pelanggaran" class="form-control" style="height: 100px"></textarea>
                                 </div>
 
+                                <div class="mb-3">
+                                    <label for="lampiran" class="form-label">Dokumen</label>
+                                    <input type="file" name="lampiran[]" id="lampiran" class="form-control" required>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Simpan</button>
-                            </form>
-                            <!-- END : Horizontal Form -->
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-4 mb-3 mb-xl-0">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="alert alert-info">
-                                <p>Untuk Format Nomor Surat seperti contoh ini :</p>
-                                <strong>UD.02.01/001/BAPPEBTI/SP/1/2025</strong><br>
-                                <span>Jika nomor surat selain SP (ditulis ulang), sisakan untuk bulan dan tahun jangan
-                                    ditulis
-                                    ulang <b>(/1/2025)</b></span><br>
-                                <strong>UD.02.01/001/BAPPEBTI/SK</strong>
-                            </div>
+            </form>
+            <div class="col-xl-3 mb-3 mb-xl-0">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <p>Untuk Format Nomor Surat seperti contoh ini :</p>
+                            <strong>UD.02.01/001/BAPPEBTI/SP/1/2025</strong><br>
+                            <span>Jika nomor surat selain SP (ditulis ulang), sisakan untuk bulan dan tahun jangan
+                                ditulis
+                                ulang <b>(/1/2025)</b></span><br>
+                            <strong>UD.02.01/001/BAPPEBTI/SK</strong>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <script>
         $(document).ready(function() {

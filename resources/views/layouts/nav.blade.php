@@ -57,7 +57,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('pengenaan-sp.create') }}"
                                     class="nav-link {{ request()->is('pengenaan-sp/create*') ? 'active' : '' }}">
-                                    Buat Sanksi
+                                    Input Sanksi
                                 </a>
                             </li>
                             <!-- END : Pengenaan SP -->

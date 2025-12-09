@@ -56,7 +56,7 @@ class PengenaanSPController extends Controller
         ]);
 
         // ---- 1. Generate no_sp awal ----
-        $last = PengenaanSp::orderBy('id', 'DESC')->first();
+        $last = PengenaanSP::orderBy('id', 'DESC')->first();
         $urutan = $last ? sprintf('%03d', $last->id + 1) : '001';
         $kode_sanksi = Sanksi::where('id', $request->sanksi_id)->value('kode_surat');
         if ($kode_sanksi == 'SP') {
@@ -66,7 +66,7 @@ class PengenaanSPController extends Controller
         }
 
         // ---- 2. Simpan data awal ----
-        $sp = PengenaanSp::create([
+        $sp = PengenaanSP::create([
             'no_surat' => $no_surat,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
@@ -87,7 +87,8 @@ class PengenaanSPController extends Controller
         ]);
 
         // ---- 4. Otomatis Export PDF setelah simpan ----
-        $this->exportPdf($sp->id);
+        // $this->exportPdf($sp->id);
+        $this->uploadFile($request, 'pengenaan_sp', $sp->id, 'surat');
 
         return redirect()->route('pengenaan-sp.index')
             ->with('success', 'Data berhasil disimpan dan PDF otomatis dibuat.');
@@ -154,7 +155,7 @@ class PengenaanSPController extends Controller
         ]);
 
         // Panggil fungsi upload file yang sudah kamu buat sebelumnya
-        $this->uploadFile($request, 'pengenaan_sp', $request->pengenaan_sp_id);
+        $this->uploadFile($request, 'pengenaan_sp', $request->pengenaan_sp_id, 'bebas');
         $pengenaan_sp = PengenaanSP::findOrFail($request->pengenaan_sp_id);
         $pengenaan_sp->tanggapan = $request->tanggapan;
         $pengenaan_sp->status_surat = 'sudah_diterima';
@@ -163,7 +164,7 @@ class PengenaanSPController extends Controller
         return back()->with('success', 'Bukti pendukung berhasil diupload.');
     }
 
-    private function uploadFile(Request $request, $table_name, $table_id)
+    private function uploadFile(Request $request, $table_name, $table_id, $tipe_dokumen)
     {
         $files = $request->file('lampiran');
 
@@ -180,7 +181,7 @@ class PengenaanSPController extends Controller
             Files::create([
                 'table_name'    => $table_name,
                 'table_id'      => $table_id,
-                'tipe'          => 'bebas',
+                'tipe'          => $tipe_dokumen,
                 'filename'      => $filename,
                 'original_name' => $originalName,
                 'url_path'      => 'storage/' . $path, // ← perbaikan
