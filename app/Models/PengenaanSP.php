@@ -33,6 +33,11 @@ class PengenaanSP extends Model
         return $this->belongsTo(PelakuUsaha::class);
     }
 
+    public function sanksi()
+    {
+        return $this->belongsTo(Sanksi::class);
+    }
+
     public function file()
     {
         return $this->hasOne(Files::class, 'table_id')

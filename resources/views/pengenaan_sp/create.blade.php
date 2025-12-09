@@ -11,12 +11,23 @@
                                 @csrf
 
                                 <div class="mb-3">
-                                    <label class="form-label">No. SP</label>
-                                    <input type="text" name="no_sp" class="form-control" value="{{ $no_sp_template }}">
+                                    <label class="form-label">No. Surat</label>
+                                    <input type="text" name="no_surat" class="form-control"
+                                        value="{{ $no_surat_template }}">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Tanggal SP</label>
+                                    <label class="form-label">Bentuk Sanksi</label>
+                                    <select name="sanksi_id" id="sanksi_id" class="form-select">
+                                        <option value="">-- Pilih Bentuk Sanksi --</option>
+                                        @foreach ($sanksi as $s)
+                                            <option value="{{ $s->id }}">{{ $s->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Tanggal Surat</label>
                                     <input type="date" name="tanggal_mulai" class="form-control">
                                 </div>
 
@@ -65,6 +76,20 @@
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                             </form>
                             <!-- END : Horizontal Form -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 mb-3 mb-xl-0">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <p>Untuk Format Nomor Surat seperti contoh ini :</p>
+                                <strong>UD.02.01/001/BAPPEBTI/SP/1/2025</strong><br>
+                                <span>Jika nomor surat selain SP (ditulis ulang), sisakan untuk bulan dan tahun jangan
+                                    ditulis
+                                    ulang <b>(/1/2025)</b></span><br>
+                                <strong>UD.02.01/001/BAPPEBTI/SK</strong>
+                            </div>
                         </div>
                     </div>
                 </div>

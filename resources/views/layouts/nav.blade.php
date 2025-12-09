@@ -45,38 +45,60 @@
                     </li>
                     <!-- END : Dashboard -->
 
-                    <!-- Pengenaan SP -->
-                    <li class="nav-item">
-                        <a href="{{ url('pengenaan-sp') }}"
-                            class="nav-link mininav-toggle collapsed {{ request()->is('pengenaan-sp*') && !request()->is('pengenaan-sp/laporan') ? 'active' : '' }}"><i
+                    <li class="nav-item has-sub">
+                        <a href="#"
+                            class="mininav-toggle nav-link collapsed {{ request()->is('pengenaan-sp*') ? 'active' : '' }}"><i
                                 class="psi-pantheon fs-5 me-2"></i>
-
-                            <span class="nav-label mininav-content ms-1">Pengenaan SP</span>
+                            <span class="nav-label ms-1">Manajemen Sanksi</span>
                         </a>
+
+                        <!-- Dashboard submenu list -->
+                        <ul class="mininav-content nav collapse" style="">
+                            <li class="nav-item">
+                                <a href="{{ route('pengenaan-sp.create') }}"
+                                    class="nav-link {{ request()->is('pengenaan-sp/create*') ? 'active' : '' }}">
+                                    Buat Sanksi
+                                </a>
+                            </li>
+                            <!-- END : Pengenaan SP -->
+
+                            <!-- Pengenaan Sanksi -->
+                            <li class="nav-item">
+                                <a href="{{ route('pengenaan-sp.index') }}"
+                                    class="nav-link {{ request()->is('pengenaan-sp*') && !request()->is('pengenaan-sp/create') ? 'active' : '' }}">
+                                    Monitoring Pengenaan Sanksi
+                                </a>
+                            </li>
+                            <!-- END : Pengenaan Sanksi -->
+
+                            <!-- Buat Laporan -->
+                            <li class="nav-item">
+                                <a href="{{ url('pengenaan-sp/laporan') }}"
+                                    class="nav-link {{ request()->is('pengenaan-sp/laporan') ? 'active' : '' }}">
+                                    Laporan Pengenaan Sanksi
+                                </a>
+                            </li>
+
+                        </ul>
+                        <!-- END : Dashboard submenu list -->
+
                     </li>
-                    <!-- END : Pengenaan SP -->
-
-                    <!-- Pengenaan Sanksi -->
-                    {{-- <li class="nav-item">
-                        <a href="{{ url('penindakan') }}"
-                            class="nav-link mininav-toggle collapsed {{ request()->is('penindakan*') && !request()->is('penindakan/laporan') ? 'active' : '' }}"><i
-                                class="psi-board fs-5 me-2"></i>
-
-                            <span class="nav-label mininav-content ms-1">Pengenaan Sanksi</span>
+                    {{-- <li class="nav-item has-sub">
+                        <a href="#"
+                            class="mininav-toggle nav-link collapsed {{ request()->is('pengenaan-sp*') ? 'active' : '' }}"><i
+                                class="psi-pantheon fs-5 me-2"></i>
+                            <span class="nav-label ms-1">Manajemen Sanksi</span>
                         </a>
+                        <!-- Menu Levels submenu list -->
+                        <ul class="mininav-content nav collapse">
+                            
+                            <!-- END : Buat Laporan -->
+                        </ul>
+                        <!-- END : Menu Levels submenu list -->
                     </li> --}}
-                    <!-- END : Pengenaan Sanksi -->
+                    <!-- END : Link with submenu -->
 
-                    <!-- Buat Laporan -->
-                    <li class="nav-item">
-                        <a href="{{ url('penindakan/laporan') }}"
-                            class="nav-link mininav-toggle collapsed {{ request()->is('penindakan/laporan') ? 'active' : '' }}"><i
-                                class="psi-notepad fs-5 me-2"></i>
-
-                            <span class="nav-label mininav-content ms-1">Laporan Pengenaan Sanksi</span>
-                        </a>
-                    </li>
-                    <!-- END : Buat Laporan -->
+                    <!-- Pengenaan SP -->
 
                     @if (auth()->user()->role == 'admin')
                         <!-- Link with submenu -->
@@ -129,7 +151,7 @@
                                 </li>
                                 <!-- END : Kategori SP -->
 
-                                {{-- <li class="nav-item">
+                                <li class="nav-item">
                                     <a href="{{ url('pengaturan/sanksi') }}"
                                         class="nav-link {{ request()->is('pengaturan/sanksi*') ? 'active' : '' }}">
                                         Bentuk Sanksi
@@ -143,7 +165,7 @@
                                 <li class="nav-item">
                                     <a href="{{ url('pengaturan/users') }}"
                                         class="nav-link {{ request()->is('pengaturan/users*') ? 'active' : '' }}">Users</a>
-                                </li> --}}
+                                </li>
                             </ul>
                             <!-- END : Menu Levels submenu list -->
                         </li>

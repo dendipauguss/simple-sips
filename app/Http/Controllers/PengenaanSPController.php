@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use PDF;
 use App\Models\PengenaanSP;
 use App\Models\PelakuUsaha;
 use App\Models\JenisPelakuUsaha;
 use App\Models\JenisPelanggaran;
 use App\Models\KategoriSP;
 use App\Models\Files;
-use PDF;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Sanksi;
 
 class PengenaanSPController extends Controller
 {
@@ -24,28 +25,30 @@ class PengenaanSPController extends Controller
 
     public function create()
     {
-        $title = 'Buat SP';
-        $pelaku_usaha = PelakuUsaha::all();
-        $jenis_pelaku_usaha = JenisPelakuUsaha::all();
-        $jenis_pelanggaran = JenisPelanggaran::all();
-        $kategori_sp = KategoriSP::all();
         // ambil nomor terakhir
         $last = PengenaanSP::orderBy('id', 'DESC')->first();
-
         // generate nomor baru (3 digit)
         $nextNumber = $last ? str_pad($last->id + 1, 3, '0', STR_PAD_LEFT) : '001';
 
-        // template nomor SP awal (belum ada bulan & tahun)
-        $no_sp_template = "UD.02.01/{$nextNumber}/BAPPEBTI/SP/";
-
-        return view('pengenaan_sp.create', compact('no_sp_template', 'pelaku_usaha', 'jenis_pelanggaran', 'kategori_sp', 'jenis_pelaku_usaha', 'title'));
+        return view('pengenaan_sp.create', [
+            'title' => 'Buat Sanksi',
+            'pelaku_usaha' => PelakuUsaha::all(),
+            'jenis_pelaku_usaha' => JenisPelakuUsaha::all(),
+            'jenis_pelanggaran' => JenisPelanggaran::all(),
+            'kategori_sp' => KategoriSP::all(),
+            'sanksi' => Sanksi::all(),
+            // template nomor SP awal (belum ada bulan & tahun)
+            'no_surat_template' => "UD.02.01/{$nextNumber}/BAPPEBTI/",
+        ]);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'no_surat' => 'required|string',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date',
+            'sanksi_id' => 'required',
             'pelaku_usaha_id' => 'required',
             'jenis_pelanggaran_id' => 'required',
             'kategori_sp_id' => 'required',
@@ -55,14 +58,19 @@ class PengenaanSPController extends Controller
         // ---- 1. Generate no_sp awal ----
         $last = PengenaanSp::orderBy('id', 'DESC')->first();
         $urutan = $last ? sprintf('%03d', $last->id + 1) : '001';
-
-        $no_sp = "UD.02.01/{$urutan}/BAPPEBTI/SP/";
+        $kode_sanksi = Sanksi::where('id', $request->sanksi_id)->value('kode_surat');
+        if ($kode_sanksi == 'SP') {
+            $no_surat = "UD.02.01/{$urutan}/BAPPEBTI/{$kode_sanksi}/";
+        } else {
+            $no_surat = $request->no_surat;
+        }
 
         // ---- 2. Simpan data awal ----
         $sp = PengenaanSp::create([
-            'no_sp' => $no_sp,
+            'no_surat' => $no_surat,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
+            'sanksi_id' => $request->sanksi_id,
             'pelaku_usaha_id' => $request->pelaku_usaha_id,
             'jenis_pelanggaran_id' => $request->jenis_pelanggaran_id,
             'kategori_sp_id' => $request->kategori_sp_id,
@@ -75,7 +83,7 @@ class PengenaanSPController extends Controller
         $tahun = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y');
 
         $sp->update([
-            'no_sp' => $sp->no_sp . "{$bulan}/{$tahun}"
+            'no_surat' => $sp->no_surat . "{$bulan}/{$tahun}"
         ]);
 
         // ---- 4. Otomatis Export PDF setelah simpan ----
@@ -110,7 +118,7 @@ class PengenaanSPController extends Controller
 
     public function exportPdf($id)
     {
-        $sp = PengenaanSP::with(['pelaku_usaha', 'jenis_pelanggaran', 'kategori_sp'])
+        $sp = PengenaanSP::with(['pelaku_usaha', 'jenis_pelanggaran', 'kategori_sp', 'sanksi'])
             ->findOrFail($id);
 
         $filename = 'SP-' . str_replace('/', '-', $sp->no_sp) . '.pdf';
@@ -132,4 +140,6 @@ class PengenaanSPController extends Controller
             'status'        => 1,
         ]);
     }
+
+    public function tindakLanjut($id) {}
 }

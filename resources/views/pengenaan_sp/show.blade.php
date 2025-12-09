@@ -11,9 +11,9 @@
                         <div class="card-body py-4">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex">
-                                    <strong class="me-3" style="width: 150px;">No SP</strong>
+                                    <strong class="me-3" style="width: 150px;">No Surat</strong>
                                     <span>:
-                                        {{ $sp->no_sp }}</span>
+                                        {{ $sp->no_surat }}</span>
                                 </li>
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">Tanggal SP</strong>

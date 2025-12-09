@@ -40,8 +40,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'import'])->name('pelaku-usaha.import');
     Route::get('/get-pelaku-usaha/{jenis_id}', [PelakuUsahaController::class, 'getPelakuUsahaByJenis']);
     Route::get('/get-kategori-sp/{jenis_pelanggaran_id}', [JenisPelanggaranController::class, 'getKategoriSPByJenis']);
-    Route::get('/pengenaan-sp/{id}/export-pdf', [PengenaanSpController::class, 'exportPdf'])
-        ->name('pengenaan_sp.export_pdf');
+    Route::get('/pengenaan-sp/{id}/export-pdf', [PengenaanSPController::class, 'exportPdf'])
+        ->name('pengenaan-sp.export-pdf');
+    Route::get('/pengenaan-sp/{id}/tindak-lanjut', [PengenaanSPController::class, 'tindakLanjut'])
+        ->name('pengenaan-sp.tindak-lanjut');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');

@@ -5,17 +5,17 @@
             <div class="row">
                 <div class="col-xl-12 mb-3 mb-xl-0">
                     <div class="card h-100">
-                        <div class="card-header d-flex align-items-center border-0">
+                        {{-- <div class="card-header d-flex align-items-center border-0">
                             <a href="{{ url('pengenaan-sp/create') }}" class="btn btn-sm btn-primary">+ Tambah</a>
-                        </div>
-                        <div class="card-body py-0">
+                        </div> --}}
+                        <div class="card-body mt-1">
                             <div class="table-responsive">
                                 <table class="table table-hover" id="dataTables">
                                     <thead class="table-primary">
                                         <tr>
                                             <th class="text-dark text-center">No</th>
-                                            <th class="text-dark text-center">No SP</th>
-                                            <th class="text-dark text-center">Tanggal SP</th>
+                                            <th class="text-dark text-center">No Surat</th>
+                                            <th class="text-dark text-center">Tanggal Surat</th>
                                             <th class="text-dark text-center">Bulan</th>
                                             <th class="text-dark text-center">Jenis Pelaku Usaha</th>
                                             <th class="text-dark text-center">Perusahaan</th>
@@ -27,9 +27,7 @@
                                             {{-- <th class="text-dark text-center">Bukti Perbaikan</th> --}}
                                             {{-- <th class="text-dark text-center">Tanggapan Atas Perbaikan</th> --}}
                                             <th class="text-dark text-center" style="width: 15%;">Status</th>
-                                            @if (auth()->user()->role == 'admin')
-                                                <th class="text-dark text-center">Aksi</th>
-                                            @endif
+                                            <th class="text-dark text-center">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -39,7 +37,7 @@
                                                 <td class="text-center">
                                                     <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
                                                         class="text-decoration-none">
-                                                        {{ $sp->no_sp }}
+                                                        {{ $sp->no_surat }}
                                                     </a>
                                                 </td>
                                                 <td class="text-center">{{ $sp->tanggal_mulai }}</td>
@@ -82,7 +80,7 @@
                                                 </td> --}}
                                                 <td class="text-center">
                                                     <span id="status-penindakan-{{ $sp->id }}"
-                                                        class="badge {{ $sp->status_sp == 'belum' ? 'bg-danger' : ($sp->status_sp == 'pending' ? 'bg-warning text-dark' : 'bg-success') }}">{{ ucfirst($sp->status_sp) }}</span>
+                                                        class="badge {{ $sp->status_sp == 'belum' ? 'bg-danger' : ($sp->status_sp == 'pending' ? 'bg-warning text-dark' : 'bg-success') }}">{{ ucfirst($sp->status_surat) }}</span>
 
                                                     {{-- 
                                                     <form action="{{ route('penindakan.updateStatus', $sp->id) }}"
@@ -92,15 +90,15 @@
                                                         <button class="badge bg-primary border-0">Ganti Status</button>
                                                     </form> --}}
                                                 </td>
-                                                @if (auth()->user()->role == 'admin')
-                                                    <td>
-                                                        <div class="btn-group" role="group">
-                                                            <a href="{{ route('penindakan.show', $sp->id) }}"
-                                                                class="badge bg-info me-1 text-decoration-none"
-                                                                title="Detail">
-                                                                Detail <i class="psi-paper"></i>
-                                                            </a>
-                                                            <a href="{{ route('penindakan.edit', $sp->id) }}"
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a href="{{ route('pengenaan-sp.tindak-lanjut', $sp->id) }}"
+                                                            class="badge bg-info me-1 text-decoration-none"
+                                                            title="Tindak Lanjut">
+                                                            Tindak Lanjut <i class="psi-paper"></i>
+                                                        </a>
+                                                        @if (auth()->user()->role == 'admin')
+                                                            <a href="{{ route('pengenaan-sp.edit', $sp->id) }}"
                                                                 class="badge bg-warning me-1 text-decoration-none"
                                                                 title="Edit">
                                                                 Edit <i class="psi-pencil"></i>
@@ -111,14 +109,14 @@
                                                             </a>
 
                                                             <form id="delete-{{ $sp->id }}"
-                                                                action="{{ route('penindakan.destroy', $sp->id) }}"
+                                                                action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
                                                                 method="POST" style="display:none;">
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>
-                                                        </div>
-                                                    </td>
-                                                @endif
+                                                        @endif
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
