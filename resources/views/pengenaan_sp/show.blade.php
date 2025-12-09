@@ -87,7 +87,7 @@
                                     <span>:
                                         <span
                                             class="badge {{ $sp->status_surat == 'belum_diterima' ? 'bg-danger' : 'bg-success' }}">
-                                            {{ ucfirst($sp->status_surat) }}</span>
+                                            {{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
                                     </span>
                                 </li>
                             </ul>

@@ -78,7 +78,7 @@
                                                 </td> --}}
                                                 <td class="text-center">
                                                     <span id="status-penindakan-{{ $sp->id }}"
-                                                        class="badge {{ $sp->status_surat == 'belum_diterima' ? 'bg-danger' : 'bg-success' }}">{{ ucfirst($sp->status_surat) }}</span>
+                                                        class="badge {{ $sp->status_surat == 'belum_diterima' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
 
                                                     {{-- 
                                                     <form action="{{ route('penindakan.updateStatus', $sp->id) }}"
