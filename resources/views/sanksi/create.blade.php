@@ -22,6 +22,18 @@
                                         @enderror
                                     </div>
                                 </div>
+                                <div class="row mb-3">
+                                    <label for="kode_surat" class="col-sm-2 col-form-label">Kode Surat</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control @error('kode_surat') is-invalid @enderror"
+                                            id="kode_surat" name="kode_surat">
+                                        @error('kode_surat')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
                                 <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
                                 <a href="{{ url('pengaturan/sanksi') }}" class="btn btn-sm btn-light"> ⬅ Kembali</a>
                             </form>

@@ -16,7 +16,6 @@
                                             <th class="text-dark text-center">No</th>
                                             <th class="text-dark text-center">No Surat</th>
                                             <th class="text-dark text-center">Tanggal Surat</th>
-                                            <th class="text-dark text-center">Bulan</th>
                                             <th class="text-dark text-center">Jenis Pelaku Usaha</th>
                                             <th class="text-dark text-center">Perusahaan</th>
                                             {{-- <th class="text-dark text-center">Jenis Pelanggaran</th> --}}
@@ -28,6 +27,7 @@
                                             {{-- <th class="text-dark text-center">Tanggapan Atas Perbaikan</th> --}}
                                             <th class="text-dark text-center" style="width: 15%;">Status</th>
                                             <th class="text-dark text-center">Aksi</th>
+                                            <th class="text-dark text-center">Pengisi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -41,9 +41,7 @@
                                                     </a>
                                                 </td>
                                                 <td class="text-center">{{ $sp->tanggal_mulai }}</td>
-                                                <td class="text-center">
-                                                    {{ \Carbon\Carbon::parse($sp->tanggal_mulai)->translatedFormat('F') }}
-                                                </td>
+
                                                 <td class="text-center">{{ $sp->pelaku_usaha->jenis_pelaku_usaha->nama }}
                                                 </td>
                                                 <td class="text-center">{{ $sp->pelaku_usaha->nama }}</td>
@@ -80,7 +78,7 @@
                                                 </td> --}}
                                                 <td class="text-center">
                                                     <span id="status-penindakan-{{ $sp->id }}"
-                                                        class="badge {{ $sp->status_sp == 'belum' ? 'bg-danger' : ($sp->status_sp == 'pending' ? 'bg-warning text-dark' : 'bg-success') }}">{{ ucfirst($sp->status_surat) }}</span>
+                                                        class="badge {{ $sp->status_surat == 'belum_diterima' ? 'bg-danger' : 'bg-success' }}">{{ ucfirst($sp->status_surat) }}</span>
 
                                                     {{-- 
                                                     <form action="{{ route('penindakan.updateStatus', $sp->id) }}"
@@ -116,6 +114,9 @@
                                                             </form>
                                                         @endif
                                                     </div>
+                                                </td>
+                                                <td class="text-start">
+                                                    {{ $sp->user->nama }}
                                                 </td>
                                             </tr>
                                         @endforeach

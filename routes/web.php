@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
         ->name('pengenaan-sp.export-pdf');
     Route::get('/pengenaan-sp/{id}/tindak-lanjut', [PengenaanSPController::class, 'tindakLanjut'])
         ->name('pengenaan-sp.tindak-lanjut');
+    Route::post('/pengenaan-sp/upload-dokumen', [PengenaanSPController::class, 'uploadDokumen'])->name('pengenaan-sp.upload-dokumen');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');

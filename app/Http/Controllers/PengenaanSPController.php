@@ -18,8 +18,8 @@ class PengenaanSPController extends Controller
     public function index()
     {
         return view('pengenaan_sp.index', [
-            'title' => 'Pengenaan SP',
-            'pengenaan_sp' => PengenaanSP::latest()->get()
+            'title' => 'Pengenaan Sanksi',
+            'pengenaan_sp' => PengenaanSP::orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')->get()
         ]);
     }
 
@@ -96,7 +96,7 @@ class PengenaanSPController extends Controller
     public function show($id)
     {
         return view('pengenaan_sp.show', [
-            'title' => 'Detail SP',
+            'title' => 'Detail Sanksi',
             'sp' => PengenaanSP::findOrFail($id)
         ]);
     }
@@ -134,6 +134,7 @@ class PengenaanSPController extends Controller
         Files::create([
             'table_id'      => $sp->id,
             'table_name'    => 'pengenaan_sp',
+            'tipe'          => 'surat',
             'filename'      => $filename,
             'original_name' => $filename,
             'url_path'      => 'storage/' . $path,
@@ -142,4 +143,48 @@ class PengenaanSPController extends Controller
     }
 
     public function tindakLanjut($id) {}
+
+    public function uploadDokumen(Request $request)
+    {
+        // dd($request);
+        $request->validate([
+            'pengenaan_sp_id' => 'required|exists:pengenaan_sp,id',
+            'tanggapan' => 'required|string',
+            'lampiran.*'    => 'nullable|file|max:5120', // 5 MB
+        ]);
+
+        // Panggil fungsi upload file yang sudah kamu buat sebelumnya
+        $this->uploadFile($request, 'pengenaan_sp', $request->pengenaan_sp_id);
+        $pengenaan_sp = PengenaanSP::findOrFail($request->pengenaan_sp_id);
+        $pengenaan_sp->tanggapan = $request->tanggapan;
+        $pengenaan_sp->status_surat = 'sudah_diterima';
+        $pengenaan_sp->save();
+
+        return back()->with('success', 'Bukti pendukung berhasil diupload.');
+    }
+
+    private function uploadFile(Request $request, $table_name, $table_id)
+    {
+        $files = $request->file('lampiran');
+
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
+        foreach ($files as $file) {
+            $originalName = $file->getClientOriginalName();
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $path = $file->storeAs('uploads/' . $table_name, $filename, 'public');
+
+            Files::create([
+                'table_name'    => $table_name,
+                'table_id'      => $table_id,
+                'tipe'          => 'bebas',
+                'filename'      => $filename,
+                'original_name' => $originalName,
+                'url_path'      => 'storage/' . $path, // ← perbaikan
+            ]);
+        }
+    }
 }

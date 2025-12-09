@@ -43,4 +43,15 @@ class PengenaanSP extends Model
         return $this->hasOne(Files::class, 'table_id')
             ->where('table_name', 'pengenaan_sp');
     }
+
+    public function files()
+    {
+        return $this->hasMany(Files::class, 'table_id')
+            ->where('table_name', 'pengenaan_sp');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

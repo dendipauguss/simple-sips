@@ -15,12 +15,14 @@
                                     <thead>
                                         <tr>
                                             <th>Nama</th>
+                                            <th>Kode Sanksi</th>
                                             <th>Perintah</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>{{ $sanksi->nama }}</td>
+                                            <td>{{ $sanksi->kode_surat }}</td>
                                             <td>
                                                 <ul>
                                                     @foreach ($sanksi->perintah_sanksi as $p)

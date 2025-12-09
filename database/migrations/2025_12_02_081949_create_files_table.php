@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('table_id');
             $table->string('table_name');
+            $table->enum('tipe', ['surat', 'bebas'])->default('bebas');
             $table->string('filename');
             $table->string('original_name')->nullable();
             $table->string('url_path');

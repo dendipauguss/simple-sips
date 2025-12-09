@@ -26,15 +26,19 @@ class SanksiController extends Controller
     {
         // Validasi input
         $request->validate([
-            'nama'    => 'required|string|max:255'
+            'nama'    => ['required', 'string', 'max:255'],
+            'kode_surat' => ['required', 'unique:sanksi']
         ], [
             'nama.required' => 'Nama tidak boleh kosong.',
             'nama.max' => 'Maksimal 255 karakter',
+            'kode_surat.unique' => 'Kode sudah dipakai',
+            'kode_surat.required' => 'Kode Surat tidak boleh kosong kakak'
         ]);
 
         // Simpan ke database
         Sanksi::create([
-            'nama'    => $request->nama
+            'nama'    => $request->nama,
+            'kode_surat' => $request->kode_surat
         ]);
 
         // Redirect dengan pesan sukses
