@@ -13,6 +13,7 @@ use App\Http\Controllers\PengenaanSPController;
 use App\Http\Controllers\JenisPelanggaranController;
 use App\Http\Controllers\KategoriSPController;
 use App\Http\Controllers\SKController;
+use App\Models\KategoriSP;
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -47,6 +48,8 @@ Route::middleware('auth')->group(function () {
         ->name('pengenaan-sp.generate-pdf');
     Route::post('/pengenaan-sp/upload-dokumen', [PengenaanSPController::class, 'uploadDokumen'])->name('pengenaan-sp.upload-dokumen');
     Route::get('/pengenaan-sp/laporan', [PengenaanSPController::class, 'laporan'])->name('pengenaan-sp.laporan');
+    Route::get('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'importView']);
+    Route::post('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'import'])->name('kategori-sp.import');
     Route::get('/sk/create/{id}', [SKController::class, 'create'])->name('sk.create');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');

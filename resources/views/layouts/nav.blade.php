@@ -146,7 +146,7 @@
                                     <a href="{{ url('pengaturan/kategori-sp') }}"
                                         class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/kategori-sp*') ? 'active' : '' }}">
                                         {{-- <i class="psi-building fs-5 me-2"></i> --}}
-                                        Kategori SP
+                                        Kategori Sanksi
                                     </a>
                                 </li>
                                 <!-- END : Kategori SP -->

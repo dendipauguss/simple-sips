@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\KategoriSP;
 use App\Models\JenisPelanggaran;
+use App\Imports\KategoriSPImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KategoriSPController extends Controller
 {
@@ -107,7 +109,7 @@ class KategoriSPController extends Controller
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new PelakuUsahaImport, $request->file('file'));
+        Excel::import(new KategoriSPImport, $request->file('file'));
 
         return back()->with('success', 'Data Pelaku Usaha berhasil diimport!');
     }

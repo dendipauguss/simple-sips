@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('kategori_sp_id');
             $table->string('detail_pelanggaran')->nullable();
             $table->string('tanggapan')->nullable();
-            $table->enum('status_surat', ['belum_direspon', 'sudah_direspon'])->default('belum_direspon');
+            $table->enum('status_surat', ['belum_ditanggapi', 'sudah_ditanggapi'])->default('belum_ditanggapi');
             $table->unsignedBigInteger('user_id');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();

@@ -10,4 +10,11 @@ class KategoriSP extends Model
     use HasFactory;
 
     protected $table = 'kategori_sp';
+
+    protected $guarded = ['id'];
+
+    public function jenis_pelanggaran()
+    {
+        return $this->belongsTo(JenisPelanggaran::class);
+    }
 }
