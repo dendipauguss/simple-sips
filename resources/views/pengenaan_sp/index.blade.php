@@ -78,7 +78,7 @@
                                                 </td> --}}
                                                 <td class="text-center">
                                                     <span id="status-penindakan-{{ $sp->id }}"
-                                                        class="badge {{ $sp->status_surat == 'belum_direspon' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
+                                                        class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
 
                                                     {{-- 
                                                     <form action="{{ route('penindakan.updateStatus', $sp->id) }}"
@@ -88,14 +88,14 @@
                                                         <button class="badge bg-primary border-0">Ganti Status</button>
                                                     </form> --}}
                                                 </td>
-                                                <td>
+                                                <td class="text-center">
                                                     <div class="btn-group" role="group">
-                                                        <a href="{{ route('sk.create', $sp->id) }}"
+                                                        {{-- <a href="{{ route('sk.create', $sp->id) }}"
                                                             class="badge bg-info me-1 text-decoration-none"
                                                             title="Tindak Lanjut">
                                                             Tindak Lanjut <i class="psi-paper"></i>
-                                                        </a>
-                                                        @if (auth()->user()->role == 'admin')
+                                                        </a> --}}
+                                                        @if (auth()->user()->id == $sp->user->id)
                                                             <a href="{{ route('pengenaan-sp.edit', $sp->id) }}"
                                                                 class="badge bg-warning me-1 text-decoration-none"
                                                                 title="Edit">
@@ -112,6 +112,12 @@
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>
+                                                        @else
+                                                            <div class="badge bg-warning">
+                                                                <span class="fs-3">
+                                                                    <i class="psi-security-settings"></i>
+                                                                </span>
+                                                            </div>
                                                         @endif
                                                     </div>
                                                 </td>

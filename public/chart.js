@@ -425,11 +425,11 @@ document.addEventListener("DOMContentLoaded", () => {
             pieCanvas, {
             type: "pie",
             data: {
-                labels: ["Belum", "Pending", "Selesai"],
+                labels: ["Belum", "Selesai"],
                 datasets: [{
                     data: statusData,
                     borderColor: "transparent",
-                    backgroundColor: [dangerColor, warningColor, successColor],
+                    backgroundColor: [dangerColor, successColor],
                 }]
             },
             options: {

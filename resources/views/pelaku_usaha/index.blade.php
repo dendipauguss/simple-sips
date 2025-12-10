@@ -54,7 +54,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $p->nama }}</td>
                                                 <td>
-                                                    {{ $p->jenis_pelaku_usaha->nama }}
+                                                    {{ $p->jenis_pelaku_usaha?->nama ?? 'Tidak ada data' }}
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="btn-group" role="group">

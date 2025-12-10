@@ -67,7 +67,7 @@
                                                 <td>{{ $p->tanggapan }}</td>
                                                 <td class="text-center">
                                                     <span
-                                                        class="badge {{ $p->status_surat == 'belum_direspon' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $p->status_surat)) }}</span>
+                                                        class="badge {{ $p->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $p->status_surat)) }}</span>
                                                 </td>
                                             </tr>
                                         @endforeach

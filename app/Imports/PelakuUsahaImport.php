@@ -17,23 +17,20 @@ class PelakuUsahaImport implements ToModel, WithHeadingRow
             case 'bursa_berjangka':
                 $row['jenis_pelaku_usaha'] = 2;
                 break;
-            case 'calon_pedagang_fisik_kripto':
+            case 'kliring_berjangka':
                 $row['jenis_pelaku_usaha'] = 3;
                 break;
-            case 'kliring_berjangka':
+            case 'pedagang_berjangka':
                 $row['jenis_pelaku_usaha'] = 4;
                 break;
-            case 'pedagang_berjangka':
+            case 'pedagang_fisik_emas':
                 $row['jenis_pelaku_usaha'] = 5;
                 break;
-            case 'pedagang_fisik_emas':
+            case 'pedagang_fisik_timah':
                 $row['jenis_pelaku_usaha'] = 6;
                 break;
-            case 'pedagang_fisik_timah':
-                $row['jenis_pelaku_usaha'] = 7;
-                break;
             case 'pialang_berjangka':
-                $row['jenis_pelaku_usaha'] = 8;
+                $row['jenis_pelaku_usaha'] = 7;
                 break;
             default:
                 $row['jenis_pelaku_usaha'] = 0;

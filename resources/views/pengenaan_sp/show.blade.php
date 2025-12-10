@@ -74,19 +74,21 @@
                                             <span>Belum ada dokumen</span>
                                         @endif
                                     </div>
-                                    <div class="col ms-1">
-                                        <button class="btn btn-sm btn-primary upload-btn mt-1"
-                                            data-id="{{ $sp->id }}" data-bs-toggle="modal"
-                                            data-bs-target="#modalUpload">
-                                            Isi Tanggapan dan Upload Dokumen
-                                        </button>
-                                    </div>
+                                    @if (auth()->user()->id == $sp->user->id)
+                                        <div class="col ms-1">
+                                            <button class="btn btn-sm btn-primary upload-btn mt-1"
+                                                data-id="{{ $sp->id }}" data-bs-toggle="modal"
+                                                data-bs-target="#modalUpload">
+                                                Isi Tanggapan dan Upload Dokumen
+                                            </button>
+                                        </div>
+                                    @endif
                                 </li>
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">Status</strong>
                                     <span>:
                                         <span
-                                            class="badge {{ $sp->status_surat == 'belum_direspon' ? 'bg-danger' : 'bg-success' }}">
+                                            class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">
                                             {{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
                                     </span>
                                 </li>
