@@ -12,6 +12,7 @@ use App\Http\Controllers\PengenaanSanksiController;
 use App\Http\Controllers\PengenaanSPController;
 use App\Http\Controllers\JenisPelanggaranController;
 use App\Http\Controllers\KategoriSPController;
+use App\Http\Controllers\SKController;
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -44,10 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengenaan-sp/export-pdf',   [PengenaanSPController::class, 'exportPdf'])->name('pengenaan-sp.export.pdf');
     Route::get('/pengenaan-sp/{id}/generate-pdf', [PengenaanSPController::class, 'generatePdf'])
         ->name('pengenaan-sp.generate-pdf');
-    Route::get('/pengenaan-sp/{id}/tindak-lanjut', [PengenaanSPController::class, 'tindakLanjut'])
-        ->name('pengenaan-sp.tindak-lanjut');
     Route::post('/pengenaan-sp/upload-dokumen', [PengenaanSPController::class, 'uploadDokumen'])->name('pengenaan-sp.upload-dokumen');
     Route::get('/pengenaan-sp/laporan', [PengenaanSPController::class, 'laporan'])->name('pengenaan-sp.laporan');
+    Route::get('/sk/create/{id}', [SKController::class, 'create'])->name('sk.create');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');
@@ -57,4 +57,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('/pengaturan/kategori-sp', KategoriSPController::class)->middleware('admin');
     Route::resource('/penindakan', PengenaanSanksiController::class);
     Route::resource('/pengenaan-sp', PengenaanSPController::class);
+    Route::resource('/sk', SKController::class);
 });

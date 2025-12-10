@@ -78,7 +78,7 @@
                                                 </td> --}}
                                                 <td class="text-center">
                                                     <span id="status-penindakan-{{ $sp->id }}"
-                                                        class="badge {{ $sp->status_surat == 'belum_diterima' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
+                                                        class="badge {{ $sp->status_surat == 'belum_direspon' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
 
                                                     {{-- 
                                                     <form action="{{ route('penindakan.updateStatus', $sp->id) }}"
@@ -90,7 +90,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group" role="group">
-                                                        <a href="{{ route('pengenaan-sp.tindak-lanjut', $sp->id) }}"
+                                                        <a href="{{ route('sk.create', $sp->id) }}"
                                                             class="badge bg-info me-1 text-decoration-none"
                                                             title="Tindak Lanjut">
                                                             Tindak Lanjut <i class="psi-paper"></i>

@@ -65,7 +65,7 @@
                             <!-- Pengenaan Sanksi -->
                             <li class="nav-item">
                                 <a href="{{ route('pengenaan-sp.index') }}"
-                                    class="nav-link {{ request()->is('pengenaan-sp*') && !request()->is('pengenaan-sp/create') ? 'active' : '' }}">
+                                    class="nav-link {{ request()->is('pengenaan-sp*') && !request()->is('pengenaan-sp/create*') && !request()->is('pengenaan-sp/laporan*') ? 'active' : '' }}">
                                     Monitoring Pengenaan Sanksi
                                 </a>
                             </li>

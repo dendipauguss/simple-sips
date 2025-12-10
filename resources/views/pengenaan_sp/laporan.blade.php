@@ -68,7 +68,7 @@
                                                 <td class="text-center">
 
                                                     <span
-                                                        class="badge {{ $p->status_surat == 'belum' ? 'bg-danger' : ($p->status_surat == 'selesai' ? 'bg-success' : 'bg-warning text-dark') }}">{{ Str::ucfirst($p->status_surat) }}</span>
+                                                        class="badge {{ $p->status_surat == 'belum_direspon' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $p->status_surat)) }}</span>
                                                 </td>
                                                 @if (auth()->user()->role == 'admin')
                                                     <td>

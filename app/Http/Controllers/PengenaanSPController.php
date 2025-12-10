@@ -14,6 +14,7 @@ use App\Models\JenisPelanggaran;
 use App\Models\KategoriSP;
 use App\Models\Files;
 use App\Models\Sanksi;
+use App\Models\SK;
 
 class PengenaanSPController extends Controller
 {
@@ -92,7 +93,7 @@ class PengenaanSPController extends Controller
         // $this->exportPdf($sp->id);
         $this->uploadFile($request, 'pengenaan_sp', $sp->id, 'surat');
 
-        return redirect()->route('pengenaan-sp.index')
+        return redirect()->route('pengenaan-sp.show', $sp->id)
             ->with('success', 'Data berhasil disimpan dan PDF otomatis dibuat.');
     }
 
@@ -144,8 +145,6 @@ class PengenaanSPController extends Controller
             'status'        => 1,
         ]);
     }
-
-    public function tindakLanjut($id) {}
 
     public function uploadDokumen(Request $request)
     {
@@ -252,7 +251,7 @@ class PengenaanSPController extends Controller
 
         $data = $query->get();
 
-        $pdf = PDF::loadView('pengenaan-sp.pdf', [
+        $pdf = PDF::loadView('pengenaan_sp.pdf', [
             'data' => $data
         ]);
 

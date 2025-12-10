@@ -11,15 +11,11 @@ class JenisPelakuUsahaSeeder extends Seeder
     public function run(): void
     {
         JenisPelakuUsaha::create([
-            'nama' => 'Bank'
+            'nama' => 'Bank Penyimpan Margin'
         ]);
 
         JenisPelakuUsaha::create([
             'nama' => 'Bursa Berjangka'
-        ]);
-
-        JenisPelakuUsaha::create([
-            'nama' => 'Calon Pedagang Fisik Kripto'
         ]);
 
         JenisPelakuUsaha::create([
