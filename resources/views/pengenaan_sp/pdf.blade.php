@@ -5,8 +5,10 @@
         <meta charset="utf-8">
         <title>Surat Peringatan</title>
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap');
+
             body {
-                font-family: Calibri, Arial, sans-serif;
+                font-family: "Open Sans", sans-serif;
                 font-size: 12px;
                 line-height: 1.4;
             }
@@ -49,6 +51,12 @@
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 20px;
+                table-layout: fixed;
+                /* <- penting supaya kolom tidak melebar */
+                font-size: 10px;
+                /* <- kecilkan sedikit */
+                word-wrap: break-word;
+                /* <- wrap konten */
             }
 
             td {
@@ -65,7 +73,7 @@
             <table class="kop-table">
                 <tr>
                     <td width="20%">
-                        <img src="logo.png" width="90">
+                        <img src="img/kemendag-bappebti-logo.jpg" width="90">
                     </td>
                     <td width="80%">
                         <div class="kop-title">KEMENTERIAN PERDAGANGAN</div>
@@ -91,35 +99,38 @@
             4. Ketua Aspebtindo.
         </p>
 
-        <div class="title">SURAT PERINGATAN</div>
+        <div class="title">Laporan Pengenaan Sanksi
+            {{ !empty($tahun) ? 'Tahun ' . \Carbon\Carbon::parse($tahun)->translatedFormat('Y') : '' }}</div>
 
-        <p><strong>No:</strong> {{ $sp->no_sp }}</p>
-
-        <table>
-            <tr>
-                <td width="30%">Tanggal Mulai</td>
-                <td>: {{ \Carbon\Carbon::parse($sp->tanggal_mulai)->translatedFormat('d F Y') }}</td>
-            </tr>
-            <tr>
-                <td>Tanggal Selesai</td>
-                <td>: {{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('d F Y') }}</td>
-            </tr>
-            <tr>
-                <td>Pelaku Usaha</td>
-                <td>: {{ $sp->pelaku_usaha->nama ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td>Jenis Pelanggaran</td>
-                <td>: {{ $sp->jenis_pelanggaran->nama ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td>Kategori SP</td>
-                <td>: {{ $sp->kategori_sp->nama ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td>Detail Pelanggaran</td>
-                <td>: {{ $sp->detail_pelanggaran }}</td>
-            </tr>
+        <table border="1" cellpadding="4" cellspacing="0" width="100%">
+            <thead>
+                <th>No. Surat</th>
+                <th>Tanggal Surat</th>
+                <th>Tanggal Jatuh Tempo</th>
+                <th>Sanksi</th>
+                <th>Perusahaan</th>
+                <th>Jenis Pelaku Usaha</th>
+                <th>Jenis Pelanggaran</th>
+                <th>Kategori</th>
+                <th>Detail Pelanggaran</th>
+                <th>Tanggapan</th>
+            </thead>
+            <tbody>
+                @foreach ($sp as $d)
+                    <tr>
+                        <td>{{ $d->no_surat }}</td>
+                        <td>{{ $d->tanggal_mulai }}</td>
+                        <td>{{ $d->tanggal_selesai }}</td>
+                        <td>{{ $d->sanksi->nama }}</td>
+                        <td>{{ $d->pelaku_usaha->nama }}</td>
+                        <td>{{ $d->pelaku_usaha->jenis_pelaku_usaha->nama }}</td>
+                        <td>{{ $d->jenis_pelanggaran->nama }}</td>
+                        <td>{{ $d->kategori_sp->nama }}</td>
+                        <td>{{ $d->detail_pelanggaran }}</td>
+                        <td>{{ $d->tanggapan }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
         </table>
 
         <br><br>

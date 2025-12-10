@@ -29,7 +29,7 @@
                                     <a href="{{ route('pengenaan-sp.export.excel', request()->all()) }}"
                                         class="btn btn-sm btn-success">Export Excel</a>
                                     <a href="{{ route('pengenaan-sp.export.pdf', request()->all()) }}"
-                                        class="btn btn-sm btn-danger">Export PDF</a>
+                                        class="btn btn-sm btn-danger" target="_blank">Export PDF</a>
                                 </div>
                             </div>
 

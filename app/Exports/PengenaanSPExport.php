@@ -3,30 +3,39 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Models\PengenaanSP;
 
-class PengenaanSPExport implements FromCollection
+class PengenaanSPExport implements FromCollection, WithHeadings
 {
-    protected $mulai;
-    protected $selesai;
+    protected $data;
 
-    public function __construct($mulai = null, $selesai = null)
+    public function __construct($data)
     {
-        $this->mulai = $mulai;
-        $this->selesai = $selesai;
+        $this->data = $data;
+    }
+
+    public function headings(): array
+    {
+        return [
+            'No Surat',
+            'Tanggal Mulai',
+            'Tanggal Selesai',
+            'Nama Pelaku Usaha',
+            'Sanksi',
+        ];
     }
 
     public function collection()
     {
-        $query = PengenaanSP::query();
-
-        if ($this->mulai && $this->selesai) {
-            $query->whereBetween('tanggal_mulai', [
-                $this->mulai,
-                $this->selesai
-            ]);
-        }
-
-        return $query->orderBy('tanggal_selesai', 'asc')->get();
+        return $this->data->map(function ($d) {
+            return [
+                $d->no_surat,
+                $d->tanggal_mulai,
+                $d->tanggal_selesai,
+                $d->pelaku_usaha->nama ?? '-',
+                $d->sanksi->nama ?? '-',
+            ];
+        });
     }
 }

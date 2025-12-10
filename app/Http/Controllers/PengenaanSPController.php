@@ -63,7 +63,7 @@ class PengenaanSPController extends Controller
         $urutan = $last ? sprintf('%03d', $last->id + 1) : '001';
         $kode_sanksi = Sanksi::where('id', $request->sanksi_id)->value('kode_surat');
         if ($kode_sanksi == 'SP') {
-            $no_surat = "UD.02.01/{$urutan}/BAPPEBTI/{$kode_sanksi}/";
+            $no_surat = "UD.02.01/{$urutan}/BAPPEBTI/{$kode_sanksi}";
         } else {
             $no_surat = $request->no_surat;
         }
@@ -86,7 +86,7 @@ class PengenaanSPController extends Controller
         $tahun = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y');
 
         $sp->update([
-            'no_surat' => $sp->no_surat . "{$bulan}/{$tahun}"
+            'no_surat' => $sp->no_surat . "/{$bulan}/{$tahun}"
         ]);
 
         // ---- 4. Otomatis Export PDF setelah simpan ----
@@ -205,7 +205,7 @@ class PengenaanSPController extends Controller
             $query->whereDate('tanggal_mulai', '<=', $request->end);
         }
 
-        $pengenaan_sp = $query->orderBy('tanggal_mulai', 'desc')->get();
+        $pengenaan_sp = $query->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')->get();
 
         return view('pengenaan_sp.laporan', [
             'title' => 'Laporan Pengenaan Sanksi',
@@ -216,7 +216,7 @@ class PengenaanSPController extends Controller
     public function exportExcel(Request $request)
     {
         $start = $request->start;
-        $end = $request->end;
+        $end   = $request->end;
 
         $query = PengenaanSP::with(['pelaku_usaha', 'sanksi']);
 
@@ -225,13 +225,20 @@ class PengenaanSPController extends Controller
         }
 
         $query->orderByRaw("ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC");
+
+        $data = $query->get();
+
         if ($start && $end) {
-            $reportname = Excel::download(new PengenaanSPExport($query->get()), "pengenaan-sp-{$start}-{}$end.xlsx");
-        } else {
-            $reportname = Excel::download(new PengenaanSPExport($query->get()), 'pengenaan-sp-all-periode.xlsx');
+            return Excel::download(
+                new PengenaanSPExport($data),
+                "pengenaan-sp-{$start}-{$end}.xlsx"
+            );
         }
 
-        return $reportname;
+        return Excel::download(
+            new PengenaanSPExport($data),
+            'pengenaan-sp-all-periode.xlsx'
+        );
     }
 
     public function exportPdf(Request $request)
@@ -252,13 +259,14 @@ class PengenaanSPController extends Controller
         $data = $query->get();
 
         $pdf = PDF::loadView('pengenaan_sp.pdf', [
-            'data' => $data
+            'sp' => $data,
+            'tahun' => $start
         ]);
 
         if ($start && $end) {
-            $report = $pdf->download("pengenaan-sp-{$start}-{$end}.pdf");
+            $report = $pdf->stream("pengenaan-sp-{$start}-{$end}.pdf");
         } else {
-            $report = $pdf->download('pengenaan-sp-all-periode.pdf');
+            $report = $pdf->stream('pengenaan-sp-all-periode.pdf');
         }
 
 
