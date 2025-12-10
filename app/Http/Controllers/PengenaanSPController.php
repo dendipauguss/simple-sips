@@ -207,9 +207,14 @@ class PengenaanSPController extends Controller
 
         $pengenaan_sp = $query->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')->get();
 
+        $pengenaan_sp_grouped = $pengenaan_sp->groupBy(function ($item) {
+            return $item->pelaku_usaha->jenis_pelaku_usaha->id;
+        });
+
         return view('pengenaan_sp.laporan', [
             'title' => 'Laporan Pengenaan Sanksi',
-            'pengenaan_sp' => $pengenaan_sp
+            'pengenaan_sp' => $pengenaan_sp,
+            'pengenaan_sp_grouped' => $pengenaan_sp_grouped
         ]);
     }
 
@@ -258,8 +263,21 @@ class PengenaanSPController extends Controller
 
         $data = $query->get();
 
+        $grouped = $data->groupBy(function ($item) {
+            return $item->pelaku_usaha->jenis_pelaku_usaha->id; // LEVEL 1
+        })->map(function ($items) {
+            return $items->groupBy(function ($item) {
+                return $item->pelaku_usaha->id; // LEVEL 2
+            })->map(function ($items2) {
+                return $items2->groupBy(function ($item) {
+                    return $item->sanksi->id; // LEVEL 3
+                });
+            });
+        });
+
         $pdf = PDF::loadView('pengenaan_sp.pdf', [
             'sp' => $data,
+            'grouped' => $grouped,
             'tahun' => $start
         ]);
 

@@ -32,9 +32,7 @@
                                         class="btn btn-sm btn-danger" target="_blank">Export PDF</a>
                                 </div>
                             </div>
-
                         </div>
-
 
                         <div class="card-body py-0">
                             <div class="table-responsive">
@@ -42,61 +40,35 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th class="text-dark text-center">No</th>
-                                            <th class="text-dark text-center">Periode</th>
-                                            <th class="text-dark text-center">Nama Perusahaan</th>
+                                            <th class="text-dark text-center">Tanggal Jatuh Tempo</th>
+                                            <th class="text-dark text-center">Kategori</th>
+                                            <th class="text-dark text-center">Perusahaan</th>
                                             <th class="text-dark text-center">Sanksi</th>
-                                            <th class="text-dark text-center">Keterangan</th>
+                                            <th class="text-dark text-center">Pelanggaran</th>
+                                            <th class="text-dark text-center">Tanggapan</th>
                                             <th class="text-dark text-center" style="width: 15%;">Status</th>
-                                            @if (auth()->user()->role == 'admin')
-                                                <th class="text-dark text-center">Aksi</th>
-                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($pengenaan_sp as $p)
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
-
-                                                <td class="text-center">{{ $p->tanggal_mulai }} s/d
-                                                    {{ $p->tanggal_selesai }}
+                                                <td class="text-center">
+                                                    {{ \Carbon\Carbon::parse($p->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                                                </td>
+                                                <td class="text-center">{{ $p->pelaku_usaha->jenis_pelaku_usaha->nama }}
                                                 </td>
                                                 <td class="text-center">{{ $p->pelaku_usaha->nama }}</td>
                                                 <td>
                                                     {{ $p->sanksi->nama }}
                                                 </td>
-                                                <td>{{ $p->detail_pelanggaran }}</td>
+                                                <td class="text-center">{{ $p->jenis_pelanggaran->nama }}
+                                                </td>
+                                                <td>{{ $p->tanggapan }}</td>
                                                 <td class="text-center">
-
                                                     <span
                                                         class="badge {{ $p->status_surat == 'belum_direspon' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $p->status_surat)) }}</span>
                                                 </td>
-                                                @if (auth()->user()->role == 'admin')
-                                                    <td>
-                                                        <div class="btn-group" role="group">
-                                                            <a href="{{ route('pengenaan-sp.show', $p->id) }}"
-                                                                class="badge bg-info me-1 text-decoration-none"
-                                                                title="Detail">
-                                                                Detail <i class="psi-paper"></i>
-                                                            </a>
-                                                            <a href="{{ route('pengenaan-sp.edit', $p->id) }}"
-                                                                class="badge bg-warning me-1 text-decoration-none"
-                                                                title="Edit">
-                                                                Edit <i class="psi-pencil"></i>
-                                                            </a>
-                                                            <a href="#" class="badge bg-danger text-decoration-none"
-                                                                onclick="event.preventDefault(); document.getElementById('delete-{{ $p->id }}').submit();">
-                                                                Hapus <i class="psi-trash"></i>
-                                                            </a>
-
-                                                            <form id="delete-{{ $p->id }}"
-                                                                action="{{ route('pengenaan-sp.destroy', $p->id) }}"
-                                                                method="POST" style="display:none;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form>
-                                                        </div>
-                                                    </td>
-                                                @endif
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -27,7 +27,7 @@
                                             {{-- <th class="text-dark text-center">Tanggapan Atas Perbaikan</th> --}}
                                             <th class="text-dark text-center" style="width: 15%;">Status</th>
                                             <th class="text-dark text-center">Aksi</th>
-                                            <th class="text-dark text-center">Pengisi</th>
+                                            <th class="text-dark text-center">PIC</th>
                                         </tr>
                                     </thead>
                                     <tbody>

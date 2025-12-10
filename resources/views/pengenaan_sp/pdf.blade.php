@@ -104,31 +104,71 @@
 
         <table border="1" cellpadding="4" cellspacing="0" width="100%">
             <thead>
-                <th>No. Surat</th>
-                <th>Tanggal Surat</th>
-                <th>Tanggal Jatuh Tempo</th>
-                <th>Sanksi</th>
-                <th>Perusahaan</th>
-                <th>Jenis Pelaku Usaha</th>
-                <th>Jenis Pelanggaran</th>
-                <th>Kategori</th>
-                <th>Detail Pelanggaran</th>
+                <th>Kategori Pelaku Usaha</th>
+                <th>Nama Perusahaan</th>
+                <th>Bentuk Sanksi</th>
+                <th>Pelanggaran</th>
                 <th>Tanggapan</th>
             </thead>
             <tbody>
-                @foreach ($sp as $d)
-                    <tr>
-                        <td>{{ $d->no_surat }}</td>
-                        <td>{{ $d->tanggal_mulai }}</td>
-                        <td>{{ $d->tanggal_selesai }}</td>
-                        <td>{{ $d->sanksi->nama }}</td>
-                        <td>{{ $d->pelaku_usaha->nama }}</td>
-                        <td>{{ $d->pelaku_usaha->jenis_pelaku_usaha->nama }}</td>
-                        <td>{{ $d->jenis_pelanggaran->nama }}</td>
-                        <td>{{ $d->kategori_sp->nama }}</td>
-                        <td>{{ $d->detail_pelanggaran }}</td>
-                        <td>{{ $d->tanggapan }}</td>
-                    </tr>
+                @foreach ($grouped as $jenis => $pelakuGroup)
+                    @php
+                        $rowspanJenis = $pelakuGroup->flatten()->count();
+                        $jenisNama = $pelakuGroup->first()->first()->first()->pelaku_usaha->jenis_pelaku_usaha->nama;
+                        $firstJenisRendered = false;
+                    @endphp
+
+                    @foreach ($pelakuGroup as $pelakuId => $sanksiGroup)
+                        @php
+                            $rowspanPelaku = $sanksiGroup->flatten()->count();
+                            $pelakuNama = $sanksiGroup->first()->first()->pelaku_usaha->nama;
+                            $firstPelakuRendered = false;
+                        @endphp
+
+                        @foreach ($sanksiGroup as $sanksiId => $items)
+                            @php
+                                $rowspanSanksi = count($items);
+                                $sanksiNama = $items->first()->sanksi->nama;
+                                $firstSanksiRendered = false;
+                            @endphp
+
+                            @foreach ($items as $item)
+                                <tr>
+
+                                    {{-- LEVEL 1: JENIS PELAKU USAHA --}}
+                                    @if (!$firstJenisRendered)
+                                        <td rowspan="{{ $rowspanJenis }}">
+                                            {{ $jenisNama }}
+                                        </td>
+                                        @php $firstJenisRendered = true; @endphp
+                                    @endif
+
+                                    {{-- LEVEL 2: PELAKU USAHA --}}
+                                    @if (!$firstPelakuRendered)
+                                        <td rowspan="{{ $rowspanPelaku }}">
+                                            {{ $pelakuNama }}
+                                        </td>
+                                        @php $firstPelakuRendered = true; @endphp
+                                    @endif
+
+                                    {{-- LEVEL 3: BENTUK SANKSI --}}
+                                    @if (!$firstSanksiRendered)
+                                        <td rowspan="{{ $rowspanSanksi }}">
+                                            {{ $sanksiNama }}
+                                        </td>
+                                        @php $firstSanksiRendered = true; @endphp
+                                    @endif
+
+                                    {{-- LEVEL 4: JENIS PELANGGARAN --}}
+                                    <td>{{ $item->jenis_pelanggaran->nama }}</td>
+
+                                    {{-- LEVEL 5: STATUS --}}
+                                    <td>{{ ucwords(str_replace('_', ' ', $item->status_surat)) }}</td>
+
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    @endforeach
                 @endforeach
             </tbody>
         </table>
