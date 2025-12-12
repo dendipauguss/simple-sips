@@ -27,20 +27,38 @@
                                 <table class="table table-hover table-sm" id="dataTables">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Bulan</th>
-                                            <th>Tahun</th>
-                                            <th>Catatan</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
+                                            <th style="width: 5%">No</th>
+                                            <th style="width: 7%">Bulan</th>
+                                            <th style="width: 7%">Tahun</th>
+                                            <th class="text-center">Catatan</th>
+                                            <th style="width: 8%">Status</th>
+                                            <th style="width: 8%">Aksi</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                         @foreach ($laporan as $row)
                                             <tr>
+                                                <td>{{ $loop->iteration }}</td>
                                                 <td>{{ DateTime::createFromFormat('!m', $row->bulan)->format('F') }}</td>
                                                 <td>{{ $row->tahun }}</td>
-                                                <td>{{ $row->catatan ?? '-' }}</td>
+                                                <td>
+                                                    @if (!empty($row->catatan))
+                                                        {{ $row->catatan }}
+                                                    @else
+                                                        <form action="{{ route('laporan.isi-catatan', $row->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <div class="input-group">
+                                                                <input type="text" name="catatan" id="catatan"
+                                                                    class="form-control">
+                                                                <button class="btn btn-primary"
+                                                                    type="submit">Simpan</button>
+                                                            </div>
+                                                        </form>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     @if ($row->status_disetujui)
                                                         <span class="badge bg-success">Disetujui</span>

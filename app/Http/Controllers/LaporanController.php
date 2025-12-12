@@ -97,4 +97,22 @@ class LaporanController extends Controller
 
         return back()->with('success', 'Status laporan diperbarui.');
     }
+
+    public function isiCatatan(Request $request, $id)
+    {
+        $request->validate([
+            'catatan' => ['required', 'string', 'max:100']
+        ], [
+            'catatan.required' => 'Tidak boleh kosong kakak',
+            'catatan.max' => 'Maksimal 100 karakter kakak'
+        ]);
+
+        $laporan = Laporan::findOrFail($id);
+        $laporan->update([
+            'catatan' => $request->catatan
+        ]);
+
+        return redirect()->route('laporan.index')
+            ->with('success', 'Laporan berhasil dibuat.');
+    }
 }
