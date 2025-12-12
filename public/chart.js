@@ -196,16 +196,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Bar Chart
     // ----------------------------------------------
-    const barData = [{ y: "1", a: 100, b: 90 }, { y: "2", a: 75, b: 65 }, { y: "3", a: 20, b: 15 }, { y: "5", a: 50, b: 40 }, { y: "6", a: 75, b: 95 }, { y: "7", a: 15, b: 65 }, { y: "8", a: 70, b: 100 }, { y: "9", a: 100, b: 70 }, { y: "10", a: 50, b: 70 }, { y: "11", a: 20, b: 10 }, { y: "12", a: 40, b: 90 }];
     const barCanvas = document.getElementById("_dm-barChart");
     if (barCanvas) {
+        const barData = JSON.parse(barCanvas.dataset.status);
         const barChart = new Chart(
             barCanvas, {
             type: "bar",
             data: {
                 datasets: [
                     {
-                        label: "Upload Speed",
+                        label: "Jumlah Pelanggaran",
                         data: barData,
                         borderWidth: 2,
                         borderColor: primaryColor,
@@ -215,16 +215,16 @@ document.addEventListener("DOMContentLoaded", () => {
                             yAxisKey: "a"
                         }
                     },
-                    {
-                        label: "Download Speed",
-                        data: barData,
-                        borderColor: infoColor,
-                        backgroundColor: infoColor,
-                        parsing: {
-                            xAxisKey: "y",
-                            yAxisKey: "b"
-                        }
-                    }
+                    // {
+                    //     label: "Download Speed",
+                    //     data: barData,
+                    //     borderColor: infoColor,
+                    //     backgroundColor: infoColor,
+                    //     parsing: {
+                    //         xAxisKey: "y",
+                    //         yAxisKey: "b"
+                    //     }
+                    // }
                 ]
             },
 
@@ -425,7 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
             pieCanvas, {
             type: "pie",
             data: {
-                labels: ["Belum", "Selesai"],
+                labels: ["Belum Ditanggapi", "Sudah Ditanggapi"],
                 datasets: [{
                     data: statusData,
                     borderColor: "transparent",

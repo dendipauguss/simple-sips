@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PengenaanSPExport;
-use PDF;
 use App\Models\PengenaanSP;
 use App\Models\PelakuUsaha;
 use App\Models\JenisPelakuUsaha;
@@ -14,15 +14,39 @@ use App\Models\JenisPelanggaran;
 use App\Models\KategoriSP;
 use App\Models\Files;
 use App\Models\Sanksi;
-use App\Models\SK;
+use App\Models\Laporan;
+use App\Models\LaporanItem;
 
 class PengenaanSPController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = PengenaanSP::query();
+
+        // === Filter Periode Tanggal ===
+        if ($request->bulan && $request->start && $request->end) {
+            $query->whereMonth('tanggal_mulai', $request->bulan)->whereBetween('tanggal_mulai', [$request->start, $request->end]);
+        } elseif ($request->bulan && $request->start) {
+            $query->whereMonth('tanggal_mulai', $request->bulan)->whereDate('tanggal_mulai', '>=', $request->start);
+        } elseif ($request->bulan && $request->end) {
+            $query->whereMonth('tanggal_mulai', $request->bulan)->whereDate('tanggal_mulai', '<=', $request->end);
+        } elseif ($request->start && $request->end) {
+            $query->whereBetween('tanggal_mulai', [$request->start, $request->end]);
+        } elseif ($request->bulan) {
+            $query->whereMonth('tanggal_mulai', $request->bulan);
+        } elseif ($request->start) {
+            $query->whereDate('tanggal_mulai', '>=', $request->start);
+        } elseif ($request->end) {
+            $query->whereDate('tanggal_mulai', '<=', $request->end);
+        }
+
+        $pengenaan_sp = $query
+            ->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')
+            ->get();
+
         return view('pengenaan_sp.index', [
             'title' => 'Pengenaan Sanksi',
-            'pengenaan_sp' => PengenaanSP::orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')->get()
+            'pengenaan_sp' => $pengenaan_sp,
         ]);
     }
 
@@ -52,6 +76,7 @@ class PengenaanSPController extends Controller
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date',
             'sanksi_id' => 'required',
+            'jenis_pelaku_usaha_id' => 'required',
             'pelaku_usaha_id' => 'required',
             'jenis_pelanggaran_id' => 'required',
             'kategori_sp_id' => 'required',
@@ -74,6 +99,7 @@ class PengenaanSPController extends Controller
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
             'sanksi_id' => $request->sanksi_id,
+            'jenis_pelaku_usaha_id' => $request->jenis_pelaku_usaha_id,
             'pelaku_usaha_id' => $request->pelaku_usaha_id,
             'jenis_pelanggaran_id' => $request->jenis_pelanggaran_id,
             'kategori_sp_id' => $request->kategori_sp_id,
@@ -159,7 +185,7 @@ class PengenaanSPController extends Controller
         $this->uploadFile($request, 'pengenaan_sp', $request->pengenaan_sp_id, 'bebas');
         $pengenaan_sp = PengenaanSP::findOrFail($request->pengenaan_sp_id);
         $pengenaan_sp->tanggapan = $request->tanggapan;
-        $pengenaan_sp->status_surat = 'sudah_direspon';
+        $pengenaan_sp->status_surat = 'sudah_ditanggapi';
         $pengenaan_sp->save();
 
         return back()->with('success', 'Bukti pendukung berhasil diupload.');
@@ -194,18 +220,23 @@ class PengenaanSPController extends Controller
     {
         $query = PengenaanSP::query();
 
-        if ($request->start && $request->end) {
-            // Filter rentang
-            $query->whereBetween('tanggal_mulai', [$request->start, $request->end]);
-        } elseif ($request->start) {
-            // Filter tanggal mulai saja
-            $query->whereDate('tanggal_mulai', '>=', $request->start);
-        } elseif ($request->end) {
-            // Filter tanggal selesai saja
-            $query->whereDate('tanggal_mulai', '<=', $request->end);
+        // === Filter Bulan ===
+        if ($request->bulan) {
+            $query->whereMonth('tanggal_mulai', $request->bulan);
+        } else {
+            // === Filter Periode Tanggal ===
+            if ($request->start && $request->end) {
+                $query->whereBetween('tanggal_mulai', [$request->start, $request->end]);
+            } elseif ($request->start) {
+                $query->whereDate('tanggal_mulai', '>=', $request->start);
+            } elseif ($request->end) {
+                $query->whereDate('tanggal_mulai', '<=', $request->end);
+            }
         }
 
-        $pengenaan_sp = $query->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')->get();
+        $pengenaan_sp = $query
+            ->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')
+            ->get();
 
         $pengenaan_sp_grouped = $pengenaan_sp->groupBy(function ($item) {
             return $item->pelaku_usaha->jenis_pelaku_usaha->id;
@@ -289,5 +320,33 @@ class PengenaanSPController extends Controller
 
 
         return $report;
+    }
+
+    public function generateLaporan(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+
+        // Buat laporan baru
+        $laporan = Laporan::create([
+            'bulan' => $bulan,
+            'tahun' => $tahun
+        ]);
+
+        // Ambil pengenaan_sp berdasarkan bulan–tahun
+        $data = PengenaanSP::whereMonth('tanggal_mulai', $bulan)
+            ->whereYear('tanggal_mulai', $tahun)
+            ->get();
+
+        // Masukkan ke pivot
+        foreach ($data as $sp) {
+            LaporanItem::create([
+                'laporan_id' => $laporan->id,
+                'pengenaan_sp_id' => $sp->id
+            ]);
+        }
+
+        return redirect()->route('laporan.index')
+            ->with('success', 'Laporan bulanan berhasil dibuat.');
     }
 }

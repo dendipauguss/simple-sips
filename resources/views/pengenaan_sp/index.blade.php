@@ -5,9 +5,41 @@
             <div class="row">
                 <div class="col-xl-12 mb-3 mb-xl-0">
                     <div class="card h-100">
-                        {{-- <div class="card-header d-flex align-items-center border-0">
-                            <a href="{{ url('pengenaan-sp/create') }}" class="btn btn-sm btn-primary">+ Tambah</a>
-                        </div> --}}
+                        <div class="card-header border-0">
+                            <form action="{{ route('laporan.generate') }}" method="GET">
+                                <div class="row">
+                                    <div class="col-sm-3 ms-1">
+                                        <div class="input-group">
+                                            <select name="bulan" class="form-select">
+                                                <option value="">-- Pilih Bulan --</option>
+                                                @foreach (range(1, 12) as $b)
+                                                    <option value="{{ $b }}">
+                                                        {{ DateTime::createFromFormat('!m', $b)->format('F') }}</option>
+                                                @endforeach
+                                            </select>
+                                            <select name="tahun" class="form-select">
+                                                @foreach (range(date('Y'), date('Y') - 5) as $t)
+                                                    <option value="{{ $t }}">{{ $t }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <button class="btn btn-primary ms-1">Generate Laporan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                            {{-- <div class="row row-cols-md-auto">
+                                <div class="input-group ms-2">
+                                    <a href="{{ route('laporan.generate', request()->all()) }}"
+                                        class="btn btn-sm btn-danger" target="_blank">Generate Laporan</a>
+                                </div>
+                            </div> --}}
+                        </div>
                         <div class="card-body mt-1">
                             <div class="table-responsive">
                                 <table class="table table-hover" id="dataTables">

@@ -19,19 +19,19 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'nama' => 'Pegawai 1',
-            'email' => 'pegawai1@gmail.com',
-            'username' => 'pegawai1',
+            'nama' => 'Pegawai',
+            'email' => 'pegawai@gmail.com',
+            'username' => 'pegawai',
             'password' => Hash::make('password_pegawai'),
             'role' => 'pegawai'
         ]);
 
         User::create([
-            'nama' => 'Pegawai 2',
-            'email' => 'pegawai2@gmail.com',
-            'username' => 'pegawai2',
-            'password' => Hash::make('password_pegawai'),
-            'role' => 'pegawai'
+            'nama' => 'Ketua Tim',
+            'email' => 'ketuatim@gmail.com',
+            'username' => 'ketuatim',
+            'password' => Hash::make('password_ketuatim'),
+            'role' => 'ketua_tim'
         ]);
     }
 }

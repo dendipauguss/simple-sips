@@ -59,4 +59,14 @@ class PengenaanSP extends Model
     {
         return $this->hasOne(SK::class);
     }
+
+    public function laporan()
+    {
+        return $this->belongsToMany(
+            Laporan::class,
+            'laporan_item',
+            'pengenaan_sp_id',
+            'laporan_id'
+        );
+    }
 }

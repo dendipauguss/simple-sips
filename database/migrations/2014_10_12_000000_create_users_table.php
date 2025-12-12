@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('password');
-            $table->enum('role', ['admin', 'pegawai'])->default('pegawai');
+            $table->enum('role', ['admin', 'pegawai', 'ketua_tim'])->default('pegawai');
             $table->tinyInteger('status')->default(1);
             $table->rememberToken();
             $table->timestamps();

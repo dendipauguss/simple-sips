@@ -36,11 +36,9 @@
 
                         <div class="card-body py-0">
                             <div class="table-responsive">
-                                <table class="table table-hover" id="dataTables">
+                                <table class="table table-hover">
                                     <thead class="table-primary">
                                         <tr>
-                                            <th class="text-dark text-center">No</th>
-                                            <th class="text-dark text-center">Tanggal Jatuh Tempo</th>
                                             <th class="text-dark text-center">Kategori</th>
                                             <th class="text-dark text-center">Perusahaan</th>
                                             <th class="text-dark text-center">Sanksi</th>
@@ -50,26 +48,48 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($pengenaan_sp as $p)
-                                            <tr>
-                                                <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">
-                                                    {{ \Carbon\Carbon::parse($p->tanggal_selesai)->translatedFormat('l, d F Y') }}
-                                                </td>
-                                                <td class="text-center">{{ $p->pelaku_usaha->jenis_pelaku_usaha->nama }}
-                                                </td>
-                                                <td class="text-center">{{ $p->pelaku_usaha->nama }}</td>
-                                                <td>
-                                                    {{ $p->sanksi->nama }}
-                                                </td>
-                                                <td class="text-center">{{ $p->jenis_pelanggaran->nama }}
-                                                </td>
-                                                <td>{{ $p->tanggapan }}</td>
-                                                <td class="text-center">
-                                                    <span
-                                                        class="badge {{ $p->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $p->status_surat)) }}</span>
-                                                </td>
-                                            </tr>
+                                        @php $no = 1; @endphp
+                                        @foreach ($pengenaan_sp_grouped as $jenis_id => $items)
+                                            @php
+                                                $rowspan = $items->count();
+                                                $jenis_nama = $items->first()->pelaku_usaha->jenis_pelaku_usaha->nama;
+                                            @endphp
+
+                                            @foreach ($items as $index => $p)
+                                                <tr>
+
+                                                    {{-- NO --}}
+                                                    {{-- <td class="text-center">{{ $no++ }}</td> --}}
+
+                                                    {{-- KATEGORI (ROWSPAN DI BARIS PERTAMA SAJA) --}}
+                                                    @if ($index == 0)
+                                                        <td class="text-center" rowspan="{{ $rowspan }}">
+                                                            {{ $jenis_nama }}
+                                                        </td>
+                                                    @endif
+
+                                                    {{-- PERUSAHAAN --}}
+                                                    <td class="text-center">{{ $p->pelaku_usaha->nama }}</td>
+
+                                                    {{-- NAMA PERUSAHAAN --}}
+                                                    <td class="text-center">{{ $p->pelaku_usaha->nama }}</td>
+
+                                                    {{-- SANKSI --}}
+                                                    <td>{{ $p->sanksi->nama }}</td>
+
+                                                    {{-- KETERANGAN --}}
+                                                    <td>{{ $p->detail_pelanggaran }}</td>
+
+                                                    {{-- STATUS --}}
+                                                    <td class="text-center">
+                                                        <span
+                                                            class="badge {{ $p->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">
+                                                            {{ ucwords(str_replace('_', ' ', $p->status_surat)) }}
+                                                        </span>
+                                                    </td>
+
+                                                </tr>
+                                            @endforeach
                                         @endforeach
                                     </tbody>
                                 </table>

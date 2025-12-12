@@ -13,7 +13,8 @@ use App\Http\Controllers\PengenaanSPController;
 use App\Http\Controllers\JenisPelanggaranController;
 use App\Http\Controllers\KategoriSPController;
 use App\Http\Controllers\SKController;
-use App\Models\KategoriSP;
+use App\Http\Controllers\LaporanController;
+
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/get-kategori-sp/{jenis_pelanggaran_id}', [JenisPelanggaranController::class, 'getKategoriSPByJenis']);
     Route::get('/pengenaan-sp/export-excel', [PengenaanSPController::class, 'exportExcel'])->name('pengenaan-sp.export.excel');
     Route::get('/pengenaan-sp/export-pdf',   [PengenaanSPController::class, 'exportPdf'])->name('pengenaan-sp.export.pdf');
+    Route::get('/pengenaan-sp/generate-laporan',   [PengenaanSPController::class, 'generateLaporan'])->name('pengenaan-sp.generate.laporan');
     Route::get('/pengenaan-sp/{id}/generate-pdf', [PengenaanSPController::class, 'generatePdf'])
         ->name('pengenaan-sp.generate-pdf');
     Route::post('/pengenaan-sp/upload-dokumen', [PengenaanSPController::class, 'uploadDokumen'])->name('pengenaan-sp.upload-dokumen');
@@ -51,6 +53,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'importView']);
     Route::post('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'import'])->name('kategori-sp.import');
     Route::get('/sk/create/{id}', [SKController::class, 'create'])->name('sk.create');
+    // Laporan
+    Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('laporan/generate', [LaporanController::class, 'generate'])->name('laporan.generate');
+    Route::get('laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
+    Route::get('laporan/{id}/pdf', [LaporanController::class, 'pdf'])->name('laporan.pdf');
+    Route::post('laporan/{id}/approve', [LaporanController::class, 'approve'])->name('laporan.approve');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');

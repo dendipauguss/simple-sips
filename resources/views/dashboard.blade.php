@@ -6,21 +6,21 @@
                 <div class="col-md-4 mb-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Status Pengenaan</h5>
+                            <h5 class="card-title">Status Tanggapan Terhadap Sanksi</h5>
                             <!-- Status Chart -->
                             <canvas id="_dm-pieChart" width="464" height="463"
                                 style="display: block; box-sizing: border-box; height: 370.4px; width: 371.2px;"
-                                data-status='@json($status_data)'></canvas>
+                                data-status='@json($pie_data)'></canvas>
                             <!-- END : Status Chart -->
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-8 mb-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Periode</h5>
+                            <h5 class="card-title">Jumlah Pelanggaran</h5>
                             <!-- Pie Chart -->
-                            <canvas id="_dm-barChart" width="464" height="463"
+                            <canvas id="_dm-barChart" width="464" height="215"
                                 style="display: block; box-sizing: border-box; height: 370.4px; width: 371.2px;"></canvas>
                             <!-- END : Pie Chart -->
                         </div>
@@ -39,5 +39,4 @@
                 </div> --}}
             </div>
         </div>
-    </div>
-@endsection
+    @endsection

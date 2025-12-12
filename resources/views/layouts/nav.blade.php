@@ -18,7 +18,7 @@
                             <span class="d-flex justify-content-center align-items-center">
                                 <h6 class="mb-0">{{ auth()->user()->nama }}</h6>
                             </span>
-                            <small class="text-muted">{{ auth()->user()->role }}</small>
+                            <small class="text-muted">{{ ucwords(str_replace('_', ' ', auth()->user()->role)) }}</small>
                         </div>
 
                         <!-- Collapsed user menu -->
@@ -31,7 +31,8 @@
 
             <!-- Navigation Category -->
             <div class="mainnav__categoriy py-3">
-                <h6 class="mainnav__caption mt-0 px-3 fw-bold">{{ auth()->user()->role }}</h6>
+                <h6 class="mainnav__caption mt-0 px-3 fw-bold">
+                    {{ ucwords(str_replace('_', ' ', auth()->user()->role)) }}</h6>
                 <ul class="mainnav__menu nav flex-column">
 
                     <!-- Dashboard -->
@@ -47,7 +48,7 @@
 
                     <li class="nav-item has-sub">
                         <a href="#"
-                            class="mininav-toggle nav-link collapsed {{ request()->is('pengenaan-sp*') ? 'active' : '' }}"><i
+                            class="mininav-toggle nav-link collapsed {{ request()->is('pengenaan-sp*') || request()->is('laporan*') ? 'active' : '' }}"><i
                                 class="psi-pantheon fs-5 me-2"></i>
                             <span class="nav-label ms-1">Manajemen Sanksi</span>
                         </a>
@@ -73,8 +74,8 @@
 
                             <!-- Buat Laporan -->
                             <li class="nav-item">
-                                <a href="{{ url('pengenaan-sp/laporan') }}"
-                                    class="nav-link {{ request()->is('pengenaan-sp/laporan') ? 'active' : '' }}">
+                                <a href="{{ url('laporan') }}"
+                                    class="nav-link {{ request()->is('laporan*') ? 'active' : '' }}">
                                     Laporan Pengenaan Sanksi
                                 </a>
                             </li>
