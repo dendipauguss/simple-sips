@@ -11,8 +11,12 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">No. Surat</label>
-                                    <input type="text" name="no_surat" class="form-control"
-                                        value="{{ $no_surat_template }}">
+                                    <select name="no_surat" id="no_surat" class="form-select">
+                                        <option value="UD.02.01">UD.02.01</option>
+                                        <option value="UD.01.00">UD.01.00</option>
+                                    </select>
+                                    {{-- <input type="text" name="no_surat" class="form-control"
+                                        value="{{ $no_surat_template }}"> --}}
                                 </div>
 
                                 <div class="mb-3">

@@ -23,22 +23,15 @@ class PengenaanSPController extends Controller
     {
         $query = PengenaanSP::query();
 
-        // === Filter Periode Tanggal ===
-        if ($request->bulan && $request->start && $request->end) {
-            $query->whereMonth('tanggal_mulai', $request->bulan)->whereBetween('tanggal_mulai', [$request->start, $request->end]);
-        } elseif ($request->bulan && $request->start) {
-            $query->whereMonth('tanggal_mulai', $request->bulan)->whereDate('tanggal_mulai', '>=', $request->start);
-        } elseif ($request->bulan && $request->end) {
-            $query->whereMonth('tanggal_mulai', $request->bulan)->whereDate('tanggal_mulai', '<=', $request->end);
-        } elseif ($request->start && $request->end) {
-            $query->whereBetween('tanggal_mulai', [$request->start, $request->end]);
-        } elseif ($request->bulan) {
-            $query->whereMonth('tanggal_mulai', $request->bulan);
-        } elseif ($request->start) {
-            $query->whereDate('tanggal_mulai', '>=', $request->start);
-        } elseif ($request->end) {
-            $query->whereDate('tanggal_mulai', '<=', $request->end);
-        }
+        $bulanList = PengenaanSP::selectRaw('MONTH(tanggal_mulai) as bulan')
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->pluck('bulan');
+
+        $tahunList = PengenaanSP::selectRaw('YEAR(tanggal_mulai) as tahun')
+            ->groupBy('tahun')
+            ->orderByDesc('tahun')
+            ->pluck('tahun');
 
         $pengenaan_sp = $query
             ->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')
@@ -47,6 +40,8 @@ class PengenaanSPController extends Controller
         return view('pengenaan_sp.index', [
             'title' => 'Pengenaan Sanksi',
             'pengenaan_sp' => $pengenaan_sp,
+            'bulanList' => $bulanList,
+            'tahunList' => $tahunList
         ]);
     }
 
@@ -87,11 +82,7 @@ class PengenaanSPController extends Controller
         $last = PengenaanSP::orderBy('id', 'DESC')->first();
         $urutan = $last ? sprintf('%03d', $last->id + 1) : '001';
         $kode_sanksi = Sanksi::where('id', $request->sanksi_id)->value('kode_surat');
-        if ($kode_sanksi == 'SP') {
-            $no_surat = "UD.02.01/{$urutan}/BAPPEBTI/{$kode_sanksi}";
-        } else {
-            $no_surat = $request->no_surat;
-        }
+        $no_surat = "{$request->no_surat}/{$urutan}/BAPPEBTI/{$kode_sanksi}";
 
         // ---- 2. Simpan data awal ----
         $sp = PengenaanSP::create([

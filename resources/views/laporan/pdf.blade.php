@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Surat Peringatan</title>
+        <title>Laporan {{ $laporan->status_disetujui == 1 ? 'Disetujui' : 'Belum Disetujui' }}</title>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap');
 
@@ -59,7 +59,8 @@
                 /* <- wrap konten */
             }
 
-            td {
+            table th,
+            table td {
                 padding: 5px;
                 vertical-align: top;
             }
@@ -100,19 +101,25 @@
         </p>
 
         <div class="title">Laporan Pengenaan Sanksi
-            {{ 'Bulan ' . \Carbon\Carbon::create($laporan->tahun, $laporan->bulan, 1)->translatedFormat('F Y') }}
+            @if ($laporan->bulan && $laporan->tahun)
+                {{ 'Bulan ' . \Carbon\Carbon::createFromDate($laporan->tahun, $laporan->bulan, 1)->translatedFormat('F Y') }}
+            @else
+                Semua Periode
+            @endif
         </div>
         @php
-            function countDeep($array)
+            function countDeep($data)
             {
                 $count = 0;
-                foreach ($array as $item) {
-                    if (is_array($item)) {
+
+                foreach ($data as $item) {
+                    if (is_array($item) || $item instanceof \Illuminate\Support\Collection) {
                         $count += countDeep($item);
                     } else {
                         $count++;
                     }
                 }
+
                 return $count;
             }
         @endphp
@@ -127,39 +134,58 @@
             </thead>
             <tbody>
                 @foreach ($items as $jenisPU => $pelakuGroup)
-                    @php $rowspan_1 = countDeep($pelakuGroup); @endphp
+                    @php
+                        $rowspan_1 = countDeep($pelakuGroup);
+                        $i1 = 0;
+                    @endphp
 
                     @foreach ($pelakuGroup as $pelakuNama => $sanksiGroup)
-                        @php $rowspan_2 = countDeep($sanksiGroup); @endphp
+                        @php
+                            $rowspan_2 = countDeep($sanksiGroup);
+                            $i2 = 0;
+                        @endphp
 
-                        @foreach ($sanksiGroup as $sanksiNama => $items)
-                            @php $rowspan_3 = count($items); @endphp
+                        @foreach ($sanksiGroup as $sanksiNama => $rowItems)
+                            @php
+                                $rowspan_3 = count($rowItems);
+                                $i3 = 0;
+                            @endphp
 
-                            @foreach ($items as $index => $item)
+                            @foreach ($rowItems as $item)
                                 <tr>
-                                    {{-- Level 1 --}}
-                                    @if ($loop->parent->parent->first && $loop->parent->first && $loop->first)
+
+                                    {{-- LEVEL 1 --}}
+                                    @if ($i1 == 0 && $i2 == 0 && $i3 == 0)
                                         <td rowspan="{{ $rowspan_1 }}">{{ $jenisPU }}</td>
                                     @endif
 
-                                    {{-- Level 2 --}}
-                                    @if ($loop->parent->first && $loop->first)
+                                    {{-- LEVEL 2 --}}
+                                    @if ($i2 == 0 && $i3 == 0)
                                         <td rowspan="{{ $rowspan_2 }}">{{ $pelakuNama }}</td>
                                     @endif
 
-                                    {{-- Level 3 --}}
-                                    @if ($loop->first)
+                                    {{-- LEVEL 3 --}}
+                                    @if ($i3 == 0)
                                         <td rowspan="{{ $rowspan_3 }}">{{ $sanksiNama }}</td>
                                     @endif
 
-                                    {{-- Level 4 + 5 --}}
+                                    {{-- LEVEL 4 --}}
                                     <td>{{ $item->jenis_pelanggaran->nama }}</td>
-                                    <td>{{ ucfirst($item->status) }}</td>
+
+                                    {{-- LEVEL 5 --}}
+                                    <td>{{ ucwords(str_replace('_', ' ', $item->status_surat)) }}</td>
+
                                 </tr>
+                                @php $i3++; @endphp
                             @endforeach
+
+                            @php $i2++; @endphp
                         @endforeach
+
+                        @php $i1++; @endphp
                     @endforeach
                 @endforeach
+
             </tbody>
         </table>
 
@@ -171,6 +197,10 @@
         <br><br>
         <strong
             style="text-align: center">{{ $laporan->status_disetujui == 1 ? 'Disetujui' : 'Belum Disetujui' }}</strong>
+        <br>
+        <strong>Catatan : </strong>
+        <br>
+        <p>{{ $laporan->catatan }}</p>
     </body>
 
 </html>

@@ -11,14 +11,17 @@
                                     <div class="col-sm-3 ms-1">
                                         <div class="input-group">
                                             <select name="bulan" class="form-select">
-                                                <option value="">-- Pilih Bulan --</option>
-                                                @foreach (range(1, 12) as $b)
+                                                <option value="">Semua Bulan</option>
+                                                @foreach ($bulanList as $b)
                                                     <option value="{{ $b }}">
-                                                        {{ DateTime::createFromFormat('!m', $b)->format('F') }}</option>
+                                                        {{ DateTime::createFromFormat('!m', $b)->format('F') }}
+                                                    </option>
                                                 @endforeach
                                             </select>
+
                                             <select name="tahun" class="form-select">
-                                                @foreach (range(date('Y'), date('Y') - 5) as $t)
+                                                <option value="">Semua Tahun</option>
+                                                @foreach ($tahunList as $t)
                                                     <option value="{{ $t }}">{{ $t }}</option>
                                                 @endforeach
                                             </select>
@@ -54,7 +57,8 @@
                                             {{-- <th class="text-dark text-center">Kategori SP</th> --}}
                                             {{-- <th class="text-dark text-center">Detail Pelanggaran</th> --}}
                                             {{-- <th class="text-dark text-center">Jangka Waktu Hari</th> --}}
-                                            <th class="text-dark text-center">Tanggal Jatuh Tempo</th>
+                                            <th class="text-dark text-center">Bentuk Sanksi</th>
+                                            <th class="text-dark text-center">Tanggal Jatuh Tempo Sanksi</th>
                                             {{-- <th class="text-dark text-center">Bukti Perbaikan</th> --}}
                                             {{-- <th class="text-dark text-center">Tanggapan Atas Perbaikan</th> --}}
                                             <th class="text-dark text-center" style="width: 15%;">Status</th>
@@ -67,8 +71,7 @@
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
-                                                        class="text-decoration-none">
+                                                    <a href="#" class="text-decoration-none">
                                                         {{ $sp->no_surat }}
                                                     </a>
                                                 </td>
@@ -86,6 +89,9 @@
                                                 <td>{{ $sp->detail_pelanggaran }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($sp->tanggal_mulai)->diffInDays(\Carbon\Carbon::parse($sp->tanggal_selesai)) }}
                                                 </td> --}}
+                                                <td>
+                                                    {{ $sp->sanksi->nama }}
+                                                </td>
                                                 <td>{{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}
                                                 </td>
                                                 {{-- <td class="text-center">
@@ -128,7 +134,7 @@
                                                             Tindak Lanjut <i class="psi-paper"></i>
                                                         </a> --}}
                                                         @if (auth()->user()->id == $sp->user->id)
-                                                            <a href="{{ route('pengenaan-sp.edit', $sp->id) }}"
+                                                            <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
                                                                 class="badge bg-warning me-1 text-decoration-none"
                                                                 title="Edit">
                                                                 Edit <i class="psi-pencil"></i>
