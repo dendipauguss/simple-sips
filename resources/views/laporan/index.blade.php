@@ -69,30 +69,37 @@
                                                     @endif
                                                 </td>
                                                 <td class="d-flex align-items-center">
-                                                    <a href="{{ route('laporan.pdf', $row->id) }}"
-                                                        class="fs-2 text-decoration-none" target="_blank"><i
-                                                            class="psi-eye-visible"></i></a>
-                                                    @if (auth()->user()->role == 'ketua_tim' || auth()->user()->role == 'admin')
-                                                        <button class="btn btn-sm btn-primary upload-btn mt-1"
-                                                            data-id="{{ $row->id }}" data-bs-toggle="modal"
-                                                            data-bs-target="#modalStatus">
-                                                            Upload Bukti
-                                                        </button>
-                                                        <form action="{{ route('laporan.approve', $row->id) }}"
+                                                    <div class="input-group">
+                                                        <a href="{{ route('laporan.pdf', $row->id) }}"
+                                                            class="btn btn-sm text-decoration-none" target="_blank"><i
+                                                                class="psi-eye fs-4 text-info"></i></a>
+                                                        @if (auth()->user()->role == 'ketua_tim' || auth()->user()->role == 'admin')
+                                                            <button class="btn btn-sm upload-btn"
+                                                                data-id="{{ $row->id }}" data-bs-toggle="modal"
+                                                                data-bs-target="#modalStatus"
+                                                                data-status="{{ $row->status_disetujui }}"
+                                                                data-catatan="{{ $row->catatan }}">
+                                                                @if ($row->status_disetujui)
+                                                                    <i class="psi-yes text-success fs-4"></i>
+                                                                @else
+                                                                    <i class="psi-danger text-warning fs-4"></i>
+                                                                @endif
+                                                            </button>
+                                                            {{-- <form action="{{ route('laporan.approve', $row->id) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @if ($row->status_disetujui)
                                                                 <button class="fs-2 text-danger bg-transparent border-0">
                                                                     <i class="psi-close"></i>
                                                                 </button>
-                                                                <input type="checkbox" name="" id="">ut
                                                             @else
                                                                 <button class="fs-2 text-success bg-transparent border-0">
                                                                     <i class="psi-yes"></i>
                                                                 </button>
                                                             @endif
-                                                        </form>
-                                                    @endif
+                                                        </form> --}}
+                                                        @endif
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -110,7 +117,7 @@
         <div class="modal-dialog">
             <form action="{{ route('laporan.approve') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="penindakan_id" id="penindakan_id">
+                <input type="hidden" name="laporan_id" id="laporan_id">
 
                 <div class="modal-content">
                     <div class="modal-header">
@@ -124,13 +131,14 @@
                             <div class="col-sm-9 pt-3">
                                 <div class="form-check form-check-inline">
                                     <input id="disetujui" class="form-check-input bg-success" type="radio" name="status"
-                                        value="1">
+                                        value="1" {{ auth()->user()->role != 'ketua_tim' ? 'disabled' : '' }}>
                                     <label for="disetujui" class="form-check-label">Setuju</label>
                                 </div>
 
                                 <div class="form-check form-check-inline">
                                     <input id="belum_disetujui" class="form-check-input bg-warning" type="radio"
-                                        name="status" value="0">
+                                        name="status" value="0"
+                                        {{ auth()->user()->role != 'ketua_tim' ? 'disabled' : '' }}>
                                     <label for="belum_disetujui" class="form-check-label">Kembalikan</label>
                                 </div>
                             </div>
@@ -138,16 +146,35 @@
                         <div class="row mb-3">
                             <label class="col col-form-label">Tambah Catatan (Opsional)</label>
                             <div class="col-sm-9 pt-3">
-                                <textarea name="catatan" id="catatan" cols="30" rows="10" class="form-control"></textarea>
+
+                                <textarea name="catatan" id="catatan" cols="30" rows="10" class="form-control"
+                                    {{ auth()->user()->role != 'ketua_tim' ? 'readonly' : '' }}></textarea>
+
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">Update</button>
+                    </div>
                 </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-primary">Upload</button>
-                </div>
+            </form>
         </div>
-        </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.upload-btn');
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('laporan_id').value = this.dataset.id;
+                    document.getElementById('catatan').value = this.dataset.catatan;
+                    if (this.dataset.status == 1) {
+                        document.getElementById('disetujui').checked = true;
+                    } else {
+                        document.getElementById('belum_disetujui').checked = true;
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

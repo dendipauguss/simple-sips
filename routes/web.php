@@ -59,7 +59,9 @@ Route::middleware('auth')->group(function () {
     Route::put('laporan/isi-catatan/{id}', [LaporanController::class, 'isiCatatan'])->name('laporan.isi-catatan');
     Route::get('laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
     Route::get('laporan/{id}/pdf', [LaporanController::class, 'pdf'])->name('laporan.pdf');
-    Route::post('laporan/{id}/approve', [LaporanController::class, 'approve'])->name('laporan.approve');
+    // Route::post('laporan/{id}/approve', [LaporanController::class, 'approve'])->name('laporan.approve');
+    Route::post('laporan/approve', [LaporanController::class, 'approve'])
+        ->name('laporan.approve');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');

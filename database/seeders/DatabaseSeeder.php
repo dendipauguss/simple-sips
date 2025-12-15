@@ -14,11 +14,11 @@ class DatabaseSeeder extends Seeder
             SanksiSeeder::class,
             // PerintahSanksiSeeder::class,
             JenisPelakuUsahaSeeder::class,
-            PelakuUsahaSeeder::class,
+            // PelakuUsahaSeeder::class,
             // PerihalSeeder::class,
             JenisPelanggaranSeeder::class,
-            KategoriSPSeeder::class,
-            PengenaanSPSeeder::class
+            // KategoriSPSeeder::class,
+            // PengenaanSPSeeder::class
         ]);
     }
 }

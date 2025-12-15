@@ -101,15 +101,34 @@ class LaporanController extends Controller
         return $pdf->stream("laporan-{$laporan->bulan}-{$laporan->tahun}.pdf");
     }
 
-    public function approve($id)
+    // public function approve($id)
+    // {
+    //     $laporan = Laporan::findOrFail($id);
+    //     $laporan->update([
+    //         'status_disetujui' => !$laporan->status_disetujui
+    //     ]);
+
+    //     return back()->with('success', 'Status laporan diperbarui.');
+    // }
+
+    public function approve(Request $request)
     {
-        $laporan = Laporan::findOrFail($id);
-        $laporan->update([
-            'status_disetujui' => !$laporan->status_disetujui
+        $request->validate([
+            'laporan_id' => 'required|exists:laporan,id',
+            'status' => 'required|boolean',
+            'catatan' => 'nullable|string'
         ]);
 
-        return back()->with('success', 'Status laporan diperbarui.');
+        $laporan = Laporan::findOrFail($request->laporan_id);
+
+        $laporan->update([
+            'status_disetujui' => $request->status,
+            'catatan' => $request->catatan
+        ]);
+
+        return back()->with('success', 'Status berhasil diperbarui');
     }
+
 
     public function isiCatatan(Request $request, $id)
     {

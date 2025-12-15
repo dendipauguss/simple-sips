@@ -70,7 +70,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('users.edit', [
+        return view('users.create', [
             'title' => 'Edit User',
             'user' => $user
         ]);
