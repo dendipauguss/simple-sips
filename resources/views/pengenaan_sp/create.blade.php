@@ -92,7 +92,7 @@
                         </div>
                     </div>
             </form>
-            <div class="col-xl-3 mb-3 mb-xl-0">
+            {{-- <div class="col-xl-3 mb-3 mb-xl-0">
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="alert alert-info">
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
     </div>

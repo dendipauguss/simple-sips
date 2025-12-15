@@ -11,12 +11,7 @@ class Laporan extends Model
 
     protected $table = 'laporan';
 
-    protected $fillable = [
-        'bulan',
-        'tahun',
-        'catatan',
-        'status_disetujui'
-    ];
+    protected $guarded = ['id'];
 
     public function items()
     {

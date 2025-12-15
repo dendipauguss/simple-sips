@@ -73,19 +73,18 @@
                                                         <a href="{{ route('laporan.pdf', $row->id) }}"
                                                             class="btn btn-sm text-decoration-none" target="_blank"><i
                                                                 class="psi-eye fs-4 text-info"></i></a>
-                                                        @if (auth()->user()->role == 'ketua_tim' || auth()->user()->role == 'admin')
-                                                            <button class="btn btn-sm upload-btn"
-                                                                data-id="{{ $row->id }}" data-bs-toggle="modal"
-                                                                data-bs-target="#modalStatus"
-                                                                data-status="{{ $row->status_disetujui }}"
-                                                                data-catatan="{{ $row->catatan }}">
-                                                                @if ($row->status_disetujui)
-                                                                    <i class="psi-yes text-success fs-4"></i>
-                                                                @else
-                                                                    <i class="psi-danger text-warning fs-4"></i>
-                                                                @endif
-                                                            </button>
-                                                            {{-- <form action="{{ route('laporan.approve', $row->id) }}"
+
+                                                        <button class="btn btn-sm upload-btn" data-id="{{ $row->id }}"
+                                                            data-bs-toggle="modal" data-bs-target="#modalStatus"
+                                                            data-status="{{ $row->status_disetujui }}"
+                                                            data-catatan="{{ $row->catatan }}">
+                                                            @if ($row->status_disetujui)
+                                                                <i class="psi-yes text-success fs-4"></i>
+                                                            @else
+                                                                <i class="psi-danger text-warning fs-4"></i>
+                                                            @endif
+                                                        </button>
+                                                        {{-- <form action="{{ route('laporan.approve', $row->id) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @if ($row->status_disetujui)
@@ -98,7 +97,7 @@
                                                                 </button>
                                                             @endif
                                                         </form> --}}
-                                                        @endif
+
                                                     </div>
                                                 </td>
                                             </tr>
@@ -153,9 +152,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary">Update</button>
-                    </div>
+                    @if (auth()->user()->role == 'ketua_tim')
+                        <div class="modal-footer">
+                            <button class="btn btn-primary">Update</button>
+                        </div>
+                    @endif
                 </div>
             </form>
         </div>

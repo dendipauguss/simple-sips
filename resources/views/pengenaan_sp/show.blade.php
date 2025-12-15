@@ -63,7 +63,7 @@
                                         @if (!empty($sp->files))
                                             @foreach ($sp->files as $file)
                                                 @if ($file->tipe == 'bebas')
-                                                    <a href="{{ asset('storage/' . $file->url_path) }}" target="_blank"
+                                                    <a href="{{ asset($file->url_path) }}" target="_blank"
                                                         class="text-decoration-none">
                                                         <span>{{ $file->original_name }}</span>
                                                     </a>

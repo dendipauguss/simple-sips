@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('laporan', function (Blueprint $table) {
             $table->id();
-            $table->integer('bulan')->default(0)->change();
-            $table->integer('tahun')->default(0)->change();
+            $table->integer('bulan')->nullable();
+            $table->integer('tahun')->nullable();
             $table->text('catatan')->nullable();
             $table->boolean('status_disetujui')->default(0);
             $table->timestamps();
