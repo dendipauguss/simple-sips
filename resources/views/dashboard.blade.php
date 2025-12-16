@@ -34,16 +34,16 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">By Kategori</h5>
-                            <div class="row mb-1 justify-content-end">
-                                <div class="col-sm-4">
+                            <div class="row mb-1 justify-content-start">
+                                <div class="col-sm-3 ms-0">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="showAllLabel">
-                                        <label class="form-check-label small">
+                                        <label class="form-check-label">
                                             Tampilkan semua label
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-4 ms-0">
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" id="stackedMode">
                                         <label class="form-check-label">Tampilan Stacked/Menumpuk</label>
