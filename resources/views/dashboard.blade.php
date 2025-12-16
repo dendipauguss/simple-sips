@@ -34,17 +34,31 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">By Kategori</h5>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="stackedMode">
-                                <label class="form-check-label">Tampilan Stacked/Menumpuk</label>
+                            <div class="row mb-1 justify-content-end">
+                                <div class="col-sm-4">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="showAllLabel">
+                                        <label class="form-check-label small">
+                                            Tampilkan semua label
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="stackedMode">
+                                        <label class="form-check-label">Tampilan Stacked/Menumpuk</label>
+                                    </div>
+                                </div>
                             </div>
-                            <select id="groupBy" class="form-select form-select-sm mb-2">
-                                <option value="jenis_pelanggaran">Jenis Pelanggaran</option>
-                                <option value="sanksi">Sanksi</option>
-                                <option value="jenis_pelaku_usaha">Jenis Pelaku Usaha</option>
-                                <option value="pelaku_usaha">Pelaku Usaha</option>
-                                <option value="kategori_sp">Kategori Sanksi</option>
-                            </select>
+                            <div class="row mb-1">
+                                <select id="groupBy" class="form-select form-select-sm mb-2">
+                                    <option value="jenis_pelanggaran">Jenis Pelanggaran</option>
+                                    <option value="sanksi">Sanksi</option>
+                                    <option value="jenis_pelaku_usaha">Jenis Pelaku Usaha</option>
+                                    <option value="pelaku_usaha">Pelaku Usaha</option>
+                                    <option value="kategori_sp">Kategori Sanksi</option>
+                                </select>
+                            </div>
                             <div id="chartLoading" class="position-absolute top-50 start-50 translate-middle d-none">
                                 <div class="spinner-border text-primary" role="status"></div>
                             </div>

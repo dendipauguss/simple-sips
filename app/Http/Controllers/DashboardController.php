@@ -44,6 +44,7 @@ class DashboardController extends Controller
     public function chartData(Request $request)
     {
         $group = $request->group_by;
+        $showAll = $request->show_all == 1;
 
         $map = [
             'jenis_pelanggaran' => [
@@ -73,21 +74,27 @@ class DashboardController extends Controller
             ],
         ];
 
-        if (!isset($map[$group])) {
-            return response()->json([], 400);
+        $cfg = $map[$group];
+
+        $query = DB::table($cfg['table'])
+            ->select(
+                DB::raw($cfg['label'] . ' as label'),
+                DB::raw("COALESCE(SUM(pengenaan_sp.status_surat = 'sudah_ditanggapi'),0) as sudah"),
+                DB::raw("COALESCE(SUM(pengenaan_sp.status_surat = 'belum_ditanggapi'),0) as belum")
+            )
+            ->leftJoin(
+                'pengenaan_sp',
+                $cfg['fk'],
+                '=',
+                $cfg['table'] . '.id'
+            )
+            ->groupBy('label');
+
+        if (!$showAll) {
+            $query->havingRaw('sudah > 0 OR belum > 0');
         }
 
-        $config = $map[$group];
-
-        $data = DB::table('pengenaan_sp')
-            ->join($config['table'], $config['fk'], '=', $config['table'] . '.id')
-            ->select(
-                DB::raw($config['label'] . ' as label'),
-                DB::raw("SUM(status_surat = 'sudah_ditanggapi') as sudah"),
-                DB::raw("SUM(status_surat = 'belum_ditanggapi') as belum")
-            )
-            ->groupBy('label')
-            ->get();
+        $data = $query->get();
 
         return response()->json([
             'labels' => $data->pluck('label'),

@@ -306,11 +306,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function loadChart(groupBy) {
 
+        const showAll = document.getElementById('showAllLabel').checked;
         const isStacked = document.getElementById('stackedMode')?.checked ?? false;
 
         showLoading();
 
-        fetch(`/dashboard/chart?group_by=${groupBy}`)
+        fetch(`/dashboard/chart?group_by=${groupBy}&show_all=${showAll ? 1 : 0}`)
             .then(res => res.json())
             .then(data => {
 
@@ -318,7 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 barChart = new Chart(barCanvas1, {
                     type: chartType,
-
                     data: {
                         labels: data.labels,
                         datasets: [
@@ -338,7 +338,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                         ]
                     },
-
                     options: {
                         plugins: {
                             legend: {
@@ -349,16 +348,9 @@ document.addEventListener("DOMContentLoaded", () => {
                                     boxWidth: 10,
                                 }
                             },
-                            tooltip: {
-                                position: "nearest"
-                            }
+                            tooltip: { position: "nearest" }
                         },
-
-                        interaction: {
-                            mode: "index",
-                            intersect: false,
-                        },
-
+                        interaction: { mode: "index", intersect: false },
                         scales: {
                             y: {
                                 stacked: isStacked,
@@ -389,16 +381,6 @@ document.addEventListener("DOMContentLoaded", () => {
                                     maxTicksLimit: 11
                                 }
                             }
-                        },
-
-                        elements: {
-                            point: {
-                                radius: 3,
-                                hoverRadius: 5
-                            },
-                            line: {
-                                tension: 0.2
-                            }
                         }
                     }
                 });
@@ -416,6 +398,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('stackedMode')
         ?.addEventListener('change', () => {
+            loadChart(document.getElementById('groupBy').value);
+        });
+
+    document.getElementById('showAllLabel')
+        .addEventListener('change', () => {
             loadChart(document.getElementById('groupBy').value);
         });
 
