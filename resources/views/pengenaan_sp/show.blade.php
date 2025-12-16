@@ -132,7 +132,12 @@
                     <div class="modal-body">
                         <div class="row mb-2">
                             <label for="tanggapan" class="form-label">Tanggapan Atas Perbaikan</label>
-                            <textarea name="tanggapan" id="tanggapan" class="form-control" required></textarea>
+                            <textarea name="tanggapan" id="tanggapan" class="form-control @error('tanggapan') is-invalid @enderror">{{ old('tanggapan') }}</textarea>
+                            @error('tanggapan')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="row mb-2">
                             <label for="lampiran" class="form-label">Dokumen Pendukung</label>
@@ -209,4 +214,12 @@
             });
         });
     </script>
+    @if ($errors->any())
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const modal = new bootstrap.Modal(document.getElementById('modalUpload'));
+                modal.show();
+            });
+        </script>
+    @endif
 @endsection

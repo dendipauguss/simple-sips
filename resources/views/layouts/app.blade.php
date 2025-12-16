@@ -147,6 +147,22 @@
                     </div>
                 @endif
 
+                {{-- Alert Error --}}
+                @if (session('error'))
+                    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+                        <div id="toastDanger" class="toast align-items-center text-white bg-danger border-0"
+                            role="alert">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    {{ session('error') }}
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                                    data-bs-dismiss="toast"></button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
                     <div id="toastAjax" class="toast align-items-center text-white bg-success border-0" role="alert">
                         <div class="d-flex">
@@ -730,6 +746,13 @@
             document.addEventListener("DOMContentLoaded", function() {
                 @if (session('success') || request('updated'))
                     var toastElement = document.getElementById('toastSuccess');
+                    var toast = new bootstrap.Toast(toastElement, {
+                        delay: 3000
+                    });
+                    toast.show();
+                @endif
+                @if (session('error'))
+                    var toastElement = document.getElementById('toastDanger');
                     var toast = new bootstrap.Toast(toastElement, {
                         delay: 3000
                     });

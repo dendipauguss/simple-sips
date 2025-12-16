@@ -173,6 +173,9 @@ class PengenaanSPController extends Controller
             'pengenaan_sp_id' => 'required|exists:pengenaan_sp,id',
             'tanggapan' => 'required|string',
             'lampiran.*'    => 'nullable|file|max:5120', // 5 MB
+        ], [
+            'pengenaan_sp_id.required' => 'ID tidak ditemukan',
+            'tanggapan.required' => 'Tidak boleh kosong kakak'
         ]);
 
         // Panggil fungsi upload file yang sudah kamu buat sebelumnya

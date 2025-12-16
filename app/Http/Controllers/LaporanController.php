@@ -86,7 +86,7 @@ class LaporanController extends Controller
 
     public function pdf($id)
     {
-        $laporan = Laporan::findOrFail($id);
+        $laporan = Laporan::with(['pengenaan_sp'])->findOrFail($id);
 
         $items = $laporan->pengenaan_sp
             ->load(['pelaku_usaha.jenis_pelaku_usaha', 'sanksi', 'jenis_pelanggaran'])
@@ -96,8 +96,17 @@ class LaporanController extends Controller
                 fn($item) => $item->sanksi->nama,
             ]);
 
+        $jumlah_status = [
+            'belum' => $laporan->pengenaan_sp
+                ->where('status_surat', 'belum_ditanggapi')
+                ->count(),
 
-        $pdf = PDF::loadView('laporan.pdf', compact('laporan', 'items'));
+            'sudah' => $laporan->pengenaan_sp
+                ->where('status_surat', 'sudah_ditanggapi')
+                ->count(),
+        ];
+
+        $pdf = PDF::loadView('laporan.pdf', compact('laporan', 'items', 'jumlah_status'));
         return $pdf->stream("laporan-{$laporan->bulan}-{$laporan->tahun}.pdf");
     }
 

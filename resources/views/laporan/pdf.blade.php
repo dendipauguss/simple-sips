@@ -64,6 +64,12 @@
                 padding: 5px;
                 vertical-align: top;
             }
+
+            .no-bullets {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
         </style>
     </head>
 
@@ -126,6 +132,7 @@
 
         <table border="1" cellpadding="4" cellspacing="0" width="100%">
             <thead>
+                <th style="width: 5%">No</th>
                 <th>Kategori Pelaku Usaha</th>
                 <th>Nama Perusahaan</th>
                 <th>Bentuk Sanksi</th>
@@ -133,6 +140,7 @@
                 <th>Tanggapan</th>
             </thead>
             <tbody>
+                @php $no =1; @endphp
                 @foreach ($items as $jenisPU => $pelakuGroup)
                     @php
                         $rowspan_1 = countDeep($pelakuGroup);
@@ -153,27 +161,29 @@
 
                             @foreach ($rowItems as $item)
                                 <tr>
+                                    {{-- NOMOR --}}
+                                    <td align="center">{{ $no++ }}</td>
 
                                     {{-- LEVEL 1 --}}
-                                    @if ($i1 == 0 && $i2 == 0 && $i3 == 0)
-                                        <td rowspan="{{ $rowspan_1 }}">{{ $jenisPU }}</td>
-                                    @endif
-
-                                    {{-- LEVEL 2 --}}
                                     @if ($i2 == 0 && $i3 == 0)
                                         <td rowspan="{{ $rowspan_2 }}">{{ $pelakuNama }}</td>
                                     @endif
 
+                                    {{-- LEVEL 2 --}}
+                                    @if ($i1 == 0 && $i2 == 0 && $i3 == 0)
+                                        <td rowspan="{{ $rowspan_1 }}" align="center">{{ $jenisPU }}</td>
+                                    @endif
+
                                     {{-- LEVEL 3 --}}
                                     @if ($i3 == 0)
-                                        <td rowspan="{{ $rowspan_3 }}">{{ $sanksiNama }}</td>
+                                        <td rowspan="{{ $rowspan_3 }}" align="center">{{ $sanksiNama }}</td>
                                     @endif
 
                                     {{-- LEVEL 4 --}}
-                                    <td>{{ $item->jenis_pelanggaran->nama }}</td>
+                                    <td align="center">{{ $item->jenis_pelanggaran->nama }}</td>
 
                                     {{-- LEVEL 5 --}}
-                                    <td>{{ ucwords(str_replace('_', ' ', $item->status_surat)) }}</td>
+                                    <td align="center">{{ ucwords(str_replace('_', ' ', $item->status_surat)) }}</td>
 
                                 </tr>
                                 @php $i3++; @endphp
@@ -190,6 +200,11 @@
         </table>
 
         <br><br>
+        <ul class="no-bullets">
+            <li>Sudah Ditanggapi = <strong>{{ $jumlah_status['sudah'] }}</strong>, Belum Ditanggapi =
+                <strong>{{ $jumlah_status['belum'] }}</strong></li>
+        </ul>
+
         <p>Demikian surat ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</p>
 
 
