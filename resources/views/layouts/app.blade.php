@@ -33,13 +33,12 @@
         <link rel="stylesheet"
             href="{{ env('THM_LINK') }}/assets/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css">
 
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="{{ env('DTABLES_LINK') }}/css/jquery.dataTables.min.css">
 
         <!-- Select2 Styles -->
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <link href="{{ env('SELECT2_LINK') }}/dist/css/select2.min.css" rel="stylesheet" />
 
-        <link rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+        <link rel="stylesheet" href="{{ env('SELECT2_BOOTSTRAP_LINK') }}/dist/select2-bootstrap-5-theme.min.css" />
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~---
 
@@ -105,7 +104,7 @@
                 box-shadow: none !important;
             }
         </style>
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="{{ env('JQUERY_LINK') }}/jquery-3.7.1.min.js"></script>
     </head>
 
     <body class="jumping">
@@ -668,10 +667,10 @@
         <!-- Initialize [ SAMPLE ] -->
         <script src="/chart.js" defer=""></script>
 
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script src="{{ env('DTABLES_LINK') }}/js/jquery.dataTables.min.js"></script>
 
         <!-- Select2 JS -->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="{{ env('SELECT2_LINK') }}/dist/js/select2.min.js"></script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function() {
