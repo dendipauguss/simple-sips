@@ -62,11 +62,8 @@
                                                     @endif
                                                 </td> --}}
                                                 <td>
-                                                    @if ($row->status_disetujui)
-                                                        <span class="badge bg-success">Disetujui</span>
-                                                    @else
-                                                        <span class="badge bg-warning">Menunggu</span>
-                                                    @endif
+                                                    <span
+                                                        class="badge {{ $row->status_persetujuan == 'setuju' ? 'bg-success' : ($row->status_persetujuan == 'dikembalikan' ? 'bg-danger' : 'bg-warning') }}">{{ ucwords(str_replace('_', ' ', $row->status_persetujuan)) }}</span>
                                                 </td>
                                                 <td class="d-flex align-items-center">
                                                     <div class="input-group">
@@ -76,13 +73,11 @@
 
                                                         <button class="btn btn-sm upload-btn" data-id="{{ $row->id }}"
                                                             data-bs-toggle="modal" data-bs-target="#modalStatus"
-                                                            data-status="{{ $row->status_disetujui }}"
+                                                            data-status="{{ $row->status_persetujuan }}"
                                                             data-catatan="{{ $row->catatan }}">
-                                                            @if ($row->status_disetujui)
-                                                                <i class="psi-yes text-success fs-4"></i>
-                                                            @else
-                                                                <i class="psi-danger text-warning fs-4"></i>
-                                                            @endif
+
+                                                            <i
+                                                                class="fs-4 {{ $row->status_persetujuan == 'setuju' ? 'psi-yes text-success' : ($row->status_persetujuan == 'dikembalikan' ? 'psi-close text-danger' : 'psi-danger text-warning') }}"></i>
                                                         </button>
                                                         {{-- <form action="{{ route('laporan.approve', $row->id) }}"
                                                             method="POST" class="d-inline">
@@ -129,16 +124,16 @@
                             <label class="col col-form-label">Status Laporan</label>
                             <div class="col-sm-9 pt-3">
                                 <div class="form-check form-check-inline">
-                                    <input id="disetujui" class="form-check-input bg-success" type="radio" name="status"
-                                        value="1" {{ auth()->user()->role != 'ketua_tim' ? 'disabled' : '' }}>
-                                    <label for="disetujui" class="form-check-label">Setuju</label>
+                                    <input id="setuju" class="form-check-input bg-success" type="radio" name="status"
+                                        value="setuju" {{ auth()->user()->role != 'ketua_tim' ? 'disabled' : '' }}>
+                                    <label for="setuju" class="form-check-label">Setuju</label>
                                 </div>
 
                                 <div class="form-check form-check-inline">
-                                    <input id="belum_disetujui" class="form-check-input bg-warning" type="radio"
-                                        name="status" value="0"
+                                    <input id="dikembalikan" class="form-check-input bg-danger" type="radio"
+                                        name="status" value="dikembalikan"
                                         {{ auth()->user()->role != 'ketua_tim' ? 'disabled' : '' }}>
-                                    <label for="belum_disetujui" class="form-check-label">Kembalikan</label>
+                                    <label for="dikembalikan" class="form-check-label">Kembalikan</label>
                                 </div>
                             </div>
                         </div>
@@ -169,10 +164,10 @@
                 btn.addEventListener('click', function() {
                     document.getElementById('laporan_id').value = this.dataset.id;
                     document.getElementById('catatan').value = this.dataset.catatan;
-                    if (this.dataset.status == 1) {
-                        document.getElementById('disetujui').checked = true;
-                    } else {
-                        document.getElementById('belum_disetujui').checked = true;
+                    if (this.dataset.status == 'setuju') {
+                        document.getElementById('setuju').checked = true;
+                    } else if (this.dataset.status == 'dikembalikan') {
+                        document.getElementById('dikembalikan').checked = true;
                     }
                 });
             });

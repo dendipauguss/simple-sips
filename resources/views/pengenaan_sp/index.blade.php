@@ -62,7 +62,9 @@
                                             {{-- <th class="text-dark text-center">Bukti Perbaikan</th> --}}
                                             {{-- <th class="text-dark text-center">Tanggapan Atas Perbaikan</th> --}}
                                             <th class="text-dark text-center" style="width: 15%;">Status</th>
-                                            <th class="text-dark text-center">Aksi</th>
+                                            @if (auth()->user()->role != 'ketua_tim')
+                                                <th class="text-dark text-center">Aksi</th>
+                                            @endif
                                             <th class="text-dark text-center">PIC</th>
                                         </tr>
                                     </thead>
@@ -126,39 +128,42 @@
                                                         <button class="badge bg-primary border-0">Ganti Status</button>
                                                     </form> --}}
                                                 </td>
-                                                <td class="text-center">
-                                                    <div class="btn-group" role="group">
-                                                        {{-- <a href="{{ route('sk.create', $sp->id) }}"
+                                                @if (auth()->user()->role != 'ketua_tim')
+                                                    <td class="text-center">
+                                                        <div class="btn-group" role="group">
+                                                            {{-- <a href="{{ route('sk.create', $sp->id) }}"
                                                             class="badge bg-info me-1 text-decoration-none"
                                                             title="Tindak Lanjut">
                                                             Tindak Lanjut <i class="psi-paper"></i>
                                                         </a> --}}
-                                                        @if (auth()->user()->id == $sp->user->id)
-                                                            <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
-                                                                class="badge bg-warning me-1 text-decoration-none"
-                                                                title="Edit">
-                                                                Edit <i class="psi-pencil"></i>
-                                                            </a>
-                                                            <a href="#" class="badge bg-danger text-decoration-none"
-                                                                onclick="event.preventDefault(); document.getElementById('delete-{{ $sp->id }}').submit();">
-                                                                Hapus <i class="psi-trash"></i>
-                                                            </a>
+                                                            @if (auth()->user()->id == $sp->user->id)
+                                                                <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
+                                                                    class="badge bg-warning me-1 text-decoration-none"
+                                                                    title="Edit">
+                                                                    Edit <i class="psi-pencil"></i>
+                                                                </a>
+                                                                <a href="#"
+                                                                    class="badge bg-danger text-decoration-none"
+                                                                    onclick="event.preventDefault(); document.getElementById('delete-{{ $sp->id }}').submit();">
+                                                                    Hapus <i class="psi-trash"></i>
+                                                                </a>
 
-                                                            <form id="delete-{{ $sp->id }}"
-                                                                action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
-                                                                method="POST" style="display:none;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form>
-                                                        @else
-                                                            <div class="badge bg-warning">
-                                                                <span class="fs-3">
-                                                                    <i class="psi-security-settings"></i>
-                                                                </span>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </td>
+                                                                <form id="delete-{{ $sp->id }}"
+                                                                    action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
+                                                                    method="POST" style="display:none;">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                </form>
+                                                            @else
+                                                                <div class="badge bg-warning">
+                                                                    <span class="fs-3">
+                                                                        <i class="psi-security-settings"></i>
+                                                                    </span>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                                @endif
                                                 <td class="text-start">
                                                     {{ $sp->user->nama }}
                                                 </td>

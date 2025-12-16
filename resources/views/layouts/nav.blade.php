@@ -55,13 +55,14 @@
 
                         <!-- Dashboard submenu list -->
                         <ul class="mininav-content nav collapse" style="">
-                            <li class="nav-item">
-                                <a href="{{ route('pengenaan-sp.create') }}"
-                                    class="nav-link {{ request()->is('pengenaan-sp/create*') ? 'active' : '' }}">
-                                    Input Sanksi
-                                </a>
-                            </li>
-                            <!-- END : Pengenaan SP -->
+                            @if (auth()->user()->role != 'ketua_tim')
+                                <li class="nav-item">
+                                    <a href="{{ route('pengenaan-sp.create') }}"
+                                        class="nav-link {{ request()->is('pengenaan-sp/create*') ? 'active' : '' }}">
+                                        Input Sanksi
+                                    </a>
+                                </li>
+                            @endif
 
                             <!-- Pengenaan Sanksi -->
                             <li class="nav-item">

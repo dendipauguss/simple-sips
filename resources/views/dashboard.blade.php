@@ -15,14 +15,45 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 mb-3">
+
+                {{-- <div class="col-md-8 mb-3">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Jumlah Pelanggaran</h5>
-                            <!-- Pie Chart -->
+                            <!-- Bar Chart -->
                             <canvas id="_dm-barChart" width="464" height="215"
-                                style="display: block; box-sizing: border-box; height: 370.4px; width: 371.2px;"></canvas>
-                            <!-- END : Pie Chart -->
+                                style="display: block; box-sizing: border-box; height: 370.4px; width: 371.2px;"
+                                data-labels='@json($labels)' data-sudah='@json($sudah)'
+                                data-belum='@json($belum)'></canvas>
+                            <!-- END : Bar Chart -->
+                        </div>
+                    </div>
+                </div> --}}
+
+                <div class="col-md-8 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">By Kategori</h5>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="stackedMode">
+                                <label class="form-check-label">Tampilan Stacked/Menumpuk</label>
+                            </div>
+                            <select id="groupBy" class="form-select form-select-sm mb-2">
+                                <option value="jenis_pelanggaran">Jenis Pelanggaran</option>
+                                <option value="sanksi">Sanksi</option>
+                                <option value="jenis_pelaku_usaha">Jenis Pelaku Usaha</option>
+                                <option value="pelaku_usaha">Pelaku Usaha</option>
+                                <option value="kategori_sp">Kategori Sanksi</option>
+                            </select>
+                            <div id="chartLoading" class="position-absolute top-50 start-50 translate-middle d-none">
+                                <div class="spinner-border text-primary" role="status"></div>
+                            </div>
+                            <!-- Bar Chart -->
+                            <canvas id="_dm-barChart-1" width="464" height="215"
+                                style="display: block; box-sizing: border-box; height: 370.4px; width: 371.2px;"
+                                data-labels='@json($labels)' data-sudah='@json($sudah)'
+                                data-belum='@json($belum)'></canvas>
+                            <!-- END : Bar Chart -->
                         </div>
                     </div>
                 </div>

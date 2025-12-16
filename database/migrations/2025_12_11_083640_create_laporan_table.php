@@ -13,7 +13,7 @@ return new class extends Migration
             $table->integer('bulan')->nullable();
             $table->integer('tahun')->nullable();
             $table->text('catatan')->nullable();
-            $table->boolean('status_disetujui')->default(0);
+            $table->enum('status_persetujuan', ['setuju', 'pending', 'dikembalikan'])->default('pending');
             $table->timestamps();
         });
     }

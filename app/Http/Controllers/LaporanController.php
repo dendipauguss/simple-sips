@@ -115,14 +115,14 @@ class LaporanController extends Controller
     {
         $request->validate([
             'laporan_id' => 'required|exists:laporan,id',
-            'status' => 'required|boolean',
+            'status' => 'required',
             'catatan' => 'nullable|string'
         ]);
 
         $laporan = Laporan::findOrFail($request->laporan_id);
 
         $laporan->update([
-            'status_disetujui' => $request->status,
+            'status_persetujuan' => $request->status,
             'catatan' => $request->catatan
         ]);
 

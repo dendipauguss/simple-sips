@@ -197,34 +197,39 @@ document.addEventListener("DOMContentLoaded", () => {
     // Bar Chart
     // ----------------------------------------------
     const barCanvas = document.getElementById("_dm-barChart");
+
     if (barCanvas) {
-        const barData = JSON.parse(barCanvas.dataset.status);
+        const labels = JSON.parse(barCanvas.dataset.labels);
+        const sudah = JSON.parse(barCanvas.dataset.sudah);
+        const belum = JSON.parse(barCanvas.dataset.belum);
         const barChart = new Chart(
             barCanvas, {
             type: "bar",
             data: {
+                labels: labels,
                 datasets: [
                     {
-                        label: "Jumlah Pelanggaran",
-                        data: barData,
+                        label: "Sudah Ditanggapi",
+                        data: sudah,
                         borderWidth: 2,
-                        borderColor: primaryColor,
-                        backgroundColor: primaryColor,
+                        borderColor: successColor,
+                        backgroundColor: successColor,
                         parsing: {
-                            xAxisKey: "y",
-                            yAxisKey: "a"
+                            xAxisKey: "0",
+                            yAxisKey: "1"
                         }
                     },
-                    // {
-                    //     label: "Download Speed",
-                    //     data: barData,
-                    //     borderColor: infoColor,
-                    //     backgroundColor: infoColor,
-                    //     parsing: {
-                    //         xAxisKey: "y",
-                    //         yAxisKey: "b"
-                    //     }
-                    // }
+                    {
+                        label: "Belum Ditanggapi",
+                        data: belum,
+                        borderWidth: 2,
+                        borderColor: dangerColor,
+                        backgroundColor: dangerColor,
+                        parsing: {
+                            xAxisKey: "0",
+                            yAxisKey: "2"
+                        }
+                    }
                 ]
             },
 
@@ -271,9 +276,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             font: { size: 11 },
                             color: `rgb( ${mutedColorRGB})`,
                             autoSkip: true,
-                            maxRotation: 0,
+                            maxRotation: 10,
                             minRotation: 0,
-                            maxTicksLimit: 7
+                            maxTicksLimit: 11
                         }
                     }
                 },
@@ -293,6 +298,126 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         );
     }
+
+    // Bar Chart 1
+    const barCanvas1 = document.getElementById("_dm-barChart-1");
+    let barChart = null;
+    let chartType = "bar";
+
+    function loadChart(groupBy) {
+
+        const isStacked = document.getElementById('stackedMode')?.checked ?? false;
+
+        showLoading();
+
+        fetch(`/dashboard/chart?group_by=${groupBy}`)
+            .then(res => res.json())
+            .then(data => {
+
+                if (barChart) barChart.destroy();
+
+                barChart = new Chart(barCanvas1, {
+                    type: chartType,
+
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: "Sudah Ditanggapi",
+                                data: data.sudah,
+                                borderWidth: 2,
+                                borderColor: successColor,
+                                backgroundColor: successColor,
+                            },
+                            {
+                                label: "Belum Ditanggapi",
+                                data: data.belum,
+                                borderWidth: 2,
+                                borderColor: dangerColor,
+                                backgroundColor: dangerColor,
+                            }
+                        ]
+                    },
+
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: true,
+                                align: "end",
+                                labels: {
+                                    color: `rgb(${mutedColorRGB})`,
+                                    boxWidth: 10,
+                                }
+                            },
+                            tooltip: {
+                                position: "nearest"
+                            }
+                        },
+
+                        interaction: {
+                            mode: "index",
+                            intersect: false,
+                        },
+
+                        scales: {
+                            y: {
+                                stacked: isStacked,
+                                grid: {
+                                    borderWidth: 0,
+                                    color: `rgba(${mutedColorRGB}, .07)`
+                                },
+                                suggestedMax: 150,
+                                ticks: {
+                                    font: { size: 11 },
+                                    color: `rgb(${mutedColorRGB})`,
+                                    beginAtZero: false,
+                                    stepSize: 50
+                                }
+                            },
+                            x: {
+                                stacked: isStacked,
+                                grid: {
+                                    borderWidth: 0,
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    font: { size: 11 },
+                                    color: `rgb(${mutedColorRGB})`,
+                                    autoSkip: true,
+                                    maxRotation: 10,
+                                    minRotation: 0,
+                                    maxTicksLimit: 11
+                                }
+                            }
+                        },
+
+                        elements: {
+                            point: {
+                                radius: 3,
+                                hoverRadius: 5
+                            },
+                            line: {
+                                tension: 0.2
+                            }
+                        }
+                    }
+                });
+            })
+            .finally(() => hideLoading());
+    }
+
+    // default load
+    loadChart('jenis_pelanggaran');
+
+    document.getElementById('groupBy')
+        .addEventListener('change', e => {
+            loadChart(e.target.value);
+        });
+
+    document.getElementById('stackedMode')
+        ?.addEventListener('change', () => {
+            loadChart(document.getElementById('groupBy').value);
+        });
 
     // Stack chart
     // ----------------------------------------------
@@ -477,4 +602,11 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
+    function showLoading() {
+        document.getElementById('chartLoading').classList.remove('d-none');
+    }
+
+    function hideLoading() {
+        document.getElementById('chartLoading').classList.add('d-none');
+    }
 });
