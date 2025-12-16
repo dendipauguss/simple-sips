@@ -20,6 +20,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
+                                            <th>Kode Sanksi</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -33,6 +34,7 @@
                                                         {{ $p->nama }}
                                                     </a>
                                                 </td>
+                                                <td>{{ $p->kode_surat }}</td>
                                                 <td>
                                                     <div class="btn-group" role="group">
                                                         <a href="{{ route('sanksi.show', $p->id) }}"

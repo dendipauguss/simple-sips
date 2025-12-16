@@ -73,9 +73,7 @@
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">
-                                                    <a href="#" class="text-decoration-none">
-                                                        {{ $sp->no_surat }}
-                                                    </a>
+                                                    {{ $sp->no_surat }}
                                                 </td>
                                                 <td class="text-center">{{ $sp->tanggal_mulai }}</td>
 

@@ -14,7 +14,7 @@ class SanksiSeeder extends Seeder
             'kode_surat' => 'SP'
         ]);
         Sanksi::create([
-            'nama' => 'Denda administratif, yaitu kewajiban membayar sejumlah uang tertentu',
+            'nama' => 'Denda administratif',
             'kode_surat' => 'D'
         ]);
         Sanksi::create([

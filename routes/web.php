@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'importView']);
     Route::post('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'import'])->name('kategori-sp.import');
     Route::get('/sk/create/{id}', [SKController::class, 'create'])->name('sk.create');
+    Route::delete('/dokumen/hapus/{id}', [PengenaanSPController::class, 'hapusDokumen'])->name('dokumen.hapus');
     // Laporan
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('laporan/generate', [LaporanController::class, 'generate'])->name('laporan.generate');

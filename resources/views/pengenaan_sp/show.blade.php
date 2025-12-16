@@ -63,10 +63,19 @@
                                         @if (!empty($sp->files))
                                             @foreach ($sp->files as $file)
                                                 @if ($file->tipe == 'bebas')
-                                                    <a href="{{ asset($file->url_path) }}" target="_blank"
-                                                        class="text-decoration-none">
-                                                        <span>{{ $file->original_name }}</span>
-                                                    </a>
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="{{ asset($file->url_path) }}" target="_blank"
+                                                            class="text-decoration-none">
+                                                            <span>{{ $file->original_name }}</span>
+                                                        </a>
+                                                        <form action="{{ route('dokumen.hapus', $file->id) }}"
+                                                            method="post" enctype="multipart/form-data">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-delete">[<i
+                                                                    class="psi-trash text-danger"></i>]</button>
+                                                        </form>
+                                                    </div>
                                                     <br>
                                                 @endif
                                             @endforeach
@@ -75,10 +84,10 @@
                                         @endif
                                     </div>
                                     @if (auth()->user()->id == $sp->user->id)
-                                        <div class="col ms-1">
+                                        <div class="col-sm-2">
                                             <button class="btn btn-sm btn-primary upload-btn mt-1"
                                                 data-id="{{ $sp->id }}" data-bs-toggle="modal"
-                                                data-bs-target="#modalUpload">
+                                                data-bs-target="#modalUpload" data-tanggapan="{{ $sp->tanggapan }}">
                                                 Isi Tanggapan dan Upload Dokumen
                                             </button>
                                         </div>
@@ -123,7 +132,7 @@
                     <div class="modal-body">
                         <div class="row mb-2">
                             <label for="tanggapan" class="form-label">Tanggapan Atas Perbaikan</label>
-                            <textarea name="tanggapan" class="form-control" required></textarea>
+                            <textarea name="tanggapan" id="tanggapan" class="form-control" required></textarea>
                         </div>
                         <div class="row mb-2">
                             <label for="lampiran" class="form-label">Dokumen Pendukung</label>
@@ -181,11 +190,22 @@
         document.addEventListener("DOMContentLoaded", function() {
             const modal = document.getElementById("modalUpload");
             const inputId = document.getElementById("pengenaan_sp_id");
+            const inputTanggapan = document.getElementById("tanggapan");
 
             document.querySelectorAll(".upload-btn").forEach(btn => {
                 btn.addEventListener("click", function() {
                     inputId.value = this.dataset.id;
+                    inputTanggapan.value = this.dataset.tanggapan;
                 });
+            });
+        });
+
+
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (!confirm('Yakin ingin menghapus dokumen ini ?')) {
+                    e.preventDefault();
+                }
             });
         });
     </script>

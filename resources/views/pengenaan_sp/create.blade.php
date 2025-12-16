@@ -24,7 +24,8 @@
                                     <select name="sanksi_id" id="sanksi_id" class="form-select">
                                         <option value="">-- Pilih Bentuk Sanksi --</option>
                                         @foreach ($sanksi as $s)
-                                            <option value="{{ $s->id }}">{{ $s->nama }}</option>
+                                            <option value="{{ $s->id }}">{{ $s->kode_surat }} - {{ $s->nama }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>

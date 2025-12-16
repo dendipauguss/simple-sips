@@ -62,11 +62,16 @@ class SanksiController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required'
+            'nama' => 'required',
+            'kode_surat' => 'required'
+        ], [
+            'nama.required' => 'Tidak boleh kosong kakak',
+            'kode_surat.required' => 'Tidak boleh kosong kakak'
         ]);
 
         $sanksi = Sanksi::findOrFail($id);
         $sanksi->nama = $request->nama;
+        $sanksi->kode_surat = $request->kode_surat;
         $sanksi->save();
 
         return redirect()->route('sanksi.index')->with('success', 'Data berhasil diperbarui!');

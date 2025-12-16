@@ -110,7 +110,7 @@ class PengenaanSPController extends Controller
         // $this->exportPdf($sp->id);
         $this->uploadFile($request, 'pengenaan_sp', $sp->id, 'surat');
 
-        return redirect()->route('pengenaan-sp.show', $sp->id)
+        return redirect()->route('pengenaan-sp.index')
             ->with('success', 'Data berhasil disimpan dan PDF otomatis dibuat.');
     }
 
@@ -132,9 +132,12 @@ class PengenaanSPController extends Controller
         //
     }
 
-    public function destroy(PengenaanSP $pengenaanSP)
+    public function destroy($id)
     {
-        //
+        $pengenaan_sp = PengenaanSP::findOrFail($id);
+        $pengenaan_sp->delete();
+
+        return redirect()->route('pengenaan-sp.index')->with('success', 'Data berhasil dihapus!');
     }
 
     public function generatePdf($id)
@@ -173,13 +176,26 @@ class PengenaanSPController extends Controller
         ]);
 
         // Panggil fungsi upload file yang sudah kamu buat sebelumnya
-        $this->uploadFile($request, 'pengenaan_sp', $request->pengenaan_sp_id, 'bebas');
+        if (!empty($request->lampiran)) {
+            $this->uploadFile($request, 'pengenaan_sp', $request->pengenaan_sp_id, 'bebas');
+        }
         $pengenaan_sp = PengenaanSP::findOrFail($request->pengenaan_sp_id);
         $pengenaan_sp->tanggapan = $request->tanggapan;
         $pengenaan_sp->status_surat = 'sudah_ditanggapi';
         $pengenaan_sp->save();
 
         return back()->with('success', 'Bukti pendukung berhasil diupload.');
+    }
+
+    public function hapusDokumen($id)
+    {
+        $file = Files::findOrFail($id);
+        if (!empty($file)) {
+            Storage::disk('public')->delete($file->url_path);
+            $file->delete();
+        }
+
+        return back()->with('success', 'Data berhasil dihapus!');
     }
 
     private function uploadFile(Request $request, $table_name, $table_id, $tipe_dokumen)
