@@ -106,7 +106,12 @@ class LaporanController extends Controller
                 ->count(),
         ];
 
-        $pdf = PDF::loadView('laporan.pdf', compact('laporan', 'items', 'jumlah_status'));
+        $urutan = sprintf('%03d', $laporan->id);
+        $bulan = $laporan->bulan;
+        $tahun = $laporan->tahun;
+        $nomor_laporan = "UD.01.00/{$urutan}/BAPPEBTI.3/ND/{$bulan}/{$tahun}";
+
+        $pdf = PDF::loadView('laporan.pdf', compact('laporan', 'items', 'jumlah_status', 'nomor_laporan'));
         return $pdf->stream("laporan-{$laporan->bulan}-{$laporan->tahun}.pdf");
     }
 

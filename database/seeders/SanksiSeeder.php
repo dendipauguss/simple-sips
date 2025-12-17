@@ -30,16 +30,12 @@ class SanksiSeeder extends Seeder
             'kode_surat' => 'CBTU'
         ]);
         Sanksi::create([
-            'nama' => 'Pencabutan izin',
-            'kode_surat' => 'CBT'
-        ]);
-        Sanksi::create([
             'nama' => 'Pembatalan persetujuan',
-            'kode_surat' => 'BTL'
+            'kode_surat' => 'BTLP'
         ]);
         Sanksi::create([
             'nama' => 'Pembatalan sertifikat pendaftaran',
-            'kode_surat' => 'SER'
+            'kode_surat' => 'BTLSP'
         ]);
     }
 }

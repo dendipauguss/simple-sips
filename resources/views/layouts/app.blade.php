@@ -103,6 +103,29 @@
             .dataTables_wrapper .dataTables_paginate .paginate_button:active {
                 box-shadow: none !important;
             }
+
+            .select2-container--default .select2-selection--single {
+                height: calc(1.5em + .75rem + 2px);
+                display: flex;
+                align-items: center;
+            }
+
+            .select2-container .select2-selection--single {
+                height: calc(1.5em + .75rem + 2px);
+                padding: .375rem .75rem;
+                border: 1px solid #ced4da;
+                border-radius: .375rem;
+                background-color: #fff;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                line-height: calc(1.5em + .75rem);
+                color: #212529;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 100%;
+            }
         </style>
         <script src="{{ env('JQUERY_LINK') }}/jquery-3.7.1.min.js"></script>
     </head>

@@ -37,7 +37,7 @@ class PelakuUsahaImport implements ToModel, WithHeadingRow
                 break;
         }
         return new PelakuUsaha([
-            'nama' => $row['nama_pelaku_usaha'],
+            'nama' => !empty($row['nama_pelaku_usaha']) ? $row['nama_pelaku_usaha'] : 'Data Excel kosong',
             'jenis_id' => $row['jenis_pelaku_usaha']
         ]);
     }

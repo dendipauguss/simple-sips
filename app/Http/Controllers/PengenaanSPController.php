@@ -70,12 +70,22 @@ class PengenaanSPController extends Controller
             'no_surat' => 'required|string',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date',
-            'sanksi_id' => 'required',
+            'sanksi_id' => 'required|integer|exists:sanksi,id',
             'jenis_pelaku_usaha_id' => 'required',
             'pelaku_usaha_id' => 'required',
             'jenis_pelanggaran_id' => 'required',
             'kategori_sp_id' => 'required',
             'detail_pelanggaran' => 'nullable',
+        ], [
+            'no_surat.required' => 'Data tidak ditemukan',
+            'tanggal_mulai.required' => 'Pilih tanggalnya dulu kakak',
+            'tanggal_selesai.required' => 'Pilih tanggalnya dulu kakak',
+            'sanksi_id.required' => 'Pilih dulu sanksinya kakak',
+            'sanksi_id.integer' => 'Tipe datanya tidak sesuai',
+            'jenis_pelaku_usaha_id.required' => 'Data tidak ditemukan',
+            'pelaku_usaha_id.required' => 'Pilih Perusahaannya dulu kakak',
+            'jenis_pelanggaran_id.required' => 'Data tidak ditemukan',
+            'kategori_sp_id.required' => 'Pilih kategorinya dulu kakak'
         ]);
 
         // ---- 1. Generate no_sp awal ----

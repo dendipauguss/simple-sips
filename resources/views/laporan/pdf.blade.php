@@ -15,7 +15,7 @@
 
             .kop-container {
                 width: 100%;
-                border-bottom: 3px solid #000;
+                /* border-bottom: 3px solid #000; */
                 padding-bottom: 10px;
                 margin-bottom: 20px;
             }
@@ -32,11 +32,13 @@
                 text-align: center;
                 font-weight: bold;
                 font-size: 14px;
+                color: #1F3864;
             }
 
             .kop-subtitle {
                 text-align: center;
                 font-size: 11px;
+                color: #1F3864;
             }
 
             .title {
@@ -70,6 +72,16 @@
                 padding: 0;
                 margin: 0;
             }
+
+            .kolom-nomor {
+                display: flex;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .kolom-nomor h3 {
+                margin-bottom: none;
+            }
         </style>
     </head>
 
@@ -78,14 +90,15 @@
         <!-- KOP SURAT -->
         <div class="kop-container">
             <table class="kop-table">
-                <tr>
+                <tr align="center">
                     <td width="20%">
-                        <img src="img/kemendag-bappebti-logo.jpg" width="90">
+                        <img src="img/kop-logo-1.png" width="90">
                     </td>
                     <td width="80%">
-                        <div class="kop-title">KEMENTERIAN PERDAGANGAN</div>
-                        <div class="kop-title">BADAN PENGAWAS PERDAGANGAN BERJANGKA KOMODITI</div>
-                        <div class="kop-subtitle">
+                        <div class="kop-title" style="font-size: 13pt">KEMENTERIAN PERDAGANGAN</div>
+                        <div class="kop-title" style="font-size: 11pt">BADAN PENGAWAS PERDAGANGAN BERJANGKA KOMODITI
+                        </div>
+                        <div class="kop-subtitle" style="font-size: 9pt">
                             Gedung Utama Lantai 4 Kementerian Perdagangan<br>
                             Jalan M. I. Ridwan Rais No. 5 Jakarta 10110<br>
                             Tel. 021-23528400 Ext 39900 Fax. 021-2352 8690<br>
@@ -96,6 +109,10 @@
             </table>
         </div>
 
+        <div class="kolom-nomor">
+            <h3>NOTA DINAS</h3>
+            <span>Nomor : {{ $nomor_laporan }}</span>
+        </div>
         <!-- Bagian Kepada Yth -->
         <p>
             Kepada Yth:<br>
@@ -202,7 +219,8 @@
         <br><br>
         <ul class="no-bullets">
             <li>Sudah Ditanggapi = <strong>{{ $jumlah_status['sudah'] }}</strong>, Belum Ditanggapi =
-                <strong>{{ $jumlah_status['belum'] }}</strong></li>
+                <strong>{{ $jumlah_status['belum'] }}</strong>
+            </li>
         </ul>
 
         <p>Demikian surat ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</p>

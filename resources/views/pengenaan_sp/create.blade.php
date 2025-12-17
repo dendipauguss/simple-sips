@@ -11,49 +11,92 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">No. Surat</label>
-                                    <select name="no_surat" id="no_surat" class="form-select">
+                                    <select name="no_surat" id="no_surat"
+                                        class="form-select @error('no_surat') is-invalid @enderror">
                                         <option value="UD.02.01">UD.02.01</option>
                                         <option value="UD.01.00">UD.01.00</option>
                                     </select>
                                     {{-- <input type="text" name="no_surat" class="form-control"
                                         value="{{ $no_surat_template }}"> --}}
+                                    @error('no_surat')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Bentuk Sanksi</label>
-                                    <select name="sanksi_id" id="sanksi_id" class="form-select">
-                                        <option value="">-- Pilih Bentuk Sanksi --</option>
+                                    <select name="sanksi_id" id="sanksi_id"
+                                        class="form-select @error('sanksi_id') is-invalid @enderror">
+                                        <option value="" disabled selected>-- Pilih Bentuk Sanksi --</option>
                                         @foreach ($sanksi as $s)
-                                            <option value="{{ $s->id }}">{{ $s->kode_surat }} - {{ $s->nama }}
+                                            <option value="{{ $s->id }}"
+                                                {{ old('sanksi_id') == $s->id ? 'selected' : '' }}>{{ $s->kode_surat }} -
+                                                {{ $s->nama }}
                                             </option>
                                         @endforeach
                                     </select>
+                                    @error('sanksi_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Tanggal Surat</label>
-                                    <input type="date" name="tanggal_mulai" class="form-control">
+                                    <input type="date" name="tanggal_mulai"
+                                        class="form-control @error('tanggal_mulai') is-invalid @enderror"
+                                        value="{{ old('tanggal_mulai') }}">
+                                    @error('tanggal_mulai')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Tanggal Jatuh Tempo</label>
-                                    <input type="date" name="tanggal_selesai" class="form-control">
+                                    <input type="date" name="tanggal_selesai"
+                                        class="form-control @error('tanggal_selesai') is-invalid @enderror"
+                                        value="{{ old('tanggal_selesai') }}">
+                                    @error('tanggal_selesai')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Jenis Pelaku Usaha</label>
-                                    <select name="jenis_pelaku_usaha_id" class="form-select" id="jenis_pelaku_usaha_id">
+                                    <select name="jenis_pelaku_usaha_id"
+                                        class="form-select @error('jenis_pelaku_usaha_id') is-invalid @enderror"
+                                        id="jenis_pelaku_usaha_id">
                                         @foreach ($jenis_pelaku_usaha as $p)
-                                            <option value="{{ $p->id }}">{{ $p->nama }}</option>
+                                            <option value="{{ $p->id }}"
+                                                {{ old('jenis_pelaku_usaha_id') == $p->id ? 'selected' : '' }}>
+                                                {{ $p->nama }}</option>
                                         @endforeach
                                     </select>
+                                    @error('jenis_pelaku_usaha_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Perusahaan</label>
-                                    <select name="pelaku_usaha_id" id="pelaku_usaha_id" class="form-select">
-                                        <option value="">-- Pilih Jenis Pelaku Usaha Terlebih Dahulu --</option>
+                                    <select name="pelaku_usaha_id" id="pelaku_usaha_id"
+                                        class="form-select select2 @error('pelaku_usaha_id') is-invalid @enderror">
+                                        <option>-- Pilih Jenis Pelaku Usaha Terlebih Dahulu --</option>
                                     </select>
+                                    @error('pelaku_usaha_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <!-- END : Horizontal Form -->
@@ -65,28 +108,43 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label class="form-label">Jenis Pelanggaran</label>
-                                    <select name="jenis_pelanggaran_id" id="jenis_pelanggaran_id" class="form-select">
+                                    <select name="jenis_pelanggaran_id" id="jenis_pelanggaran_id"
+                                        class="form-select @error('jenis_pelanggaran_id') is-invalid @enderror">
                                         @foreach ($jenis_pelanggaran as $j)
-                                            <option value="{{ $j->id }}">{{ $j->nama }}</option>
+                                            <option value="{{ $j->id }}"
+                                                {{ old('jenis_pelanggaran_id') == $j->id ? 'selected' : '' }}>
+                                                {{ $j->nama }}</option>
                                         @endforeach
                                     </select>
+                                    @error('jenis_pelanggaran_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Kategori Sanksi</label>
-                                    <select name="kategori_sp_id" id="kategori_sp_id" class="form-select">
-                                        <option value="">-- Pilih Jenis Pelanggaran Terlebih Dahulu --</option>
+                                    <select name="kategori_sp_id" id="kategori_sp_id"
+                                        class="form-select @error('kategori_sp_id') is-invalid @enderror">
+                                        <option>-- Pilih Jenis Pelanggaran Terlebih Dahulu
+                                            --</option>
                                     </select>
+                                    @error('kategori_sp_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Detail Pelanggaran</label>
-                                    <textarea name="detail_pelanggaran" class="form-control" style="height: 100px"></textarea>
+                                    <textarea name="detail_pelanggaran" class="form-control" style="height: 100px">{{ old('detail_pelanggaran') }}</textarea>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="lampiran" class="form-label">Dokumen</label>
-                                    <input type="file" name="lampiran[]" id="lampiran" class="form-control" required>
+                                    <input type="file" name="lampiran[]" id="lampiran" class="form-control">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                             </div>
@@ -111,11 +169,14 @@
     </div>
     </div>
     <script>
-        $(document).ready(function() {
+        const oldPelakuUsahaId = "{{ old('pelaku_usaha_id') }}";
+        const oldKategoriSanksiId = "{{ old('kategori_sp_id') }}";
 
+        $(document).ready(function() {
             // Aktifkan Select2
             $('.select2').select2({
-                theme: "bootstrap-5"
+                theme: 'default',
+                width: '100%'
             });
 
             $('#jenis_pelaku_usaha_id').on('change', function() {
@@ -131,20 +192,28 @@
                         // Kosongkan select perusahaan
                         perusahaanSelect.empty();
                         perusahaanSelect.append(
-                            `<option value="">-- Pilih Perusahaan --</option>`);
+                            `<option value="" disabled>-- Pilih Perusahaan --</option>`);
 
                         // Isi ulang dengan data baru
                         $.each(data, function(index, item) {
+                            let selected = (oldPelakuUsahaId == item.id) ? 'selected' :
+                                '';
                             perusahaanSelect.append(
-                                `<option value="${item.id}">${item.nama}</option>`
+                                `<option value="${item.id}" ${selected}>${item.nama}</option>`
                             );
                         });
 
                         // Refresh select2 setelah update
-                        perusahaanSelect.trigger('change.select2');
+                        perusahaanSelect.trigger('change');
                     }
                 });
             });
+
+            let jenisOld = $('#jenis_pelaku_usaha_id').val();
+
+            if (jenisOld) {
+                $('#jenis_pelaku_usaha_id').trigger('change');
+            }
 
             $('#jenis_pelanggaran_id').on('change', function() {
                 let jenisID = $(this).val();
@@ -154,26 +223,35 @@
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        let perusahaanSelect = $('#kategori_sp_id');
+                        kategoriSelect = $('#kategori_sp_id');
 
                         // Kosongkan select perusahaan
-                        perusahaanSelect.empty();
-                        perusahaanSelect.append(
-                            `<option value="">-- Pilih Kategori SP --</option>`);
+                        kategoriSelect.empty();
+                        kategoriSelect.append(
+                            `<option value="" disabled>-- Pilih Kategori Sanksi --</option>`
+                        );
 
                         // Isi ulang dengan data baru
                         $.each(data, function(index, item) {
-                            perusahaanSelect.append(
-                                `<option value="${item.id}">${item.nama}</option>`
+                            let selected = (oldKategoriSanksiId == item.id) ?
+                                'selected' :
+                                '';
+                            kategoriSelect.append(
+                                `<option value="${item.id}" ${selected}>${item.nama}</option>`
                             );
                         });
 
                         // Refresh select2 setelah update
-                        perusahaanSelect.trigger('change.select2');
+                        kategoriSelect.trigger('change.select2');
                     }
                 });
             });
 
+            let pelanggaranOld = $('#jenis_pelanggaran_id').val();
+
+            if (pelanggaranOld) {
+                $('#jenis_pelanggaran_id').trigger('change');
+            }
         });
     </script>
 @endsection
