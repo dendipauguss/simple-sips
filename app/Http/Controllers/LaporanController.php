@@ -91,8 +91,8 @@ class LaporanController extends Controller
         $items = $laporan->pengenaan_sp
             ->load(['pelaku_usaha.jenis_pelaku_usaha', 'sanksi', 'jenis_pelanggaran'])
             ->groupBy([
-                fn($item) => $item->pelaku_usaha->jenis_pelaku_usaha->nama,
                 fn($item) => $item->pelaku_usaha->nama,
+                fn($item) => $item->pelaku_usaha->jenis_pelaku_usaha->nama,
                 fn($item) => $item->sanksi->nama,
             ]);
 

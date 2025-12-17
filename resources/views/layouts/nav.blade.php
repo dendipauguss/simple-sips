@@ -159,11 +159,11 @@
                                         Bentuk Sanksi
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a href="{{ url('pengaturan/perintah-sanksi') }}"
                                         class="nav-link {{ request()->is('pengaturan/perintah-sanksi*') ? 'active' : '' }}">Perintah
                                         Bentuk Sanksi</a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item">
                                     <a href="{{ url('pengaturan/users') }}"
                                         class="nav-link {{ request()->is('pengaturan/users*') ? 'active' : '' }}">Users</a>

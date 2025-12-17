@@ -37,7 +37,7 @@
                                     <span>: {{ $sp->jenis_pelanggaran->nama }}</span>
                                 </li>
                                 <li class="list-group-item d-flex">
-                                    <strong class="me-3" style="width: 150px;">Kategori SP</strong>
+                                    <strong class="me-3" style="width: 150px;">Kategori Sanksi</strong>
                                     <span>: {{ $sp->kategori_sp->nama }}</span>
                                 </li>
                                 <li class="list-group-item d-flex">

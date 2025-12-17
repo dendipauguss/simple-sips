@@ -16,6 +16,7 @@ use App\Models\Files;
 use App\Models\Sanksi;
 use App\Models\Laporan;
 use App\Models\LaporanItem;
+use App\Imports\PengenaanSPImport;
 
 class PengenaanSPController extends Controller
 {
@@ -368,5 +369,24 @@ class PengenaanSPController extends Controller
 
         return redirect()->route('laporan.index')
             ->with('success', 'Laporan bulanan berhasil dibuat.');
+    }
+
+    public function importView()
+    {
+        return view('pengenaan_sp.import', [
+            'title' => 'Import Excel',
+            'pengenaan_sp' => PengenaanSP::all()
+        ]);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        Excel::import(new PengenaanSPImport, $request->file('file'));
+
+        return back()->with('success', 'Data berhasil diimport');
     }
 }

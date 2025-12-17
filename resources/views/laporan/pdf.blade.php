@@ -82,6 +82,27 @@
             .kolom-nomor h3 {
                 margin-bottom: none;
             }
+
+            .tabel-word {
+                border-collapse: collapse;
+                width: 95%;
+                font-size: 9pt;
+            }
+
+            .tabel-word th,
+            .tabel-word td {
+                border: 1px solid #000;
+                /* HITAM TEGAS */
+                padding: 6px 8px;
+                vertical-align: top;
+            }
+
+            .tabel-word th {
+                background-color: lightgray;
+                /* hijau kebiruan seperti contoh */
+                text-align: center;
+                font-weight: bold;
+            }
         </style>
     </head>
 
@@ -109,27 +130,49 @@
             </table>
         </div>
 
-        <div class="kolom-nomor">
+        <div class="kolom-nomor" style="font-size: 11pt">
             <h3>NOTA DINAS</h3>
             <span>Nomor : {{ $nomor_laporan }}</span>
         </div>
         <!-- Bagian Kepada Yth -->
-        <p>
-            Kepada Yth:<br>
-            1. Direktur Utama Pialang Berjangka Peserta Sistem Perdagangan Alternatif;<br>
-            2. Direktur Utama Pialang Berjangka yang mengajukan permohonan persetujuan sebagai Pialang Berjangka Peserta
-            Sistem Perdagangan Alternatif;<br>
-            3. Direktur Utama Bursa Berjangka;<br>
-            4. Ketua Aspebtindo.
-        </p>
+        <table style="font-size:11pt; line-height:1.2; border-collapse:collapse;">
+            <tr>
+                <td style="width:9%; padding:2px 0;">Yth</td>
+                <td style="width:1%; padding:2px 0;">:</td>
+                <td style="padding:2px 0;">Kepala Biro Pengawasan dan Penindakan PBK, SRG dan PLK</td>
+            </tr>
+            <tr>
+                <td style="padding:2px 0;">Dari</td>
+                <td style="padding:2px 0;">:</td>
+                <td style="padding:2px 0;">Ketua Tim Bidang Penindakan PBK, Pasar Fisik, SRG dan PLK serta Entitas PBK
+                    Ilegal</td>
+            </tr>
+            <tr>
+                <td style="padding:2px 0;">Hal</td>
+                <td style="padding:2px 0;">:</td>
+                <td style="padding:2px 0;">
+                    Laporan Monitoring Pengenaan Sanksi
+                    @if ($laporan->bulan && $laporan->tahun)
+                        {{ 'Periode Bulan ' . \Carbon\Carbon::createFromDate($laporan->tahun, $laporan->bulan, 1)->translatedFormat('F Y') }}
+                    @else
+                        Semua Periode
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:2px 0;">Tanggal</td>
+                <td style="padding:2px 0;">:</td>
+                <td style="padding:2px 0;">{{ now()->translatedFormat('d F Y') }}</td>
+            </tr>
+        </table>
 
-        <div class="title">Laporan Pengenaan Sanksi
+        {{-- <div class="title">Laporan Pengenaan Sanksi
             @if ($laporan->bulan && $laporan->tahun)
-                {{ 'Bulan ' . \Carbon\Carbon::createFromDate($laporan->tahun, $laporan->bulan, 1)->translatedFormat('F Y') }}
+                {{ 'Periode Bulan ' . \Carbon\Carbon::createFromDate($laporan->tahun, $laporan->bulan, 1)->translatedFormat('F Y') }}
             @else
                 Semua Periode
             @endif
-        </div>
+        </div> --}}
         @php
             function countDeep($data)
             {
@@ -147,7 +190,7 @@
             }
         @endphp
 
-        <table border="1" cellpadding="4" cellspacing="0" width="100%">
+        <table border="1" cellpadding="4" cellspacing="0" class="tabel-word" align="center">
             <thead>
                 <th style="width: 5%">No</th>
                 <th>Kategori Pelaku Usaha</th>
@@ -157,62 +200,76 @@
                 <th>Tanggapan</th>
             </thead>
             <tbody>
-                @php $no =1; @endphp
-                @foreach ($items as $jenisPU => $pelakuGroup)
+                @php $no = 1; @endphp
+
+                @foreach ($items as $namaPerusahaan => $kategoriGroup)
                     @php
-                        $rowspan_1 = countDeep($pelakuGroup);
-                        $i1 = 0;
+                        $rowspanPerusahaan = countDeep($kategoriGroup);
+                        $firstPerusahaan = true;
                     @endphp
 
-                    @foreach ($pelakuGroup as $pelakuNama => $sanksiGroup)
+                    @foreach ($kategoriGroup as $kategoriPU => $sanksiGroup)
                         @php
-                            $rowspan_2 = countDeep($sanksiGroup);
-                            $i2 = 0;
+                            $rowspanKategori = countDeep($sanksiGroup);
+                            $firstKategori = true;
                         @endphp
 
-                        @foreach ($sanksiGroup as $sanksiNama => $rowItems)
+                        @foreach ($sanksiGroup as $namaSanksi => $rows)
                             @php
-                                $rowspan_3 = count($rowItems);
-                                $i3 = 0;
+                                $rowspanSanksi = count($rows);
+                                $firstSanksi = true;
                             @endphp
 
-                            @foreach ($rowItems as $item)
+                            @foreach ($rows as $row)
                                 <tr>
-                                    {{-- NOMOR --}}
-                                    <td align="center">{{ $no++ }}</td>
 
-                                    {{-- LEVEL 1 --}}
-                                    @if ($i2 == 0 && $i3 == 0)
-                                        <td rowspan="{{ $rowspan_2 }}">{{ $pelakuNama }}</td>
+                                    {{-- NO --}}
+                                    @if ($firstPerusahaan)
+                                        <td rowspan="{{ $rowspanPerusahaan }}" class="center">
+                                            {{ $no++ }}
+                                        </td>
                                     @endif
 
-                                    {{-- LEVEL 2 --}}
-                                    @if ($i1 == 0 && $i2 == 0 && $i3 == 0)
-                                        <td rowspan="{{ $rowspan_1 }}" align="center">{{ $jenisPU }}</td>
+                                    {{-- NAMA PERUSAHAAN --}}
+                                    @if ($firstPerusahaan)
+                                        <td rowspan="{{ $rowspanPerusahaan }}">
+                                            {{ $namaPerusahaan }}
+                                        </td>
                                     @endif
 
-                                    {{-- LEVEL 3 --}}
-                                    @if ($i3 == 0)
-                                        <td rowspan="{{ $rowspan_3 }}" align="center">{{ $sanksiNama }}</td>
+                                    {{-- KATEGORI --}}
+                                    @if ($firstKategori && $firstSanksi)
+                                        <td rowspan="{{ $rowspanKategori }}">
+                                            {{ $kategoriPU }}
+                                        </td>
                                     @endif
 
-                                    {{-- LEVEL 4 --}}
-                                    <td align="center">{{ $item->jenis_pelanggaran->nama }}</td>
+                                    {{-- BENTUK SANKSI --}}
+                                    @if ($firstSanksi)
+                                        <td rowspan="{{ $rowspanSanksi }}">
+                                            {{ $namaSanksi }}
+                                        </td>
+                                    @endif
 
-                                    {{-- LEVEL 5 --}}
-                                    <td align="center">{{ ucwords(str_replace('_', ' ', $item->status_surat)) }}</td>
+                                    {{-- PELANGGARAN --}}
+                                    <td>{{ $row->jenis_pelanggaran->nama }}</td>
+
+                                    {{-- TANGGAPAN --}}
+                                    <td>
+                                        {{ $row->status_surat == 'belum_ditanggapi' ? 'Belum Ditanggapi' : 'Sudah Ditanggapi' }}
+                                    </td>
 
                                 </tr>
-                                @php $i3++; @endphp
+
+                                @php
+                                    $firstPerusahaan = false;
+                                    $firstKategori = false;
+                                    $firstSanksi = false;
+                                @endphp
                             @endforeach
-
-                            @php $i2++; @endphp
                         @endforeach
-
-                        @php $i1++; @endphp
                     @endforeach
                 @endforeach
-
             </tbody>
         </table>
 
@@ -222,18 +279,35 @@
                 <strong>{{ $jumlah_status['belum'] }}</strong>
             </li>
         </ul>
-
-        <p>Demikian surat ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</p>
-
-
         <br>
-        <br><br>
-        <strong
-            style="text-align: center">{{ $laporan->status_disetujui == 1 ? 'Disetujui' : 'Belum Disetujui' }}</strong>
         <br>
-        <strong>Catatan : </strong>
         <br>
-        <p>{{ $laporan->catatan }}</p>
+
+        <table width="100%" style="font-size:9pt;">
+            <tr>
+                {{-- TEMBUSAN (KIRI) --}}
+                <td width="70%" style="vertical-align: top;">
+
+                </td>
+
+                {{-- TANDA TANGAN (KANAN) --}}
+                <td width="25%" style="vertical-align: top; text-align: left;">
+                    Ketua Tim Bidang Penindakan<br>
+                    PBK, Pasar Fisik, SRG dan PLK<br>
+                    serta Entitas PBK Ilegal,
+                    <br><br><br>
+                    <div style="text-align: center;">{{ $laporan->status_persetujuan == 'setuju' ? 'TTD' : '' }}</div>
+                    <br><br><br>
+                    <div style="text-align: center;">
+                        <strong><u>A</u></strong><br>
+                    </div>
+                    NIP. 19xxxxxxxxxxxx
+                </td>
+            </tr>
+        </table>
+
+        <strong>Tembusan:</strong><br>
+        Para Ketua Tim di lingkungan Biro Pengawasan dan Penindakan PBK, SRG dan PLK
     </body>
 
 </html>

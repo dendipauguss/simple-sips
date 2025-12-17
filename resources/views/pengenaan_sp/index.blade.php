@@ -27,14 +27,18 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-sm-3">
                                         <div class="input-group">
                                             <button class="btn btn-primary ms-1">Generate Laporan</button>
+                                            @if (auth()->user()->role == 'admin')
+                                                <a href="{{ url('pengenaan-sp/import') }}" class="btn btn-sm btn-success">+
+                                                    Import
+                                                    Excel</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </form>
-
 
                             {{-- <div class="row row-cols-md-auto">
                                 <div class="input-group ms-2">

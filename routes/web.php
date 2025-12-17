@@ -51,6 +51,8 @@ Route::middleware('auth')->group(function () {
         ->name('pengenaan-sp.generate-pdf');
     Route::post('/pengenaan-sp/upload-dokumen', [PengenaanSPController::class, 'uploadDokumen'])->name('pengenaan-sp.upload-dokumen');
     Route::get('/pengenaan-sp/laporan', [PengenaanSPController::class, 'laporan'])->name('pengenaan-sp.laporan');
+    Route::get('/pengenaan-sp/import', [PengenaanSPController::class, 'importView']);
+    Route::post('/pengenaan-sp/import', [PengenaanSPController::class, 'import'])->name('pengenaan-sp.import');
     Route::get('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'importView']);
     Route::post('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'import'])->name('kategori-sp.import');
     Route::get('/sk/create/{id}', [SKController::class, 'create'])->name('sk.create');
