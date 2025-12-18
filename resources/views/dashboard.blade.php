@@ -16,8 +16,8 @@
                     </div>
                 </div>
                 <div class="col-xl-8">
-                    <div class="row">
-                        <div class="card">
+                    {{-- 
+                        <div class="card mb-1">
                             <div class="card-body">
                                 <h5 class="card-title">By Kategori</h5>
                                 <div class="row mb-1 justify-content-start">
@@ -56,42 +56,81 @@
                                 <!-- END : Bar Chart -->
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Stacked bar/line</h5>
-                                <!-- Stacked chart -->
-                                <canvas id="_dm-stackChart" width="731" height="365"
-                                    style="display: block; box-sizing: border-box; height: 292px; width: 584.8px;"
-                                    data-stack='@json($sanksi_per_periode)'></canvas>
-                                <!-- END : Stacked chart -->
+                     --}}
+
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Pengenaan Sanksi Tiap Bulan</h5>
+                            <!-- Stacked chart -->
+                            <div style="height: 300px;">
+                                <canvas id="_dm-stackChart" data-stack='@json($sanksi_per_periode)'></canvas>
                             </div>
+                            <!-- END : Stacked chart -->
                         </div>
                     </div>
-                    <div class="row mt-3 justify-content-between">
-                        @foreach ($topPelaku as $item)
-                            <div class="col">
-                                <div class="card mb-3 mb-xl-3">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1 ms-3">
-                                                <h5 class="h2 mb-0">{{ $item->total_sanksi }}</h5>
-                                                <p class="mb-0">{{ $item->nama }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="d-block align-items-center ms-3">
-                                            <div class="badge bg-success me-1">
-                                                Sudah Ditanggapi
-                                                <span class="text-dark">{{ $item->sudah_ditanggapi }}</span>
-                                            </div>
-                                            <div class="badge bg-danger">
-                                                Belum Ditanggapi
-                                                <span class="text-dark">{{ $item->belum_ditanggapi }}</span>
+
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Perusahaan Penerima Sanksi</h5>
+                            <div class="row justify-content-between">
+                                @foreach ($top_pelaku as $item)
+                                    <div class="col d-flex">
+                                        <div class="card bg-warning mb-3 mb-md-3 text-white">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h5 class="h2 mb-0">{{ $item->total_sanksi }}</h5>
+                                                        <strong class="mb-0">{{ $item->nama }}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="d-block align-items-center ms-3">
+                                                    <div class="badge bg-success me-1">
+                                                        Sudah Ditanggapi
+                                                        <span class="text-dark">{{ $item->sudah_ditanggapi }}</span>
+                                                    </div>
+                                                    <div class="badge bg-danger">
+                                                        Belum Ditanggapi
+                                                        <span class="text-dark">{{ $item->belum_ditanggapi }}</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
-                        @endforeach
+                        </div>
+                    </div>
+
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Kategori Pelaku Usaha Penerima Sanksi</h5>
+                            <div class="row justify-content-between">
+                                @foreach ($top_jenis_pelaku as $item)
+                                    <div class="col d-flex">
+                                        <div class="card bg-warning mb-3 mb-md-3 text-white">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h5 class="h2 mb-0">{{ $item->total_sanksi }}</h5>
+                                                        <strong class="mb-0">{{ $item->nama }}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="d-block align-items-center ms-3">
+                                                    <div class="badge bg-success me-1">
+                                                        Sudah Ditanggapi
+                                                        <span class="text-dark">{{ $item->sudah_ditanggapi }}</span>
+                                                    </div>
+                                                    <div class="badge bg-danger">
+                                                        Belum Ditanggapi
+                                                        <span class="text-dark">{{ $item->belum_ditanggapi }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-xl-2">

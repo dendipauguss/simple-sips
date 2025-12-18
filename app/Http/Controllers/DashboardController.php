@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use App\Models\PengenaanSP;
 use App\Models\JenisPelanggaran;
-use Illuminate\Support\Facades\DB;
 use App\Models\PelakuUsaha;
+use App\Models\JenisPelakuUsaha;
 
 class DashboardController extends Controller
 {
@@ -33,7 +35,20 @@ class DashboardController extends Controller
         $belum = PengenaanSP::where('status_surat', 'belum_ditanggapi')->count();
         $selesai = PengenaanSP::where('status_surat', 'sudah_ditanggapi')->count();
 
-        $topPelaku = PelakuUsaha::withCount([
+        $top_pelaku = PelakuUsaha::withCount([
+            'pengenaan_sp as total_sanksi',
+            'pengenaan_sp as sudah_ditanggapi' => function ($query) {
+                $query->where('status_surat', 'sudah_ditanggapi');
+            },
+            'pengenaan_sp as belum_ditanggapi' => function ($query) {
+                $query->where('status_surat', 'belum_ditanggapi');
+            },
+        ])
+            ->orderByDesc('total_sanksi')
+            ->limit(5)
+            ->get();
+
+        $top_jenis_pelaku = JenisPelakuUsaha::withCount([
             'pengenaan_sp as total_sanksi',
             'pengenaan_sp as sudah_ditanggapi' => function ($query) {
                 $query->where('status_surat', 'sudah_ditanggapi');
@@ -60,13 +75,19 @@ class DashboardController extends Controller
 
         $sanksi_per_periode = DB::table('pengenaan_sp')
             ->select(
-                'tanggal_mulai',
+                DB::raw("DATE_FORMAT(tanggal_mulai, '%Y-%m') as periode"),
                 DB::raw("SUM(status_surat = 'sudah_ditanggapi') as sudah"),
                 DB::raw("SUM(status_surat = 'belum_ditanggapi') as belum")
             )
-            ->groupBy('tanggal_mulai')
-            ->orderBy('tanggal_mulai')
-            ->get();
+            ->groupBy('periode')
+            ->orderBy('periode')
+            ->get()
+            ->map(function ($row) {
+                $row->periode_label = Carbon::createFromFormat('Y-m', $row->periode)
+                    ->locale('id')
+                    ->translatedFormat('F Y'); // 1 November 2001
+                return $row;
+            });
 
         return view('dashboard', [
             'title' => 'Dashboard',
@@ -74,7 +95,8 @@ class DashboardController extends Controller
             'labels' => $labels_bar,
             'sudah'  => $sudah_bar,
             'belum'  => $belum_bar,
-            'topPelaku' => $topPelaku,
+            'top_pelaku' => $top_pelaku,
+            'top_jenis_pelaku' => $top_jenis_pelaku,
             'sanksi_per_periode' => $sanksi_per_periode
         ]);
     }

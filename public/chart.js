@@ -124,9 +124,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         borderColor: successColor,
                         backgroundColor: successColor,
                         stack: "combined",
-                        type: "bar",
+                        type: "line",
                         parsing: {
-                            xAxisKey: "tanggal_mulai",
+                            xAxisKey: "periode_label",
                             yAxisKey: "sudah"
                         }
                     },
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         backgroundColor: dangerColor,
                         stack: "combined",
                         parsing: {
-                            xAxisKey: "tanggal_mulai",
+                            xAxisKey: "periode_label",
                             yAxisKey: "belum"
                         }
                     }
@@ -145,6 +145,8 @@ document.addEventListener("DOMContentLoaded", () => {
             },
 
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         display: true,
