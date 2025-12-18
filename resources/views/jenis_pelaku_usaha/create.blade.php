@@ -3,7 +3,7 @@
     <div class="content__boxed">
         <div class="content__wrap">
             @php $jumlah = !empty(old('nama')) ? count(old('nama')) : 1;  @endphp
-            <form action="{{ url('jenis-pelaku-usaha') }}" method="POST">
+            <form action="{{ url('pengaturan/jenis-pelaku-usaha') }}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-xl-12 mb-3 mb-xl-0">

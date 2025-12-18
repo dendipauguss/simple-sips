@@ -134,7 +134,7 @@
 
         <!-- PAGE CONTAINER -->
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <div id="root" class="root mn--max hd--expanded">
+        <div id="root" class="root hd--expanded mn--min mn--sticky">
 
             <!-- CONTENTS -->
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

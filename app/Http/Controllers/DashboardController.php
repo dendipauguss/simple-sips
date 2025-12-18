@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PengenaanSP;
 use App\Models\JenisPelanggaran;
 use Illuminate\Support\Facades\DB;
+use App\Models\PelakuUsaha;
 
 class DashboardController extends Controller
 {
@@ -32,12 +33,49 @@ class DashboardController extends Controller
         $belum = PengenaanSP::where('status_surat', 'belum_ditanggapi')->count();
         $selesai = PengenaanSP::where('status_surat', 'sudah_ditanggapi')->count();
 
+        $topPelaku = PelakuUsaha::withCount([
+            'pengenaan_sp as total_sanksi',
+            'pengenaan_sp as sudah_ditanggapi' => function ($query) {
+                $query->where('status_surat', 'sudah_ditanggapi');
+            },
+            'pengenaan_sp as belum_ditanggapi' => function ($query) {
+                $query->where('status_surat', 'belum_ditanggapi');
+            },
+        ])
+            ->orderByDesc('total_sanksi')
+            ->limit(5)
+            ->get();
+
+        //     $sanksi_per_periode = DB::table('pengenaan_sp')
+        //         ->selectRaw("
+        //     DATE_FORMAT(tanggal_mulai, '%b %Y') as periode,
+        //     SUM(CASE WHEN status_surat = 'sudah_ditanggapi' THEN 1 ELSE 0 END) as sudah,
+        //     SUM(CASE WHEN status_surat = 'belum_ditanggapi' THEN 1 ELSE 0 END) as belum,
+        //     COUNT(*) as total
+        // ")
+        //         ->whereNotNull('tanggal_mulai')
+        //         ->groupByRaw("YEAR(tanggal_mulai), MONTH(tanggal_mulai)")
+        //         ->orderByRaw("YEAR(tanggal_mulai), MONTH(tanggal_mulai)")
+        //         ->get();
+
+        $sanksi_per_periode = DB::table('pengenaan_sp')
+            ->select(
+                'tanggal_mulai',
+                DB::raw("SUM(status_surat = 'sudah_ditanggapi') as sudah"),
+                DB::raw("SUM(status_surat = 'belum_ditanggapi') as belum")
+            )
+            ->groupBy('tanggal_mulai')
+            ->orderBy('tanggal_mulai')
+            ->get();
+
         return view('dashboard', [
             'title' => 'Dashboard',
             'pie_data' => [$belum, $selesai],
             'labels' => $labels_bar,
             'sudah'  => $sudah_bar,
             'belum'  => $belum_bar,
+            'topPelaku' => $topPelaku,
+            'sanksi_per_periode' => $sanksi_per_periode
         ]);
     }
 

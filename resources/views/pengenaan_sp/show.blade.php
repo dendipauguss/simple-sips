@@ -108,8 +108,10 @@
                 <div class="col-xl">
                     <div class="card h-100">
                         <div class="card-body py-4">
-                            <iframe src="{{ asset($sp->file->url_path) }}" frameborder="0" width="100%"
-                                height="600px"></iframe>
+                            @if (isset($sp->file))
+                                <iframe src="{{ asset($sp->file->url_path) }}" frameborder="0" width="100%"
+                                    height="600px"></iframe>
+                            @endif
                         </div>
                     </div>
                 </div>

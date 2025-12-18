@@ -28,7 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             data: areaData,
                             borderColor: successColor,
                             backgroundColor: successColor,
-                            fill: "start",
+                            type: "bar",
+                            stack: "combined",
                             parsing: {
                                 xAxisKey: "period",
                                 yAxisKey: "up"
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             data: areaData,
                             borderColor: "transparent",
                             backgroundColor: grayColor,
-                            fill: "start",
+                            stack: "combined",
                             parsing: {
                                 xAxisKey: "period",
                                 yAxisKey: "dl"
@@ -106,6 +107,94 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         );
+    }
+
+    // Stack chart
+    // ----------------------------------------------
+    const stackCanvas = document.getElementById("_dm-stackChart");
+    if (stackCanvas) {
+        const stackData = JSON.parse(stackCanvas.dataset.stack);
+        const stackChart = new Chart(stackCanvas, {
+            type: "line",
+            data: {
+                datasets: [
+                    {
+                        label: "Sudah Ditanggapi",
+                        data: stackData,
+                        borderColor: successColor,
+                        backgroundColor: successColor,
+                        stack: "combined",
+                        type: "bar",
+                        parsing: {
+                            xAxisKey: "tanggal_mulai",
+                            yAxisKey: "sudah"
+                        }
+                    },
+                    {
+                        label: "Belum Ditanggapi",
+                        data: stackData,
+                        borderColor: dangerColor,
+                        backgroundColor: dangerColor,
+                        stack: "combined",
+                        parsing: {
+                            xAxisKey: "tanggal_mulai",
+                            yAxisKey: "belum"
+                        }
+                    }
+                ]
+            },
+
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        align: "end",
+                        labels: {
+                            color: `rgb(${mutedColorRGB})`,
+                            boxWidth: 10,
+                        }
+                    },
+                },
+
+                interaction: {
+                    mode: "index",
+                    intersect: false,
+                },
+
+                scales: {
+                    y: {
+                        suggestedMax: 300,
+                        grid: {
+                            borderWidth: 0,
+                            color: `rgba(${mutedColorRGB}, .07)`
+                        },
+                        ticks: {
+                            font: { size: 11 },
+                            color: `rgb(${mutedColorRGB})`,
+                            beginAtZero: false,
+                            stepSize: 100
+                        }
+                    },
+                    x: {
+                        grid: {
+                            borderWidth: 0,
+                            drawOnChartArea: false
+                        },
+                        ticks: {
+                            font: { size: 11 },
+                            color: `rgb(${mutedColorRGB})`,
+                            autoSkip: true,
+                            maxRotation: 0,
+                            minRotation: 0,
+                            maxTicksLimit: 7
+                        }
+                    }
+                },
+
+                // Dot width (line)
+                radius: 3,
+            }
+        });
     }
 
     // Line Chart
@@ -405,96 +494,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .addEventListener('change', () => {
             loadChart(document.getElementById('groupBy').value);
         });
-
-    // Stack chart
-    // ----------------------------------------------
-    const stackCanvas = document.getElementById("_dm-stackChart");
-    if (stackCanvas) {
-        const stackChart = new Chart(
-            stackCnavas, {
-            type: "line",
-            data: {
-                datasets: [
-                    {
-                        label: "Upload Speed",
-                        data: areaData,
-                        borderColor: primaryColor,
-                        backgroundColor: primaryColor,
-                        stack: "combined",
-                        type: "bar",
-                        parsing: {
-                            xAxisKey: "period",
-                            yAxisKey: "up"
-                        }
-                    },
-                    {
-                        label: "Download Speed",
-                        data: areaData,
-                        borderColor: warningColor,
-                        backgroundColor: warningColor,
-                        stack: "combined",
-                        parsing: {
-                            xAxisKey: "period",
-                            yAxisKey: "dl"
-                        }
-                    },
-                ]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: true,
-                        align: "end",
-                        labels: {
-                            color: `rgb( ${mutedColorRGB})`,
-                            boxWidth: 10,
-                        }
-                    },
-                },
-
-                interaction: {
-                    mode: "index",
-                    intersect: false,
-                },
-
-                scales: {
-                    y: {
-                        suggestedMax: 300,
-                        grid: {
-                            borderWidth: 0,
-                            color: `rgba( ${mutedColorRGB}, .07 )`
-                        },
-                        ticks: {
-                            font: { size: 11 },
-                            color: `rgb( ${mutedColorRGB})`,
-                            beginAtZero: false,
-                            stepSize: 100
-                        }
-                    },
-                    x: {
-                        grid: {
-                            borderWidth: 0,
-                            drawOnChartArea: false
-                        },
-                        ticks: {
-                            font: { size: 11 },
-                            color: `rgb( ${mutedColorRGB})`,
-                            autoSkip: true,
-                            maxRotation: 0,
-                            minRotation: 0,
-                            maxTicksLimit: 7
-                        }
-                    }
-                },
-
-                // Dot width
-                radius: 3,
-
-            }
-        }
-        );
-    }
-
 
     // Doughnut Chart
     // ----------------------------------------------

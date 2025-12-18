@@ -23,4 +23,9 @@ class PelakuUsaha extends Model
     {
         return $this->belongsTo(JenisPelakuUsaha::class, 'jenis_id');
     }
+
+    public function pengenaan_sp()
+    {
+        return $this->hasMany(PengenaanSP::class);
+    }
 }

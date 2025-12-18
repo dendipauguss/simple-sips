@@ -37,5 +37,9 @@ class JenisPelakuUsahaSeeder extends Seeder
         JenisPelakuUsaha::create([
             'nama' => 'Pialang Berjangka'
         ]);
+
+        JenisPelakuUsaha::create([
+            'nama' => "Calon Pedagang Aset Kripto"
+        ]);
     }
 }

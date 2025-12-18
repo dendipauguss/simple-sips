@@ -41,7 +41,7 @@ class JenisPelakuUsahaController extends Controller
         JenisPelakuUsaha::insert($data);
 
         // Redirect dengan pesan sukses
-        return redirect('jenis-pelaku-usaha')->with('success', 'Data Jenis Pelaku Usaha berhasil disimpan!');
+        return redirect('pengaturan/jenis-pelaku-usaha')->with('success', 'Data Jenis Pelaku Usaha berhasil disimpan!');
     }
 
     public function show(string $id)

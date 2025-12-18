@@ -9,7 +9,8 @@
                             @if (auth()->user()->role == 'admin')
                                 <div class="row row-cols-md-auto">
                                     <div class="input-group me-2">
-                                        <a href="{{ url('jenis-pelaku-usaha/create') }}" class="btn btn-sm btn-primary">+
+                                        <a href="{{ url('pengaturan/jenis-pelaku-usaha/create') }}"
+                                            class="btn btn-sm btn-primary">+
                                             Tambah</a>
                                         {{-- <a href="{{ url('jenis-pelaku-usaha/import') }}" class="btn btn-sm btn-success">+
                                             Import
