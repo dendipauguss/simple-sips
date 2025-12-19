@@ -79,7 +79,9 @@
                                                 <td class="text-center">
                                                     {{ $sp->no_surat }}
                                                 </td>
-                                                <td class="text-center">{{ $sp->tanggal_mulai }}</td>
+                                                <td class="text-center">
+                                                    {{ \Carbon\Carbon::parse($sp->tanggal_mulai)->translatedFormat('d-m-Y') }}
+                                                </td>
 
                                                 <td class="text-center">{{ $sp->pelaku_usaha->jenis_pelaku_usaha->nama }}
                                                 </td>

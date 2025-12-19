@@ -19,6 +19,7 @@ class DashboardController extends Controller
         $labels_bar = [];
         $sudah_bar = [];
         $belum_bar = [];
+        $total_bar = [];
 
         foreach ($jenis as $jp) {
             $labels_bar[] = $jp->nama;
@@ -29,6 +30,9 @@ class DashboardController extends Controller
 
             $belum_bar[] = PengenaanSP::where('jenis_pelanggaran_id', $jp->id)
                 ->where('status_surat', 'belum_ditanggapi')
+                ->count();
+
+            $total_bar[] = PengenaanSP::where('jenis_pelanggaran_id', $jp->id)
                 ->count();
         }
 
@@ -58,7 +62,6 @@ class DashboardController extends Controller
             },
         ])
             ->orderByDesc('total_sanksi')
-            ->limit(5)
             ->get();
 
         //     $sanksi_per_periode = DB::table('pengenaan_sp')
@@ -89,15 +92,26 @@ class DashboardController extends Controller
                 return $row;
             });
 
+        $sanksi_per_pelanggaran = JenisPelanggaran::withCount('pengenaan_sp')
+            ->orderByDesc('pengenaan_sp_count')
+            ->get()
+            ->groupBy(fn($r, $i) => $i < 5 ? $r->nama_jenis_pelanggaran : 'Lainnya')
+            ->map(fn($g) => $g->sum('pengenaan_sp_count'));
+
+        $total_sanksi = $top_jenis_pelaku->sum('total_sanksi');
+
         return view('dashboard', [
             'title' => 'Dashboard',
             'pie_data' => [$belum, $selesai],
             'labels' => $labels_bar,
             'sudah'  => $sudah_bar,
             'belum'  => $belum_bar,
+            'total_bar' => $total_bar,
             'top_pelaku' => $top_pelaku,
             'top_jenis_pelaku' => $top_jenis_pelaku,
-            'sanksi_per_periode' => $sanksi_per_periode
+            'sanksi_per_periode' => $sanksi_per_periode,
+            'total_sanksi' => $total_sanksi,
+            'sanksi_per_pelanggaran' => $sanksi_per_pelanggaran
         ]);
     }
 

@@ -182,14 +182,16 @@
         <!-- End - Navigation menu -->
 
         <!-- Bottom navigation menu -->
-        <div class="mainnav__bottom-content border-top pb-2">
+        <div class="mainnav__bottom-content scrollable-content border-top pb-2">
             <ul id="mainnav" class="mainnav__menu nav flex-column">
-                <li class="nav-item has-sub">
-                    <form action="{{ route('logout') }}" method="post">
+                <li class="nav-item">
+                    <a href="#" class="nav-link mininav-toggle collapsed"
+                        onclick="event.preventDefault(); document.getElementById('logout').submit();">
+                        <i class="psi-unlock fs-5 me-2"></i>
+                        <span class="nav-label ms-1"> <b>Logout</b></span>
+                    </a>
+                    <form id="logout" action="{{ route('logout') }}" method="POST" style="display:none;">
                         @csrf
-                        <button type="submit" class="btn nav-link mininav-toggle collapsed" aria-expanded="false"><i
-                                class="psi-unlock fs-5 me-2"></i>
-                            <span class="nav-label ms-1"><b>Logout</b></span></button>
                     </form>
                 </li>
             </ul>

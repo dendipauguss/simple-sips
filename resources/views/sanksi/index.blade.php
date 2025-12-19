@@ -67,7 +67,7 @@
                                 </table>
                             </div>
                         </div>
-                        <!-- END : Network - Area Chart -->\
+                        <!-- END : Network - Area Chart -->
                     </div>
                 </div>
             </div>

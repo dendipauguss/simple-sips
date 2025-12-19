@@ -12,4 +12,9 @@ class JenisPelanggaran extends Model
     protected $table = 'jenis_pelanggaran';
 
     protected $guarded = ['id'];
+
+    public function pengenaan_sp()
+    {
+        return $this->hasMany(PengenaanSP::class, 'jenis_pelanggaran_id');
+    }
 }

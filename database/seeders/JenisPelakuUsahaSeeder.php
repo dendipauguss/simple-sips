@@ -39,7 +39,7 @@ class JenisPelakuUsahaSeeder extends Seeder
         ]);
 
         JenisPelakuUsaha::create([
-            'nama' => "Calon Pedagang Aset Kripto"
+            'nama' => "Pengelola Gudang SRG"
         ]);
     }
 }

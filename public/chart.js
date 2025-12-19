@@ -14,8 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // Area Chart
-    // ----------------------------------------------
-    const areaData = [{ period: "January 16", dl: 77, up: 25 }, { period: "February 16", dl: 127, up: 58 }, { period: "March 16", dl: 115, up: 46 }, { period: "April 16", dl: 239, up: 57 }, { period: "May 16", dl: 46, up: 75 }, { period: "June 16", dl: 97, up: 57 }, { period: "July 16", dl: 105, up: 70 }, { period: "August 16", dl: 115, up: 106 }, { period: "September 16", dl: 239, up: 187 }, { period: "October 16", dl: 97, up: 57 }, { period: "November 16", dl: 189, up: 70 }, { period: "December 16", dl: 65, up: 30 }, { period: "January 17", dl: 35, up: 90 }, { period: "February 17", dl: 127, up: 58 }, { period: "March 17", dl: 115, up: 46 }, { period: "April 17", dl: 239, up: 57 }, { period: "May 17", dl: 46, up: 75 }, { period: "June 17", dl: 97, up: 57 }, { period: "July 17", dl: 105, up: 70 }, { period: "August 17", dl: 115, up: 106 }, { period: "September 17", dl: 239, up: 187 }, { period: "October 17", dl: 97, up: 57 }, { period: "November 17", dl: 189, up: 70 }, { period: "December 17", dl: 65, up: 30 }, { period: "January 18", dl: 35, up: 90 }, { period: "February 18", dl: 127, up: 58 }, { period: "March 18", dl: 115, up: 46 }, { period: "April 18", dl: 239, up: 57 }, { period: "May 18", dl: 46, up: 75 }, { period: "June 18", dl: 97, up: 57 }, { period: "July 18", dl: 105, up: 70 }, { period: "August 18", dl: 115, up: 106 }];
+    // ----------------------------------------------    
     const areaCanvas = document.getElementById("_dm-areaChart");
     if (areaCanvas) {
         const areaChart = new Chart(areaCanvas,
@@ -111,10 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Stack chart
     // ----------------------------------------------
-    const stackCanvas = document.getElementById("_dm-stackChart");
-    if (stackCanvas) {
-        const stackData = JSON.parse(stackCanvas.dataset.stack);
-        const stackChart = new Chart(stackCanvas, {
+    const sanksiPerBulanCanvas = document.getElementById("sanksi_per_bulan_chart");
+    if (sanksiPerBulanCanvas) {
+        const stackData = JSON.parse(sanksiPerBulanCanvas.dataset.stack);
+        const stackChart = new Chart(sanksiPerBulanCanvas, {
             type: "line",
             data: {
                 datasets: [
@@ -125,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         backgroundColor: successColor,
                         stack: "combined",
                         type: "line",
+                        fill: "start",
                         parsing: {
                             xAxisKey: "periode_label",
                             yAxisKey: "sudah"
@@ -136,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         borderColor: dangerColor,
                         backgroundColor: dangerColor,
                         stack: "combined",
+                        fill: "start",
                         parsing: {
                             xAxisKey: "periode_label",
                             yAxisKey: "belum"
@@ -194,7 +195,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
 
                 // Dot width (line)
-                radius: 3,
+                // radius: 2,
+
+                // Smooth lines
+                elements: {
+                    point: {
+                        radius: 1,
+                        hoverRadius: 3
+                    },
+                    line: {
+                        tension: 0.25
+                    }
+                }
             }
         });
     }
@@ -390,6 +402,177 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
+    // Doughnut Chart
+    // ----------------------------------------------
+    const circleData = [25, 35, 98];
+    const doughnutCanvas = document.getElementById("_dm-doughnutChart");
+    if (doughnutCanvas) {
+        const doughnutChart = new Chart(
+            doughnutCanvas, {
+            type: "doughnut",
+            data: {
+                labels: ["Blue", "Orange", "Navy", "Green", "Gray"],
+                datasets: [{
+                    data: circleData,
+                    borderColor: "transparent",
+                    backgroundColor: [infoColor, warningColor, primaryColor, successColor, grayColor],
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: `rgb( ${mutedColorRGB})`,
+                            boxWidth: 10,
+                        }
+                    },
+                }
+            }
+        }
+        );
+    }
+
+    // Pie Chart
+    // ----------------------------------------------
+    // const pieCanvas = document.getElementById("_dm-pieChart");
+    // if (pieCanvas) {
+    //     const statusData = JSON.parse(pieCanvas.dataset.status);
+
+    //     const pieChart = new Chart(
+    //         pieCanvas, {
+    //         type: "pie",
+    //         data: {
+    //             labels: ["Belum Ditanggapi", "Sudah Ditanggapi"],
+    //             datasets: [{
+    //                 data: statusData,
+    //                 borderColor: "transparent",
+    //                 backgroundColor: [dangerColor, successColor],
+    //             }]
+    //         },
+    //         options: {
+    //             plugins: {
+    //                 legend: {
+    //                     display: true,
+    //                     labels: {
+    //                         color: `rgb( ${mutedColorRGB})`,
+    //                         boxWidth: 10,
+    //                     }
+    //                 },
+    //             }
+    //         }
+    //     }
+    //     );
+    // }
+
+    const pieCanvas = document.getElementById("_dm-pieChart");
+    if (pieCanvas) {
+        const labels = JSON.parse(pieCanvas.dataset.labels);
+        const values = JSON.parse(pieCanvas.dataset.values);
+        const pieChart = new Chart(
+            pieCanvas, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: [
+                        primaryColor,
+                        successColor,
+                        warningColor,
+                        dangerColor,
+                        infoColor
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: "right",
+                        labels: {
+                            color: `rgb(${mutedColorRGB})`,
+                            boxWidth: 12
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const value = ctx.raw;
+                                const percent = ((value / total) * 100).toFixed(1);
+                                return `${ctx.label}: ${value} (${percent}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        );
+    }
+
+    const pieCanvasSanksiPerPelanggaran = document.getElementById("sanksi_per_pelanggaran_chart");
+
+    if (pieCanvasSanksiPerPelanggaran) {
+        const labels = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.labels);
+        const values = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.values);
+
+        const pieChart = new Chart(
+            pieCanvasSanksiPerPelanggaran, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    borderColor: "transparent",
+                    backgroundColor: dynamicColors(),
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: `rgb( ${mutedColorRGB})`,
+                            boxWidth: 10,
+                        }
+                    },
+                }
+            }
+        }
+        );
+    }
+
+    // Polar Area chart
+    // ----------------------------------------------
+    const polarCanvas = document.getElementById("_dm-polarAreaChart");
+    if (polarCanvas) {
+        const polarAreaChart = new Chart(
+            polarCanvas, {
+            type: "polarArea",
+            data: {
+                labels: ["Blue", "Orange", "Navy", "Green", "Gray"],
+                datasets: [{
+                    data: circleData,
+                    borderColor: "transparent",
+                    backgroundColor: [infoColor, warningColor, primaryColor, successColor, grayColor],
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: `rgb( ${mutedColorRGB})`,
+                            boxWidth: 10,
+                        }
+                    },
+                }
+            }
+        }
+        );
+    }
+
     // Bar Chart 1
     const barCanvas1 = document.getElementById("_dm-barChart-1");
     let barChart = null;
@@ -496,99 +679,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .addEventListener('change', () => {
             loadChart(document.getElementById('groupBy').value);
         });
-
-    // Doughnut Chart
-    // ----------------------------------------------
-    const circleData = [25, 35, 98];
-    const doughnutCanvas = document.getElementById("_dm-doughnutChart");
-    if (doughnutCanvas) {
-        const doughnutChart = new Chart(
-            doughnutCanvas, {
-            type: "doughnut",
-            data: {
-                labels: ["Blue", "Orange", "Navy", "Green", "Gray"],
-                datasets: [{
-                    data: circleData,
-                    borderColor: "transparent",
-                    backgroundColor: [infoColor, warningColor, primaryColor, successColor, grayColor],
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: true,
-                        labels: {
-                            color: `rgb( ${mutedColorRGB})`,
-                            boxWidth: 10,
-                        }
-                    },
-                }
-            }
-        }
-        );
-    }
-
-    // Pie Chart
-    // ----------------------------------------------
-    const pieCanvas = document.getElementById("_dm-pieChart");
-    if (pieCanvas) {
-        const statusData = JSON.parse(pieCanvas.dataset.status);
-
-        const pieChart = new Chart(
-            pieCanvas, {
-            type: "pie",
-            data: {
-                labels: ["Belum Ditanggapi", "Sudah Ditanggapi"],
-                datasets: [{
-                    data: statusData,
-                    borderColor: "transparent",
-                    backgroundColor: [dangerColor, successColor],
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: true,
-                        labels: {
-                            color: `rgb( ${mutedColorRGB})`,
-                            boxWidth: 10,
-                        }
-                    },
-                }
-            }
-        }
-        );
-    }
-
-    // Polar Area chart
-    // ----------------------------------------------
-    const polarCanvas = document.getElementById("_dm-polarAreaChart");
-    if (polarCanvas) {
-        const polarAreaChart = new Chart(
-            polarCanvas, {
-            type: "polarArea",
-            data: {
-                labels: ["Blue", "Orange", "Navy", "Green", "Gray"],
-                datasets: [{
-                    data: circleData,
-                    borderColor: "transparent",
-                    backgroundColor: [infoColor, warningColor, primaryColor, successColor, grayColor],
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: true,
-                        labels: {
-                            color: `rgb( ${mutedColorRGB})`,
-                            boxWidth: 10,
-                        }
-                    },
-                }
-            }
-        }
-        );
-    }
 
     function showLoading() {
         document.getElementById('chartLoading').classList.remove('d-none');

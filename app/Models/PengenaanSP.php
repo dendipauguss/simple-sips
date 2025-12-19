@@ -15,7 +15,7 @@ class PengenaanSP extends Model
 
     public function jenis_pelanggaran()
     {
-        return $this->belongsTo(JenisPelanggaran::class);
+        return $this->belongsTo(JenisPelanggaran::class, 'jenis_pelanggaran_id');
     }
 
     public function kategori_sp()
