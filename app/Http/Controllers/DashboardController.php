@@ -105,6 +105,20 @@ class DashboardController extends Controller
             ->orderByDesc('pengenaan_sp_count')
             ->get();
 
+
+        $top_jenis_pelaku_bar = JenisPelakuUsaha::withCount([
+            'pengenaan_sp as total_sanksi',
+            'pengenaan_sp as sudah_ditanggapi' => function ($query) {
+                $query->where('status_surat', 'sudah_ditanggapi');
+            },
+            'pengenaan_sp as belum_ditanggapi' => function ($query) {
+                $query->where('status_surat', 'belum_ditanggapi');
+            },
+        ])
+            ->orderByDesc('total_sanksi')
+            ->limit(5)
+            ->get();
+
         $total_sanksi = $top_jenis_pelaku->sum('total_sanksi');
 
         return view('dashboard', [
@@ -119,7 +133,8 @@ class DashboardController extends Controller
             'sanksi_per_periode' => $sanksi_per_periode,
             'total_sanksi' => $total_sanksi,
             'sanksi_per_pelanggaran' => $sanksi_per_pelanggaran,
-            'sanksi_per_bentuk' => $sanksi_per_bentuk
+            'sanksi_per_bentuk' => $sanksi_per_bentuk,
+            'top_jenis_pelaku_bar' => $top_jenis_pelaku_bar
         ]);
     }
 

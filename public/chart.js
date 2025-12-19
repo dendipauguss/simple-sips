@@ -465,6 +465,80 @@ document.addEventListener("DOMContentLoaded", () => {
     //     );
     // }
 
+    const topJenisPelakuCanvas = document.getElementById("top_jenis_pelaku_chart");
+
+    if (topJenisPelakuCanvas) {
+        const labels = JSON.parse(topJenisPelakuCanvas.dataset.labels);
+        const sudah = JSON.parse(topJenisPelakuCanvas.dataset.sudah);
+        const total = JSON.parse(topJenisPelakuCanvas.dataset.total);
+
+        new Chart(topJenisPelakuCanvas, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Total Sanksi",
+                        data: total,
+                        backgroundColor: primaryColor,
+                        borderColor: primaryColor,
+                        borderWidth: 2
+                    },
+                    {
+                        label: "Sudah Ditanggapi",
+                        data: sudah,
+                        backgroundColor: successColor,
+                        borderColor: successColor,
+                        borderWidth: 2
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y', // 🔥 INI KUNCI MENYAMPING
+                plugins: {
+                    legend: {
+                        display: true,
+                        align: "end",
+                        labels: {
+                            color: `rgb(${mutedColorRGB})`,
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: {
+                        position: "nearest"
+                    }
+                },
+                interaction: {
+                    mode: "index",
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: `rgba(${mutedColorRGB}, .07)`,
+                            borderWidth: 0
+                        },
+                        ticks: {
+                            color: `rgb(${mutedColorRGB})`,
+                            stepSize: 5
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: `rgb(${mutedColorRGB})`,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     const topPelakuCanvas = document.getElementById("top_pelaku_chart");
 
     if (topPelakuCanvas) {
@@ -673,6 +747,7 @@ document.addEventListener("DOMContentLoaded", () => {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                devicePixelRatio: window.devicePixelRatio || 2,
                 cutout: "75%",
                 plugins: {
                     legend: { display: false },
