@@ -16,4 +16,9 @@ class Sanksi extends Model
     {
         return $this->hasMany(PerintahSanksi::class);
     }
+
+    public function pengenaan_sp()
+    {
+        return $this->hasMany(PengenaanSP::class, 'sanksi_id');
+    }
 }

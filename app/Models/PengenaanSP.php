@@ -35,7 +35,7 @@ class PengenaanSP extends Model
 
     public function sanksi()
     {
-        return $this->belongsTo(Sanksi::class);
+        return $this->belongsTo(Sanksi::class, 'sanksi_id');
     }
 
     public function file()

@@ -465,34 +465,176 @@ document.addEventListener("DOMContentLoaded", () => {
     //     );
     // }
 
-    const pieCanvas = document.getElementById("_dm-pieChart");
-    if (pieCanvas) {
-        const labels = JSON.parse(pieCanvas.dataset.labels);
-        const values = JSON.parse(pieCanvas.dataset.values);
+    const topPelakuCanvas = document.getElementById("top_pelaku_chart");
+
+    if (topPelakuCanvas) {
+        const labels = JSON.parse(topPelakuCanvas.dataset.labels);
+        const sudah = JSON.parse(topPelakuCanvas.dataset.sudah);
+        const total = JSON.parse(topPelakuCanvas.dataset.total);
+
+        new Chart(topPelakuCanvas, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Total Sanksi",
+                        data: total,
+                        backgroundColor: primaryColor,
+                        borderColor: primaryColor,
+                        borderWidth: 2
+                    },
+                    {
+                        label: "Sudah Ditanggapi",
+                        data: sudah,
+                        backgroundColor: successColor,
+                        borderColor: successColor,
+                        borderWidth: 2
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y', // 🔥 INI KUNCI MENYAMPING
+                plugins: {
+                    legend: {
+                        display: true,
+                        align: "end",
+                        labels: {
+                            color: `rgb(${mutedColorRGB})`,
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: {
+                        position: "nearest"
+                    }
+                },
+                interaction: {
+                    mode: "index",
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: `rgba(${mutedColorRGB}, .07)`,
+                            borderWidth: 0
+                        },
+                        ticks: {
+                            color: `rgb(${mutedColorRGB})`,
+                            stepSize: 5
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: `rgb(${mutedColorRGB})`,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const sanksiPerBentukCanvas = document.getElementById("sanksi_per_bentuk_chart");
+
+    if (sanksiPerBentukCanvas) {
+        const labels = JSON.parse(sanksiPerBentukCanvas.dataset.labels);
+        const values = JSON.parse(sanksiPerBentukCanvas.dataset.values);
+        const bgColors = generateRandomColors(labels.length);
+
+        new Chart(sanksiPerBentukCanvas, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Total Sanksi",
+                        data: values,
+                        backgroundColor: infoColor,
+                        borderColor: infoColor,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'x', // 🔥 INI KUNCI MENYAMPING
+                plugins: {
+                    legend: {
+                        display: true,
+                        align: "end",
+                        labels: {
+                            color: `rgb(${mutedColorRGB})`,
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: {
+                        position: "nearest"
+                    }
+                },
+                interaction: {
+                    mode: "index",
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: `rgba(${mutedColorRGB}, .07)`,
+                            borderWidth: 0
+                        },
+                        ticks: {
+                            color: `rgb(${mutedColorRGB})`,
+                            stepSize: 5,
+                            minRotation: 0,
+                            maxRotation: 0
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: `rgb(${mutedColorRGB})`,
+                            font: { size: 11 },
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const pieCanvasSanksiPerPelanggaran = document.getElementById("sanksi_per_pelanggaran_chart");
+    if (pieCanvasSanksiPerPelanggaran) {
+        const labels = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.labels);
+        const values = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.values);
+        const bgColors = generateRandomColors(labels.length);
+
         const pieChart = new Chart(
-            pieCanvas, {
+            pieCanvasSanksiPerPelanggaran, {
             type: "pie",
             data: {
                 labels: labels,
                 datasets: [{
                     data: values,
-                    backgroundColor: [
-                        primaryColor,
-                        successColor,
-                        warningColor,
-                        dangerColor,
-                        infoColor
-                    ],
+                    backgroundColor: bgColors,
                     borderWidth: 1
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
+                        display: true,
                         position: "right",
                         labels: {
-                            color: `rgb(${mutedColorRGB})`,
-                            boxWidth: 12
+                            color: `rgb( ${mutedColorRGB})`,
+                            boxWidth: 10
                         }
                     },
                     tooltip: {
@@ -511,37 +653,64 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-    const pieCanvasSanksiPerPelanggaran = document.getElementById("sanksi_per_pelanggaran_chart");
+    document.querySelectorAll(".donut-mini").forEach((el) => {
+        const persen = parseFloat(el.dataset.persen);
+        const nama = el.dataset.nama;
+        const bgColors = generateRandomColors(nama.length);
 
-    if (pieCanvasSanksiPerPelanggaran) {
-        const labels = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.labels);
-        const values = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.values);
-
-        const pieChart = new Chart(
-            pieCanvasSanksiPerPelanggaran, {
-            type: "pie",
+        new Chart(el, {
+            type: "doughnut",
             data: {
-                labels: labels,
                 datasets: [{
-                    data: values,
-                    borderColor: "transparent",
-                    backgroundColor: dynamicColors(),
+                    data: [persen, 100 - persen],
+                    backgroundColor: [
+                        bgColors,
+                        `rgba(${mutedColorRGB}, .15)`
+                    ],
+                    borderWidth: 0
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "75%",
                 plugins: {
-                    legend: {
-                        display: true,
-                        labels: {
-                            color: `rgb( ${mutedColorRGB})`,
-                            boxWidth: 10,
-                        }
-                    },
+                    legend: { display: false },
+                    tooltip: { enabled: false }
                 }
-            }
-        }
-        );
-    }
+            },
+            plugins: [{
+                id: "centerText",
+                beforeDraw(chart) {
+                    const { ctx } = chart;
+                    const meta = chart.getDatasetMeta(0).data[0];
+                    const centerX = meta.x;
+                    const centerY = meta.y;
+
+                    ctx.save();
+
+                    // === PERSENTASE ===
+                    ctx.font = "bold 16px sans-serif";
+                    ctx.fillStyle = bgColors;
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(persen + "%", centerX, centerY - 8);
+
+                    // === NAMA ===
+                    ctx.font = "10px sans-serif";
+                    ctx.fillStyle = `rgb(${mutedColorRGB})`;
+
+                    // potong teks jika kepanjangan
+                    const maxWidth = 90;
+                    const text = nama.length > 18 ? nama.substring(0, 18) + "…" : nama;
+
+                    ctx.fillText(text, centerX, centerY + 10);
+
+                    ctx.restore();
+                }
+            }]
+        });
+    });
 
     // Polar Area chart
     // ----------------------------------------------
@@ -687,4 +856,16 @@ document.addEventListener("DOMContentLoaded", () => {
     function hideLoading() {
         document.getElementById('chartLoading').classList.add('d-none');
     }
+
+    function generateRandomColors(total) {
+        const colors = [];
+        for (let i = 0; i < total; i++) {
+            const r = Math.floor(Math.random() * 200);
+            const g = Math.floor(Math.random() * 200);
+            const b = Math.floor(Math.random() * 200);
+            colors.push(`rgba(${r}, ${g}, ${b}, 0.8)`);
+        }
+        return colors;
+    }
+
 });

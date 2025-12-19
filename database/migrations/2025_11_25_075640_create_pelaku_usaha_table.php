@@ -14,6 +14,11 @@ class CreatePelakuUsahaTable extends Migration
             $table->unsignedBigInteger('jenis_id');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
+
+            $table->foreign('jenis_id')
+                ->references('id')
+                ->on('jenis_pelaku_usaha')
+                ->onDelete('restrict'); // atau cascade / set null
         });
     }
 

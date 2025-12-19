@@ -41,5 +41,9 @@ class JenisPelakuUsahaSeeder extends Seeder
         JenisPelakuUsaha::create([
             'nama' => "Pengelola Gudang SRG"
         ]);
+
+        JenisPelakuUsaha::create([
+            'nama' => "Penasihat Berjangka"
+        ]);
     }
 }

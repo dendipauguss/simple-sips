@@ -2,20 +2,8 @@
 @section('content')
     <div class="content__boxed">
         <div class="content__wrap">
-            <div class="row justify-content-center">
-                <div class="col-xl-2">
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title">Sanksi Per Pelanggaran</h5>
-                            <!-- Status Chart -->
-                            <canvas id="_dm-pieChart" style="height: 100px" data-labels='@json($sanksi_per_pelanggaran->pluck('nama_jenis_pelanggaran'))'
-                                data-values='@json($sanksi_per_pelanggaran->pluck('sanksi_count'))'>></canvas>
-                            <!-- END : Status Chart -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-8">
-
+            <div class="row justify-content-between">
+                <div class="col-xl-12">
                     {{-- <div class="card mb-1">
                         <div class="card-body">
                             <h5 class="card-title">By Kategori</h5>
@@ -56,7 +44,6 @@
                         </div>
                     </div> --}}
 
-
                     <div class="card mb-2">
                         <div class="card-body">
                             <h5 class="card-title">Pengenaan Sanksi Tiap Bulan</h5>
@@ -67,50 +54,43 @@
                             <!-- END : Stacked chart -->
                         </div>
                     </div>
-
+                </div>
+                <div class="col-xl-3">
                     <div class="card mb-2">
                         <div class="card-body">
-                            <h5 class="card-title">Persentase Kategori Pelaku Usaha Penerima Sanksi</h5>
-                            <div class="row justify-content-between">
-                                @foreach ($top_jenis_pelaku as $item)
-                                    @php
-                                        $persen =
-                                            $total_sanksi > 0
-                                                ? round(($item->total_sanksi / $total_sanksi) * 100, 1)
-                                                : 0;
-                                    @endphp
-                                    <div class="col d-flex">
-                                        <div class="card bg-warning mb-3 mb-md-3 text-white">
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h5 class="h2 mb-0">{{ $persen }}%</h5>
-                                                        <strong class="mb-0">{{ $item->nama }}</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="d-block align-items-center ms-3">
-                                                    <div class="badge bg-success me-1">
-                                                        Sudah Ditanggapi
-                                                        <span class="text-dark">{{ $item->sudah_ditanggapi }}</span>
-                                                    </div>
-                                                    <div class="badge bg-danger">
-                                                        Belum Ditanggapi
-                                                        <span class="text-dark">{{ $item->belum_ditanggapi }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
+                            <h5 class="card-title">Total Sanksi Per Bentuk Sanksi</h5>
+                            <!-- Status Chart -->
+                            <div style="height: 300px;">
+                                <canvas id="sanksi_per_bentuk_chart" data-labels='@json($sanksi_per_bentuk->pluck('kode_surat'))'
+                                    data-values='@json($sanksi_per_bentuk->pluck('pengenaan_sp_count'))'>></canvas>
                             </div>
+                            <!-- END : Status Chart -->
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-2">
+                <div class="col-xl-3">
                     <div class="card mb-2">
                         <div class="card-body">
-                            <h5 class="card-title">Top 5 Perusahaan Penerima Sanksi</h5>
-                            <div class="row justify-content-between">
+                            <h5 class="card-title">Total Sanksi Per Pelanggaran</h5>
+                            <!-- Status Chart -->
+                            <div style="height: 300px;">
+                                <canvas id="sanksi_per_pelanggaran_chart" data-labels='@json($sanksi_per_pelanggaran->pluck('nama'))'
+                                    data-values='@json($sanksi_per_pelanggaran->pluck('pengenaan_sp_count'))'>></canvas>
+                            </div>
+                            <!-- END : Status Chart -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3">
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 10 Perusahaan Penerima Sanksi</h5>
+                            <div style="height: 300px">
+                                <canvas id="top_pelaku_chart" data-labels='@json($top_pelaku->pluck('nama'))'
+                                    data-sudah='@json($top_pelaku->pluck('sudah_ditanggapi'))' data-total='@json($top_pelaku->pluck('total_sanksi'))'>
+                                </canvas>
+                            </div>
+                            {{-- <div class="row justify-content-between">
                                 @foreach ($top_pelaku as $item)
                                     <div class="col d-flex">
                                         <div class="card bg-warning mb-3 mb-md-3 text-white">
@@ -130,6 +110,37 @@
                                                         Belum Ditanggapi
                                                         <span class="text-dark">{{ $item->belum_ditanggapi }}</span>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3">
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Persentase Kategori Pelaku Usaha Penerima Sanksi</h5>
+                            <div class="row justify-content-between">
+                                @foreach ($top_jenis_pelaku as $i => $item)
+                                    <div class="col d-flex">
+                                        <div class="card mb-3 mb-md-3 shadow-none">
+                                            <div class="card-body">
+                                                <div style="width: 120px; height: 120px;">
+                                                    <canvas class="donut-mini" id="donut-{{ $i }}"
+                                                        data-persen="{{ $item->persen }}" data-nama="{{ $item->nama }}">
+                                                    </canvas>
+                                                </div>
+
+                                                <div class="badge bg-success d-flex justify-content-between mb-1">
+                                                    <span>Sudah Ditanggapi</span>
+                                                    <span class="text-dark">{{ $item->sudah_ditanggapi }}</span>
+                                                </div>
+                                                <div class="badge bg-danger d-flex justify-content-between mb-1">
+                                                    <span>Belum Ditanggapi</span>
+                                                    <span class="text-dark">{{ $item->belum_ditanggapi }}</span>
                                                 </div>
                                             </div>
                                         </div>

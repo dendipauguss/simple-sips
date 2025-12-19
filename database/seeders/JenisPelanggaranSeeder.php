@@ -49,9 +49,5 @@ class JenisPelanggaranSeeder extends Seeder
         JenisPelanggaran::create([
             'nama' => 'Teguran Tenda'
         ]);
-
-        JenisPelanggaran::create([
-            'nama' => 'Aset Kripto Diluar Ketentuan'
-        ]);
     }
 }

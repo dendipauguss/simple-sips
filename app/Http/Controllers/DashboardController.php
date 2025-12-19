@@ -9,6 +9,7 @@ use App\Models\PengenaanSP;
 use App\Models\JenisPelanggaran;
 use App\Models\PelakuUsaha;
 use App\Models\JenisPelakuUsaha;
+use App\Models\Sanksi;
 
 class DashboardController extends Controller
 {
@@ -49,20 +50,24 @@ class DashboardController extends Controller
             },
         ])
             ->orderByDesc('total_sanksi')
-            ->limit(5)
+            ->limit(10)
             ->get();
 
         $top_jenis_pelaku = JenisPelakuUsaha::withCount([
             'pengenaan_sp as total_sanksi',
-            'pengenaan_sp as sudah_ditanggapi' => function ($query) {
-                $query->where('status_surat', 'sudah_ditanggapi');
-            },
-            'pengenaan_sp as belum_ditanggapi' => function ($query) {
-                $query->where('status_surat', 'belum_ditanggapi');
-            },
+            'pengenaan_sp as sudah_ditanggapi' => fn($q) =>
+            $q->where('status_surat', 'sudah_ditanggapi'),
+            'pengenaan_sp as belum_ditanggapi' => fn($q) =>
+            $q->where('status_surat', 'belum_ditanggapi')
         ])
             ->orderByDesc('total_sanksi')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->persen = $item->total_sanksi > 0
+                    ? round(($item->sudah_ditanggapi / $item->total_sanksi) * 100, 1)
+                    : 0;
+                return $item;
+            });
 
         //     $sanksi_per_periode = DB::table('pengenaan_sp')
         //         ->selectRaw("
@@ -94,9 +99,11 @@ class DashboardController extends Controller
 
         $sanksi_per_pelanggaran = JenisPelanggaran::withCount('pengenaan_sp')
             ->orderByDesc('pengenaan_sp_count')
-            ->get()
-            ->groupBy(fn($r, $i) => $i < 5 ? $r->nama_jenis_pelanggaran : 'Lainnya')
-            ->map(fn($g) => $g->sum('pengenaan_sp_count'));
+            ->get();
+
+        $sanksi_per_bentuk = Sanksi::withCount('pengenaan_sp')
+            ->orderByDesc('pengenaan_sp_count')
+            ->get();
 
         $total_sanksi = $top_jenis_pelaku->sum('total_sanksi');
 
@@ -111,7 +118,8 @@ class DashboardController extends Controller
             'top_jenis_pelaku' => $top_jenis_pelaku,
             'sanksi_per_periode' => $sanksi_per_periode,
             'total_sanksi' => $total_sanksi,
-            'sanksi_per_pelanggaran' => $sanksi_per_pelanggaran
+            'sanksi_per_pelanggaran' => $sanksi_per_pelanggaran,
+            'sanksi_per_bentuk' => $sanksi_per_bentuk
         ]);
     }
 
