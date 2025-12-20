@@ -162,7 +162,7 @@
             <tr>
                 <td style="padding:2px 0;">Tanggal</td>
                 <td style="padding:2px 0;">:</td>
-                <td style="padding:2px 0;">{{ now()->translatedFormat('d F Y') }}</td>
+                <td style="padding:2px 0;">{{ $laporan->updated_at->translatedFormat('d F Y') }}</td>
             </tr>
         </table>
 
@@ -299,7 +299,7 @@
                     <div style="text-align: center;">{{ $laporan->status_persetujuan == 'setuju' ? 'TTD' : '' }}</div>
                     <br><br><br>
                     <div style="text-align: center;">
-                        <strong><u>A</u></strong><br>
+                        <strong><u>{{ $laporan->user->nama }}</u></strong><br>
                     </div>
                     NIP. 19xxxxxxxxxxxx
                 </td>

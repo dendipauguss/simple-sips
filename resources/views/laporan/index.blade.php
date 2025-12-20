@@ -68,13 +68,13 @@
                                                 <td class="d-flex align-items-center">
                                                     <div class="input-group">
                                                         <a href="{{ route('laporan.pdf', $row->id) }}"
-                                                            class="btn btn-sm text-decoration-none" target="_blank"><i
-                                                                class="psi-eye fs-4 text-info"></i></a>
+                                                            class="btn btn-sm text-decoration-none" target="_blank"
+                                                            title="Lihat Laporan"><i class="psi-eye fs-4 text-info"></i></a>
 
                                                         <button class="btn btn-sm upload-btn" data-id="{{ $row->id }}"
                                                             data-bs-toggle="modal" data-bs-target="#modalStatus"
                                                             data-status="{{ $row->status_persetujuan }}"
-                                                            data-catatan="{{ $row->catatan }}">
+                                                            data-catatan="{{ $row->catatan }}" title="Validasi Ketua Tim">
 
                                                             <i
                                                                 class="fs-4 {{ $row->status_persetujuan == 'setuju' ? 'psi-yes text-success' : ($row->status_persetujuan == 'dikembalikan' ? 'psi-close text-danger' : 'psi-danger text-warning') }}"></i>

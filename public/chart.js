@@ -596,7 +596,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
                         ticks: {
                             color: `rgb(${mutedColorRGB})`,
-                            stepSize: 5
+                            stepSize: 5,
                         }
                     },
                     y: {
@@ -605,7 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
                         ticks: {
                             color: `rgb(${mutedColorRGB})`,
-                            font: { size: 11 }
+                            font: { size: 8 },
                         }
                     }
                 }
@@ -751,7 +751,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 cutout: "75%",
                 plugins: {
                     legend: { display: false },
-                    tooltip: { enabled: false }
+                    tooltip: {
+                        callbacks: {
+                            title: () => nama, // baris atas
+                            label: (ctx) => {
+                                if (ctx.dataIndex !== 0) return null;
+                                return `${persen.toFixed(1)}%`;
+                            }
+                        }
+                    }
                 }
             },
             plugins: [{
@@ -759,6 +767,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 beforeDraw(chart) {
                     const { ctx } = chart;
                     const meta = chart.getDatasetMeta(0).data[0];
+                    if (!meta) return;
                     const centerX = meta.x;
                     const centerY = meta.y;
 

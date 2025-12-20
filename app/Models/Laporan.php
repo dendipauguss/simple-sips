@@ -22,4 +22,9 @@ class Laporan extends Model
     {
         return $this->belongsToMany(PengenaanSP::class, 'laporan_item', 'laporan_id', 'pengenaan_sp_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -7,6 +7,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Laporan;
 use App\Models\LaporanItem;
 use App\Models\PengenaanSP;
+use Carbon\Carbon;
 
 class LaporanController extends Controller
 {
@@ -111,8 +112,10 @@ class LaporanController extends Controller
         $tahun = $laporan->tahun;
         $nomor_laporan = "UD.01.00/{$urutan}/BAPPEBTI.3/ND/{$bulan}/{$tahun}";
 
+        $nama_bulan = Carbon::createFromDate($bulan, 1)->translatedFormat('F');
         $pdf = PDF::loadView('laporan.pdf', compact('laporan', 'items', 'jumlah_status', 'nomor_laporan'));
-        return $pdf->stream("laporan-{$laporan->bulan}-{$laporan->tahun}.pdf");
+
+        return $pdf->stream("NOTA DINAS {$nama_bulan}-{$laporan->tahun}.pdf");
     }
 
     // public function approve($id)
@@ -135,9 +138,14 @@ class LaporanController extends Controller
 
         $laporan = Laporan::findOrFail($request->laporan_id);
 
+        if (auth()->user()->role != 'ketua_tim') {
+            abort(403, 'Anda tidak memiliki akses (Hanya Ketua Tim).');
+        }
+
         $laporan->update([
             'status_persetujuan' => $request->status,
-            'catatan' => $request->catatan
+            'catatan' => $request->catatan,
+            'user_id' => auth()->user()->id
         ]);
 
         return back()->with('success', 'Status berhasil diperbarui');
