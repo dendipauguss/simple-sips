@@ -38,11 +38,16 @@ class PengenaanSPController extends Controller
             ->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')
             ->get();
 
+        $perusahaan = PelakuUsaha::whereHas('pengenaan_sp')
+            ->orderBy('nama')
+            ->get();
+
         return view('pengenaan_sp.index', [
             'title' => 'Pengenaan Sanksi',
             'pengenaan_sp' => $pengenaan_sp,
             'bulanList' => $bulanList,
-            'tahunList' => $tahunList
+            'tahunList' => $tahunList,
+            'perusahaan' => $perusahaan
         ]);
     }
 

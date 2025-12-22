@@ -791,6 +791,12 @@
                 });
                 toast.show();
             }
+
+            // Aktifkan Select2            
+            $('.select2').select2({
+                theme: 'default',
+                width: '100%'
+            });
         </script>
     </body>
 

@@ -85,23 +85,38 @@
 
             .tabel-word {
                 border-collapse: collapse;
-                width: 95%;
+                width: 100%;
+                /* Ubah ke 100% agar rapi */
                 font-size: 9pt;
+                table-layout: fixed;
+                /* Penting agar kolom stabil */
+                word-wrap: break-word;
             }
 
-            .tabel-word th,
             .tabel-word td {
-                border: 1px solid #000;
-                /* HITAM TEGAS */
+                border: 1px solid #fff;
                 padding: 6px 8px;
                 vertical-align: top;
+                /* Pastikan teks selalu di atas */
             }
 
             .tabel-word th {
+                border: 1px solid #fff;
+                vertical-align: top;
+                padding: 6px 8px;
                 background-color: lightgray;
-                /* hijau kebiruan seperti contoh */
                 text-align: center;
                 font-weight: bold;
+            }
+
+            /* CLASS KHUSUS UNTUK FAKE ROWSPAN */
+            .no-border-top {
+                border-top: none !important;
+            }
+
+            /* Mencegah baris terpotong aneh (opsional) */
+            tr {
+                page-break-inside: avoid;
             }
         </style>
     </head>
@@ -193,8 +208,8 @@
         <table border="1" cellpadding="4" cellspacing="0" class="tabel-word" align="center">
             <thead>
                 <th style="width: 5%">No</th>
-                <th>Kategori Pelaku Usaha</th>
                 <th>Nama Perusahaan</th>
+                <th>Kategori Pelaku Usaha</th>
                 <th>Bentuk Sanksi</th>
                 <th>Pelanggaran</th>
                 <th>Tanggapan</th>
@@ -204,52 +219,121 @@
 
                 @foreach ($items as $namaPerusahaan => $kategoriGroup)
                     @php
-                        $rowspanPerusahaan = countDeep($kategoriGroup);
+                        // Reset flag perusahaan setiap loop baru
                         $firstPerusahaan = true;
                     @endphp
 
                     @foreach ($kategoriGroup as $kategoriPU => $sanksiGroup)
                         @php
-                            $rowspanKategori = countDeep($sanksiGroup);
+                            // Reset flag kategori
                             $firstKategori = true;
                         @endphp
 
                         @foreach ($sanksiGroup as $namaSanksi => $rows)
                             @php
-                                $rowspanSanksi = count($rows);
+                                // Reset flag sanksi
                                 $firstSanksi = true;
                             @endphp
 
                             @foreach ($rows as $row)
                                 <tr>
+                                    {{-- 1. NO --}}
+                                    {{-- Jika baris pertama perusahaan, cetak No. Jika tidak, kosong & hilangkan border atas --}}
+                                    <td class="center {{ !$firstPerusahaan ? 'no-border-top' : '' }}">
+                                        {{ $firstPerusahaan ? $no++ : '' }}
+                                    </td>
+
+                                    {{-- 2. NAMA PERUSAHAAN --}}
+                                    <td class="{{ !$firstPerusahaan ? 'no-border-top' : '' }}">
+                                        {{ $firstPerusahaan ? $namaPerusahaan : '' }}
+                                    </td>
+
+                                    {{-- 3. KATEGORI --}}
+                                    {{-- Cek firstKategori (dan pastikan ini masih dalam blok perusahaan yg sama secara visual) --}}
+                                    {{-- Logika: Jika ini baris pertama Kategori, cetak. Jika tidak, borderless. --}}
+                                    {{-- Note: Karena loop nested, $firstKategori akan true tiap kali ganti kategori --}}
+                                    <td class="{{ !$firstKategori ? 'no-border-top' : '' }}">
+                                        {{ $firstKategori ? $kategoriPU : '' }}
+                                    </td>
+
+                                    {{-- 4. BENTUK SANKSI --}}
+                                    <td class="{{ !$firstSanksi ? 'no-border-top' : '' }}">
+                                        {{ $firstSanksi ? $namaSanksi : '' }}
+                                    </td>
+
+                                    {{-- 5. PELANGGARAN (Selalu tampil setiap baris) --}}
+                                    <td>
+                                        {{ $row->jenis_pelanggaran->nama }}
+                                    </td>
+
+                                    {{-- 6. TANGGAPAN (Selalu tampil setiap baris) --}}
+                                    <td>
+                                        {{ $row->status_surat == 'belum_ditanggapi' ? 'Belum Ditanggapi' : 'Sudah Ditanggapi' }}
+                                    </td>
+                                </tr>
+
+                                @php
+                                    // Matikan flag setelah baris pertama tercetak
+                                    $firstPerusahaan = false;
+                                    $firstKategori = false;
+                                    $firstSanksi = false;
+                                @endphp
+                            @endforeach
+                        @endforeach
+                    @endforeach
+                @endforeach
+
+                {{-- PAKAI ROWSPAN SEMULA TETAPI JIKA SATU PERUSAHAAN SANKSI NYA LEBIH DARI SATU HALAMAN AKAN RUSAK --}}
+
+
+                <!-- @foreach ($items as $namaPerusahaan => $kategoriGroup)
+@php
+    $rowspanPerusahaan = countDeep($kategoriGroup);
+    $firstPerusahaan = true;
+@endphp
+
+                    @foreach ($kategoriGroup as $kategoriPU => $sanksiGroup)
+@php
+    $rowspanKategori = countDeep($sanksiGroup);
+    $firstKategori = true;
+@endphp
+
+                        @foreach ($sanksiGroup as $namaSanksi => $rows)
+@php
+    $rowspanSanksi = count($rows);
+    $firstSanksi = true;
+@endphp
+
+                            @foreach ($rows as $row)
+<tr>
 
                                     {{-- NO --}}
                                     @if ($firstPerusahaan)
-                                        <td rowspan="{{ $rowspanPerusahaan }}" class="center">
+<td rowspan="{{ $rowspanPerusahaan }}" class="center">
                                             {{ $no++ }}
                                         </td>
-                                    @endif
+@endif
 
                                     {{-- NAMA PERUSAHAAN --}}
                                     @if ($firstPerusahaan)
-                                        <td rowspan="{{ $rowspanPerusahaan }}">
+<td rowspan="{{ $rowspanPerusahaan }}">
                                             {{ $namaPerusahaan }}
                                         </td>
-                                    @endif
+@endif
 
                                     {{-- KATEGORI --}}
                                     @if ($firstKategori && $firstSanksi)
-                                        <td rowspan="{{ $rowspanKategori }}">
+<td rowspan="{{ $rowspanKategori }}">
                                             {{ $kategoriPU }}
                                         </td>
-                                    @endif
+@endif
 
                                     {{-- BENTUK SANKSI --}}
                                     @if ($firstSanksi)
-                                        <td rowspan="{{ $rowspanSanksi }}">
+<td rowspan="{{ $rowspanSanksi }}">
                                             {{ $namaSanksi }}
                                         </td>
-                                    @endif
+@endif
 
                                     {{-- PELANGGARAN --}}
                                     <td>{{ $row->jenis_pelanggaran->nama }}</td>
@@ -266,17 +350,18 @@
                                     $firstKategori = false;
                                     $firstSanksi = false;
                                 @endphp
-                            @endforeach
-                        @endforeach
-                    @endforeach
-                @endforeach
+@endforeach
+@endforeach
+@endforeach
+@endforeach -->
             </tbody>
         </table>
 
         <br><br>
         <ul class="no-bullets">
             <li>Sudah Ditanggapi = <strong>{{ $jumlah_status['sudah'] }}</strong>, Belum Ditanggapi =
-                <strong>{{ $jumlah_status['belum'] }}</strong>
+                <strong>{{ $jumlah_status['belum'] }}</strong>, Total =
+                <strong>{{ $jumlah_status['belum'] + $jumlah_status['sudah'] }}</strong>
             </li>
         </ul>
         <br>
@@ -299,7 +384,7 @@
                     <div style="text-align: center;">{{ $laporan->status_persetujuan == 'setuju' ? 'TTD' : '' }}</div>
                     <br><br><br>
                     <div style="text-align: center;">
-                        <strong><u>{{ $laporan->user->nama }}</u></strong><br>
+                        <strong><u>{{ $laporan->user->nama ?? 'Ketua Tim Belum Validasi' }}</u></strong><br>
                     </div>
                     NIP. 19xxxxxxxxxxxx
                 </td>
@@ -308,6 +393,13 @@
 
         <strong>Tembusan:</strong><br>
         Para Ketua Tim di lingkungan Biro Pengawasan dan Penindakan PBK, SRG dan PLK
+
+        <br>
+        <br>
+        @if ($laporan->status_persetujuan === 'setuju')
+            {!! QrCode::size(120)->generate(route('laporan.verify', $laporan->approval_hash)) !!}
+            <small>Sccan untuk verifikasi keaslian</small>
+        @endif
     </body>
 
 </html>

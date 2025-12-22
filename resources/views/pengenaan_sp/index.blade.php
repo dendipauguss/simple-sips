@@ -7,25 +7,34 @@
                     <div class="card h-100">
                         <div class="card-header border-0">
                             <form action="{{ route('laporan.generate') }}" method="GET">
-                                <div class="row">
-                                    <div class="col-sm-3 ms-1">
-                                        <div class="input-group">
-                                            <select name="bulan" class="form-select">
-                                                <option value="">Semua Bulan</option>
-                                                @foreach ($bulanList as $b)
-                                                    <option value="{{ $b }}">
-                                                        {{ DateTime::createFromFormat('!m', $b)->format('F') }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                <div class="row align-items-center">
+                                    <div class="col-md-3">
+                                        <select name="bulan" class="form-select">
+                                            <option value="">Semua Bulan</option>
+                                            @foreach ($bulanList as $b)
+                                                <option value="{{ $b }}">
+                                                    {{ \Carbon\Carbon::createFromFormat('!m', $b)->translatedFormat('F') }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                            <select name="tahun" class="form-select">
-                                                <option value="">Semua Tahun</option>
-                                                @foreach ($tahunList as $t)
-                                                    <option value="{{ $t }}">{{ $t }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                    <div class="col-md-3">
+                                        <select name="tahun" class="form-select">
+                                            <option value="">Semua Tahun</option>
+                                            @foreach ($tahunList as $t)
+                                                <option value="{{ $t }}">{{ $t }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <select name="perusahaan_id" id="perusahaan_id" class="form-select select2">
+                                            <option value="">Semua Perusahaan</option>
+                                            @foreach ($perusahaan as $p)
+                                                <option value="{{ $p->id }}">{{ $p->nama }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="input-group">
@@ -55,7 +64,7 @@
                                             <th class="text-dark text-center">No</th>
                                             <th class="text-dark text-center">No Surat</th>
                                             <th class="text-dark text-center">Tanggal Surat</th>
-                                            <th class="text-dark text-center">Jenis Pelaku Usaha</th>
+                                            <th class="text-dark text-center">Kategori Pelaku Usaha</th>
                                             <th class="text-dark text-center">Perusahaan</th>
                                             {{-- <th class="text-dark text-center">Jenis Pelanggaran</th> --}}
                                             {{-- <th class="text-dark text-center">Kategori SP</th> --}}
@@ -98,7 +107,8 @@
                                                 <td>
                                                     {{ $sp->sanksi->nama }}
                                                 </td>
-                                                <td>{{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                                                <td class="text-center">
+                                                    {{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}
                                                 </td>
                                                 {{-- <td class="text-center">
                                                     {{ $sp->tanggapan }}

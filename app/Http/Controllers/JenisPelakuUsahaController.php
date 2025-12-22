@@ -10,7 +10,7 @@ class JenisPelakuUsahaController extends Controller
     public function index()
     {
         return view('jenis_pelaku_usaha.index', [
-            'title' => 'List Jenis Pelaku Usaha',
+            'title' => 'List Kategori Pelaku Usaha',
             'jenis_pelaku_usaha' => JenisPelakuUsaha::all()
         ]);
     }
@@ -18,7 +18,7 @@ class JenisPelakuUsahaController extends Controller
     public function create()
     {
         return view('jenis_pelaku_usaha.create', [
-            'title' => 'Tambah Jenis Pelaku Usaha Baru'
+            'title' => 'Tambah Kategori Pelaku Usaha Baru'
         ]);
     }
 
@@ -47,14 +47,14 @@ class JenisPelakuUsahaController extends Controller
     public function show(string $id)
     {
         $jenis_pelaku_usaha = JenisPelakuUsaha::findOrFail($id);
-        $title = 'Detail Jenis Pelaku Usaha';
+        $title = 'Detail Kategori Pelaku Usaha';
         return view('jenis_pelaku_usaha.show', compact('jenis_pelaku_usaha', 'title'));
     }
 
     public function edit(string $id)
     {
         $jenis_pelaku_usaha = JenisPelakuUsaha::findOrFail($id);
-        $title = 'Edit Jenis Pelaku Usaha';
+        $title = 'Edit Kategori Pelaku Usaha';
         return view('jenis_pelaku_usaha.edit', compact('jenis_pelaku_usaha', 'title'));
     }
 

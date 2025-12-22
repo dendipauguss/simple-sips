@@ -118,7 +118,7 @@
                                     <a href="{{ url('pengaturan/jenis-pelaku-usaha') }}"
                                         class="nav-link mininav-toggle collapsed {{ request()->is('pengaturan/jenis-pelaku-usaha*') ? 'active' : '' }}">
                                         {{-- <i class="psi-building fs-5 me-2"></i> --}}
-                                        Jenis Pelaku Usaha
+                                        Kategori Pelaku Usaha
                                     </a>
                                 </li>
                                 <!-- END : Jenis Pelaku Usaha -->

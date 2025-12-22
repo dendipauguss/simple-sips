@@ -173,11 +173,6 @@
         const oldKategoriSanksiId = "{{ old('kategori_sp_id') }}";
 
         $(document).ready(function() {
-            // Aktifkan Select2
-            $('.select2').select2({
-                theme: 'default',
-                width: '100%'
-            });
 
             $('#jenis_pelaku_usaha_id').on('change', function() {
                 let jenisID = $(this).val();

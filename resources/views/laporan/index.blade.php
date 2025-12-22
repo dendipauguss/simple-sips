@@ -29,6 +29,7 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th style="width: 5%">No</th>
+                                            <th>Perusahaan</th>
                                             <th style="width: 7%">Tahun</th>
                                             <th style="width: 7%">Bulan</th>
                                             <th style="width: 8%">Status</th>
@@ -40,6 +41,7 @@
                                         @foreach ($laporan as $row)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $row->pelaku_usaha->nama ?? 'Semua' }}</td>
                                                 <td>{{ $row->tahun == 0 ? 'Semua' : $row->tahun }}
                                                 </td>
                                                 <td>{{ $row->bulan ? DateTime::createFromFormat('!m', $row->bulan)->format('F') : 'Semua' }}

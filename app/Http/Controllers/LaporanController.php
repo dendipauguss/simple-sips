@@ -7,7 +7,10 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Laporan;
 use App\Models\LaporanItem;
 use App\Models\PengenaanSP;
+use App\Models\PelakuUsaha;
 use Carbon\Carbon;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class LaporanController extends Controller
 {
@@ -24,40 +27,50 @@ class LaporanController extends Controller
     public function generate(Request $request)
     {
         $request->validate([
-            'bulan' => 'nullable',
-            'tahun' => 'nullable'
+            'bulan' => 'nullable|integer|min:1|max:12',
+            'tahun' => 'nullable|integer|min:2000',
+            'perusahaan_id' => 'nullable|exists:pelaku_usaha,id'
         ]);
 
-        $bulan = $request->bulan ?? 0;   // 0 = Semua Bulan
-        $tahun = $request->tahun ?? 0;   // 0 = Semua Tahun
+        $bulan = $request->bulan;   // 0 = Semua Bulan
+        $tahun = $request->tahun;   // 0 = Semua Tahun
+        $perusahaan_id = $request->perusahaan_id;
 
         // Cek duplikasi hanya jika bulan & tahun spesifik
-        if ($bulan != 0 && $tahun != 0) {
-            if (Laporan::where('bulan', $bulan)->where('tahun', $tahun)->exists()) {
-                return back()->with('error', 'Laporan bulan tersebut sudah ada.');
-            }
+        // Cek duplikasi laporan
+        $exists = Laporan::where('bulan', $bulan)
+            ->where('tahun', $tahun)
+            ->when(
+                $perusahaan_id,
+                fn($q) =>
+                $q->where('pelaku_usaha_id', $perusahaan_id)
+            )
+            ->exists();
+
+        if ($exists) {
+            return back()->with('error', 'Laporan dengan filter tersebut sudah ada.');
         }
 
-        // Buat laporan
-        $laporan = Laporan::create([
-            'bulan' => $bulan,
-            'tahun' => $tahun
-        ]);
-
-        // Query data
+        // Query data Sanksi
         $query = PengenaanSP::query();
 
-        if ($bulan != 0) {
-            $query->whereMonth('tanggal_mulai', $bulan);
-        }
-
-        if ($tahun != 0) {
-            $query->whereYear('tanggal_mulai', $tahun);
-        }
+        if ($bulan) $query->whereMonth('tanggal_mulai', $bulan);
+        if ($tahun) $query->whereYear('tanggal_mulai', $tahun);
+        if ($perusahaan_id) $query->where('pelaku_usaha_id', $perusahaan_id);
 
         $data = $query->get();
 
-        // Pivot
+        if ($data->isEmpty()) {
+            return back()->with('error', 'Data tidak ditemukan.');
+        }
+
+        // Simpan laporan
+        $laporan = Laporan::create([
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'pelaku_usaha_id' => $perusahaan_id
+        ]);
+
         foreach ($data as $sp) {
             LaporanItem::create([
                 'laporan_id' => $laporan->id,
@@ -136,14 +149,38 @@ class LaporanController extends Controller
             'catatan' => 'nullable|string'
         ]);
 
-        $laporan = Laporan::findOrFail($request->laporan_id);
-
         if (auth()->user()->role != 'ketua_tim') {
             abort(403, 'Anda tidak memiliki akses (Hanya Ketua Tim).');
         }
 
+        $laporan = Laporan::findOrFail($request->laporan_id);
+
+        // 🔒 Payload JWT (ENUM SAFE)
+        $payload = [
+            'laporan_id' => $laporan->id,
+            'status' => $request->status, // setuju / dikembalikan
+            'approved_by' => auth()->id(),
+            'role' => 'ketua_tim',
+            'iat' => time()
+        ];
+
+        $jwt = JWT::encode($payload, config('app.key'), 'HS256');
+
+        // 🔑 Hash untuk QR
+        $hash = hash_hmac(
+            'sha256',
+            $laporan->id . '|' . $request->status . '|' . auth()->id() . '|' . $payload['iat'],
+            config('app.key')
+        );
+
         $laporan->update([
             'status_persetujuan' => $request->status,
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'signature_jwt' => $jwt,
+            'approval_hash' => $hash,
+            'approval_ip' => request()->ip(),
+            'approval_agent' => request()->userAgent(),
             'catatan' => $request->catatan,
             'user_id' => auth()->user()->id
         ]);
@@ -151,6 +188,26 @@ class LaporanController extends Controller
         return back()->with('success', 'Status berhasil diperbarui');
     }
 
+    public function verify($hash)
+    {
+        $laporan = Laporan::where('approval_hash', $hash)->firstOrFail();
+
+        try {
+            $decoded = JWT::decode(
+                $laporan->signature_jwt,
+                new Key(config('app.key'), 'HS256')
+            );
+        } catch (\Exception $e) {
+            abort(403, 'Tanda tangan digital tidak valid');
+        }
+
+        // Cocokkan status enum
+        if ($decoded->status !== $laporan->status_persetujuan) {
+            abort(403, 'Data persetujuan tidak konsisten');
+        }
+
+        return view('laporan.verify', compact('laporan', 'decoded'));
+    }
 
     public function isiCatatan(Request $request, $id)
     {

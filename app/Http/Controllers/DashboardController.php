@@ -116,7 +116,7 @@ class DashboardController extends Controller
             },
         ])
             ->orderByDesc('total_sanksi')
-            ->limit(5)
+            ->limit(10)
             ->get();
 
         $total_sanksi = $top_jenis_pelaku->sum('total_sanksi');

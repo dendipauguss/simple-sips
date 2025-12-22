@@ -127,7 +127,7 @@
                 <div class="col-xl-3">
                     <div class="card mb-2">
                         <div class="card-body">
-                            <h5 class="card-title">Top 10 Jenis Pelaku Usaha Penerima Sanksi</h5>
+                            <h5 class="card-title">Kategori Pelaku Usaha Penerima Sanksi</h5>
                             <div style="height: 300px">
                                 <canvas id="top_jenis_pelaku_chart" data-labels='@json($top_jenis_pelaku_bar->pluck('nama'))'
                                     data-sudah='@json($top_jenis_pelaku_bar->pluck('sudah_ditanggapi'))' data-total='@json($top_jenis_pelaku_bar->pluck('total_sanksi'))'>

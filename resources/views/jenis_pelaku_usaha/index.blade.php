@@ -25,7 +25,7 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th class="text-dark text-center" style="width: 5%;">No</th>
-                                            <th class="text-dark text-center">Jenis Pelaku Usaha</th>
+                                            <th class="text-dark text-center">Kategori Pelaku Usaha</th>
                                             <th class="text-dark text-center" style="width: 15%;">Aksi</th>
                                         </tr>
                                     </thead>
