@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         display: true,
                         align: "end",
                         labels: {
-                            color: `rgb(${mutedColorRGB})`,
+                            color: `#fff`,
                             boxWidth: 10,
                         }
                     },
@@ -169,11 +169,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         suggestedMax: 300,
                         grid: {
                             borderWidth: 0,
-                            color: `rgba(${mutedColorRGB}, .07)`
+                            color: `rgba(${mutedColorRGB}, .7)`
                         },
                         ticks: {
                             font: { size: 11 },
-                            color: `rgb(${mutedColorRGB})`,
+                            color: `#fff`,
                             beginAtZero: false,
                             stepSize: 100
                         }
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
                         ticks: {
                             font: { size: 11 },
-                            color: `rgb(${mutedColorRGB})`,
+                            color: `#fff`,
                             autoSkip: true,
                             maxRotation: 0,
                             minRotation: 0,
@@ -463,46 +463,39 @@ document.addEventListener("DOMContentLoaded", () => {
     //         }
     //     }
     //     );
-    // }
+    // }    
 
-    const topJenisPelakuCanvas = document.getElementById("top_jenis_pelaku_chart");
+    const sanksiPerBentukCanvas = document.getElementById("sanksi_per_bentuk_chart");
 
-    if (topJenisPelakuCanvas) {
-        const labels = JSON.parse(topJenisPelakuCanvas.dataset.labels);
-        const sudah = JSON.parse(topJenisPelakuCanvas.dataset.sudah);
-        const total = JSON.parse(topJenisPelakuCanvas.dataset.total);
+    if (sanksiPerBentukCanvas) {
+        const labels = JSON.parse(sanksiPerBentukCanvas.dataset.labels);
+        const values = JSON.parse(sanksiPerBentukCanvas.dataset.values);
+        const bgColors = generateRandomColors(labels.length);
 
-        new Chart(topJenisPelakuCanvas, {
+        new Chart(sanksiPerBentukCanvas, {
             type: "bar",
             data: {
                 labels: labels,
                 datasets: [
                     {
                         label: "Total Sanksi",
-                        data: total,
-                        backgroundColor: primaryColor,
-                        borderColor: primaryColor,
+                        data: values,
+                        backgroundColor: infoColor,
+                        borderColor: infoColor,
                         borderWidth: 2
-                    },
-                    {
-                        label: "Sudah Ditanggapi",
-                        data: sudah,
-                        backgroundColor: successColor,
-                        borderColor: successColor,
-                        borderWidth: 2
-                    },
+                    }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                indexAxis: 'y', // 🔥 INI KUNCI MENYAMPING
+                indexAxis: 'x', // 🔥 INI KUNCI MENYAMPING
                 plugins: {
                     legend: {
                         display: true,
                         align: "end",
                         labels: {
-                            color: `rgb(${mutedColorRGB})`,
+                            color: `#fff`,
                             boxWidth: 10
                         }
                     },
@@ -517,12 +510,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 scales: {
                     x: {
                         grid: {
-                            color: `rgba(${mutedColorRGB}, .07)`,
+                            color: '#fff',
                             borderWidth: 0
                         },
                         ticks: {
-                            color: `rgb(${mutedColorRGB})`,
-                            stepSize: 5
+                            color: '#fff',
+                            stepSize: 5,
+                            minRotation: 0,
+                            maxRotation: 0
                         }
                     },
                     y: {
@@ -530,13 +525,58 @@ document.addEventListener("DOMContentLoaded", () => {
                             display: false
                         },
                         ticks: {
-                            color: `rgb(${mutedColorRGB})`,
-                            font: { size: 11 }
+                            color: '#fff',
+                            font: { size: 11 },
                         }
                     }
                 }
             }
         });
+    }
+
+    const pieCanvasSanksiPerPelanggaran = document.getElementById("sanksi_per_pelanggaran_chart");
+    if (pieCanvasSanksiPerPelanggaran) {
+        const labels = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.labels);
+        const values = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.values);
+        const bgColors = generateRandomColors(labels.length);
+
+        const pieChart = new Chart(
+            pieCanvasSanksiPerPelanggaran, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: bgColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: "right",
+                        labels: {
+                            color: `#000`,
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const value = ctx.raw;
+                                const percent = ((value / total) * 100).toFixed(1);
+                                return `${ctx.label}: ${value} (${percent}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        );
     }
 
     const topPelakuCanvas = document.getElementById("top_pelaku_chart");
@@ -576,7 +616,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         display: true,
                         align: "end",
                         labels: {
-                            color: `rgb(${mutedColorRGB})`,
+                            color: `#000`,
                             boxWidth: 10
                         }
                     },
@@ -591,11 +631,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 scales: {
                     x: {
                         grid: {
-                            color: `rgba(${mutedColorRGB}, .07)`,
+                            color: `rgba(${mutedColorRGB}, .6)`,
                             borderWidth: 0
                         },
                         ticks: {
-                            color: `rgb(${mutedColorRGB})`,
+                            color: `#000`,
                             stepSize: 5,
                         }
                     },
@@ -604,7 +644,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             display: false
                         },
                         ticks: {
-                            color: `rgb(${mutedColorRGB})`,
+                            color: `#000`,
                             font: { size: 8 },
                         }
                     }
@@ -613,37 +653,44 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const sanksiPerBentukCanvas = document.getElementById("sanksi_per_bentuk_chart");
+    const topJenisPelakuCanvas = document.getElementById("top_jenis_pelaku_chart");
 
-    if (sanksiPerBentukCanvas) {
-        const labels = JSON.parse(sanksiPerBentukCanvas.dataset.labels);
-        const values = JSON.parse(sanksiPerBentukCanvas.dataset.values);
-        const bgColors = generateRandomColors(labels.length);
+    if (topJenisPelakuCanvas) {
+        const labels = JSON.parse(topJenisPelakuCanvas.dataset.labels);
+        const sudah = JSON.parse(topJenisPelakuCanvas.dataset.sudah);
+        const total = JSON.parse(topJenisPelakuCanvas.dataset.total);
 
-        new Chart(sanksiPerBentukCanvas, {
+        new Chart(topJenisPelakuCanvas, {
             type: "bar",
             data: {
                 labels: labels,
                 datasets: [
                     {
                         label: "Total Sanksi",
-                        data: values,
-                        backgroundColor: infoColor,
-                        borderColor: infoColor,
+                        data: total,
+                        backgroundColor: primaryColor,
+                        borderColor: primaryColor,
                         borderWidth: 2
-                    }
+                    },
+                    {
+                        label: "Sudah Ditanggapi",
+                        data: sudah,
+                        backgroundColor: successColor,
+                        borderColor: successColor,
+                        borderWidth: 2
+                    },
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                indexAxis: 'x', // 🔥 INI KUNCI MENYAMPING
+                indexAxis: 'y', // 🔥 INI KUNCI MENYAMPING
                 plugins: {
                     legend: {
                         display: true,
                         align: "end",
                         labels: {
-                            color: `rgb(${mutedColorRGB})`,
+                            color: `#000`,
                             boxWidth: 10
                         }
                     },
@@ -658,14 +705,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 scales: {
                     x: {
                         grid: {
-                            color: `rgba(${mutedColorRGB}, .07)`,
+                            color: `rgba(${mutedColorRGB}, .6)`,
                             borderWidth: 0
                         },
                         ticks: {
-                            color: `rgb(${mutedColorRGB})`,
-                            stepSize: 5,
-                            minRotation: 0,
-                            maxRotation: 0
+                            color: `#000`,
+                            stepSize: 5
                         }
                     },
                     y: {
@@ -673,58 +718,13 @@ document.addEventListener("DOMContentLoaded", () => {
                             display: false
                         },
                         ticks: {
-                            color: `rgb(${mutedColorRGB})`,
-                            font: { size: 11 },
+                            color: `#000`,
+                            font: { size: 11 }
                         }
                     }
                 }
             }
         });
-    }
-
-    const pieCanvasSanksiPerPelanggaran = document.getElementById("sanksi_per_pelanggaran_chart");
-    if (pieCanvasSanksiPerPelanggaran) {
-        const labels = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.labels);
-        const values = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.values);
-        const bgColors = generateRandomColors(labels.length);
-
-        const pieChart = new Chart(
-            pieCanvasSanksiPerPelanggaran, {
-            type: "pie",
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: bgColors,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: "right",
-                        labels: {
-                            color: `rgb( ${mutedColorRGB})`,
-                            boxWidth: 10
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (ctx) {
-                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                                const value = ctx.raw;
-                                const percent = ((value / total) * 100).toFixed(1);
-                                return `${ctx.label}: ${value} (${percent}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        );
     }
 
     document.querySelectorAll(".donut-mini").forEach((el) => {

@@ -3,9 +3,9 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Laporan {{ $laporan->status_disetujui == 1 ? 'Disetujui' : 'Belum Disetujui' }}</title>
+        <title>Laporan {{ $laporan->status_disetujui == 'setuju' ? 'Disetujui' : 'Belum Disetujui' }}</title>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap');
+            /* @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap'); */
 
             body {
                 font-family: "Open Sans", sans-serif;
@@ -358,12 +358,33 @@
         </table>
 
         <br><br>
-        <ul class="no-bullets">
-            <li>Sudah Ditanggapi = <strong>{{ $jumlah_status['sudah'] }}</strong>, Belum Ditanggapi =
-                <strong>{{ $jumlah_status['belum'] }}</strong>, Total =
-                <strong>{{ $jumlah_status['belum'] + $jumlah_status['sudah'] }}</strong>
+        <table style="font-size:9pt; line-height:1.2; border-collapse:collapse;">
+            <tr>
+                <td style="width:17%; padding:2px 0;">Sudah Ditanggapi </td>
+                <td style="width:2%; padding:2px 0;">=</td>
+                <td style="padding:2px 0;"><strong>{{ $jumlah_status['sudah'] }}</strong></td>
+            </tr>
+            <tr>
+                <td style="padding:2px 0;">Belum Ditanggapi
+                </td>
+                <td style="padding:2px 0;">=</td>
+                <td style="padding:2px 0;"><strong>{{ $jumlah_status['belum'] }}</strong></td>
+            </tr>
+            <tr>
+                <td style="padding:2px 0;">Total
+                </td>
+                <td style="padding:2px 0;">=</td>
+                <td style="padding:2px 0;">
+                    <strong>{{ $jumlah_status['belum'] + $jumlah_status['sudah'] }}</strong>
+                </td>
+            </tr>
+        </table>
+        {{-- <ul class="no-bullets">
+            <li>Sudah Ditanggapi = <strong>{{ $jumlah_status['belum'] }}</strong>,
+                Belum Ditanggapi = <strong>{{ $jumlah_status['sudah'] }}</strong>,
+                Total = <strong>{{ $jumlah_status['sudah'] + $jumlah_status['belum'] }}</strong>
             </li>
-        </ul>
+        </ul> --}}
         <br>
         <br>
         <br>
@@ -396,9 +417,13 @@
 
         <br>
         <br>
-        @if ($laporan->status_persetujuan === 'setuju')
-            {!! QrCode::size(120)->generate(route('laporan.verify', $laporan->approval_hash)) !!}
-            <small>Sccan untuk verifikasi keaslian</small>
+        @if (!empty($qrBase64))
+            <div style="text-align:center; margin-top:20px;">
+                <img src="data:image/png;base64,{{ $qrBase64 }}" width="120">
+                <p style="font-size:10px; margin-top:5px;">
+                    Scan untuk verifikasi keaslian dokumen
+                </p>
+            </div>
         @endif
     </body>
 

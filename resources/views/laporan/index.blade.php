@@ -33,7 +33,7 @@
                                             <th style="width: 7%">Tahun</th>
                                             <th style="width: 7%">Bulan</th>
                                             <th style="width: 8%">Status</th>
-                                            <th style="width: 8%">Aksi</th>
+                                            <th style="width: 9%">Aksi</th>
                                         </tr>
                                     </thead>
 

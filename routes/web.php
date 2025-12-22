@@ -24,6 +24,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// AUTH ROUTES
 // Route yang hanya boleh diakses jika sudah login
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -66,8 +67,6 @@ Route::middleware('auth')->group(function () {
     // Route::post('laporan/{id}/approve', [LaporanController::class, 'approve'])->name('laporan.approve');
     Route::post('laporan/approve', [LaporanController::class, 'approve'])
         ->name('laporan.approve');
-    Route::get('/verify-approval/{hash}', [LaporanController::class, 'verify'])
-        ->name('laporan.verify');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');
@@ -79,3 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/pengenaan-sp', PengenaanSPController::class);
     Route::resource('/sk', SKController::class);
 });
+// AUTH ROUTES
+
+Route::get('/verify-approval/{hash}', [LaporanController::class, 'verify'])
+    ->name('laporan.verify');

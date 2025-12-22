@@ -8,9 +8,12 @@ use App\Models\Laporan;
 use App\Models\LaporanItem;
 use App\Models\PengenaanSP;
 use App\Models\PelakuUsaha;
+use App\Models\User;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+// use BaconQrCode\Encoder\QrCode;
 
 class LaporanController extends Controller
 {
@@ -124,9 +127,21 @@ class LaporanController extends Controller
         $bulan = $laporan->bulan;
         $tahun = $laporan->tahun;
         $nomor_laporan = "UD.01.00/{$urutan}/BAPPEBTI.3/ND/{$bulan}/{$tahun}";
-
         $nama_bulan = Carbon::createFromDate($bulan, 1)->translatedFormat('F');
-        $pdf = PDF::loadView('laporan.pdf', compact('laporan', 'items', 'jumlah_status', 'nomor_laporan'));
+
+        $qrBase64 = null;
+        if ($laporan->approval_hash) {
+            $verifyUrl = config('app.url') . route('laporan.verify', $laporan->approval_hash, false);
+
+            $qrBase64 = base64_encode(
+                QrCode::format('png')
+                    ->size(160)
+                    ->margin(1)
+                    ->generate($verifyUrl)
+            );
+        }
+
+        $pdf = PDF::loadView('laporan.pdf', compact('laporan', 'items', 'jumlah_status', 'nomor_laporan', 'qrBase64'));
 
         return $pdf->stream("NOTA DINAS {$nama_bulan}-{$laporan->tahun}.pdf");
     }
@@ -206,7 +221,9 @@ class LaporanController extends Controller
             abort(403, 'Data persetujuan tidak konsisten');
         }
 
-        return view('laporan.verify', compact('laporan', 'decoded'));
+        $user = User::findOrFail($decoded->approved_by);
+
+        return view('laporan.verify', compact('laporan', 'decoded', 'user'));
     }
 
     public function isiCatatan(Request $request, $id)

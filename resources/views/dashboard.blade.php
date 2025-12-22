@@ -44,7 +44,7 @@
                         </div>
                     </div> --}}
 
-                    <div class="card mb-2">
+                    <div class="card mb-2 bg-info text-white">
                         <div class="card-body">
                             <h5 class="card-title">Pengenaan Sanksi Tiap Bulan</h5>
                             <!-- Stacked chart -->
@@ -62,7 +62,7 @@
                             <div class="row g-5">
                                 @foreach ($top_jenis_pelaku as $i => $item)
                                     <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                        <div class="card mb-3 mb-md-3 shadow-none">
+                                        <div class="card mb-3 mb-md-3 shadow-none bg-transparent">
                                             <div class="card-body text-center d-flex flex-column align-items-center">
                                                 <div style="width: 150px; height: 120px;" class="mb-1">
                                                     <canvas class="donut-mini" id="donut-{{ $i }}"
@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3">
-                    <div class="card mb-2">
+                    <div class="card mb-2 bg-success text-white">
                         <div class="card-body">
                             <h5 class="card-title">Total Sanksi Per Bentuk Sanksi</h5>
                             <!-- Status Chart -->
@@ -100,7 +100,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3">
-                    <div class="card mb-2">
+                    <div class="card mb-2 bg-cyan text-dark">
                         <div class="card-body">
                             <h5 class="card-title">Total Sanksi Per Pelanggaran</h5>
                             <!-- Status Chart -->
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3">
-                    <div class="card mb-2">
+                    <div class="card mb-2 bg-orange text-dark">
                         <div class="card-body">
                             <h5 class="card-title">Top 10 Perusahaan Penerima Sanksi</h5>
                             <div style="height: 300px">
@@ -125,7 +125,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3">
-                    <div class="card mb-2">
+                    <div class="card mb-2 bg-yellow text-dark">
                         <div class="card-body">
                             <h5 class="card-title">Kategori Pelaku Usaha Penerima Sanksi</h5>
                             <div style="height: 300px">
