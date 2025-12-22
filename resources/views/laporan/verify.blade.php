@@ -160,11 +160,11 @@
                 </tr>
             </table>
 
-            @if ($laporan->catatan)
-                <hr>
+            <hr>
+            {{-- @if ($laporan->catatan)
                 <strong>Catatan:</strong>
                 <p>{{ $laporan->catatan }}</p>
-            @endif
+            @endif --}}
 
             <div class="footer">
                 Dokumen ini diverifikasi secara elektronik menggunakan<br>
