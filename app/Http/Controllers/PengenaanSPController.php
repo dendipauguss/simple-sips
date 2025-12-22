@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use App\Exports\PengenaanSPExport;
 use App\Models\PengenaanSP;
 use App\Models\PelakuUsaha;
@@ -95,8 +96,22 @@ class PengenaanSPController extends Controller
         ]);
 
         // ---- 1. Generate no_sp awal ----
-        $last = PengenaanSP::orderBy('id', 'DESC')->first();
-        $urutan = $last ? sprintf('%03d', $last->id + 1) : '001';
+        $tahun = Carbon::parse($request->tanggal_mulai)->format('Y');
+        $last_data = PengenaanSP::whereYear('tanggal_mulai', $tahun)->orderBy('id', 'DESC')->first();
+        if ($last_data) {
+            // Pecah nomor surat
+            $parts = explode('/', $last_data->no_surat);
+
+            // Ambil nomor urut (index ke-1)
+            $last_number = (int) $parts[1];
+
+            // Tambah 1 dan format 3 digit
+            $urutan = sprintf('%03d', $last_number + 1);
+        } else {
+            // Jika belum ada data di tahun tersebut
+            $urutan = '001';
+        }
+
         $kode_sanksi = Sanksi::where('id', $request->sanksi_id)->value('kode_surat');
         $no_surat = "{$request->no_surat}/{$urutan}/BAPPEBTI/{$kode_sanksi}";
 
@@ -115,11 +130,11 @@ class PengenaanSPController extends Controller
         ]);
 
         // ---- 3. Update no_sp dengan bulan/tahun ----
-        $bulan = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('m');
-        $tahun = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y');
+        $bulan_tersimpan = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('m');
+        $tahun_tersimpan = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y');
 
         $sp->update([
-            'no_surat' => $sp->no_surat . "/{$bulan}/{$tahun}"
+            'no_surat' => $sp->no_surat . "/{$bulan_tersimpan}/{$tahun_tersimpan}"
         ]);
 
         // ---- 4. Otomatis Export PDF setelah simpan ----
