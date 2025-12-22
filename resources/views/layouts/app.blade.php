@@ -231,7 +231,7 @@
                                     width="40" height="40">
                             </a>
                             <!-- Brand title -->
-                            <div class="brand-title">SIPS</div>
+                            <div class="brand-title">SiOMeS</div>
                             <!-- You can also use IMG or SVG instead of a text element. -->
                         </div>
                     </div>

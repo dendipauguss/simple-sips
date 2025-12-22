@@ -169,7 +169,7 @@
             <div class="footer">
                 Dokumen ini diverifikasi secara elektronik menggunakan<br>
                 <strong>QR Code & JSON Web Token (JWT)</strong><br><br>
-                <strong style="font-size: 12pt">Sistem Informasi Monitoring Pengenaan Sanksi</strong>
+                <strong style="font-size: 12pt">Sistem Informasi Operasional Manajemen Pengenaan Sanksi</strong>
             </div>
 
         </div>
