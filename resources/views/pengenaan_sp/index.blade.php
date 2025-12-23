@@ -66,7 +66,7 @@
                                             <th class="text-dark text-center">Tanggal Surat</th>
                                             <th class="text-dark text-center">Kategori Pelaku Usaha</th>
                                             <th class="text-dark text-center">Perusahaan</th>
-                                            {{-- <th class="text-dark text-center">Jenis Pelanggaran</th> --}}
+                                            <th class="text-dark text-center">Kategori Pelanggaran</th>
                                             {{-- <th class="text-dark text-center">Kategori SP</th> --}}
                                             {{-- <th class="text-dark text-center">Detail Pelanggaran</th> --}}
                                             {{-- <th class="text-dark text-center">Jangka Waktu Hari</th> --}}
@@ -91,10 +91,11 @@
                                                 <td class="text-center">
                                                     {{ \Carbon\Carbon::parse($sp->tanggal_mulai)->translatedFormat('d-m-Y') }}
                                                 </td>
-
                                                 <td class="text-center">{{ $sp->pelaku_usaha->jenis_pelaku_usaha->nama }}
                                                 </td>
                                                 <td class="text-center">{{ $sp->pelaku_usaha->nama }}</td>
+                                                <td class="text-center">{{ $sp->jenis_pelanggaran->nama }}
+                                                </td>
                                                 {{-- <td>
                                                     <strong>{{ $sp->jenis_pelanggaran->nama }}</strong>
                                                 </td>

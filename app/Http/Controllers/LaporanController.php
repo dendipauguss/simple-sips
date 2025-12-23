@@ -124,8 +124,8 @@ class LaporanController extends Controller
         ];
 
         $urutan = sprintf('%03d', $laporan->id);
-        $bulan = $laporan->bulan;
-        $tahun = $laporan->tahun;
+        $bulan = $laporan->updated_at->format('m');
+        $tahun = $laporan->updated_at->format('Y');
         $nomor_laporan = "UD.01.00/{$urutan}/BAPPEBTI.3/ND/{$bulan}/{$tahun}";
         $nama_bulan = Carbon::createFromDate($bulan, 1)->translatedFormat('F');
 

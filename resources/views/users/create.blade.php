@@ -84,7 +84,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
-                                <button onclick="window.history.back()" class="btn btn-sm btn-light"> ⬅ Kembali</button>
+                                <a href="{{ route('users.index') }}" class="btn btn-sm btn-light"> ⬅ Kembali</a>
                             </form>
                             <!-- END : Horizontal Form -->
                         </div>

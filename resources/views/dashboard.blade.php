@@ -44,9 +44,9 @@
                         </div>
                     </div> --}}
 
-                    <div class="card mb-2 text-dark">
+                    <div class="card mb-2 text-dark text-center">
                         <div class="card-body">
-                            <h5 class="card-title">Pengenaan Sanksi Tiap Bulan</h5>
+                            <h5 class="card-title">Trend Pengenaan Sanksi Tiap Bulan</h5>
                             <!-- Stacked chart -->
                             <div style="height: 300px;">
                                 <canvas id="sanksi_per_bulan_chart" data-stack='@json($sanksi_per_periode)'></canvas>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="col-xl-12">
-                    <div class="card mb-2">
+                    <div class="card mb-2 text-center">
                         <div class="card-body">
                             <h5 class="card-title">Persentase Kategori Pelaku Usaha Penerima Sanksi</h5>
                             <div class="row g-5">
@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3">
-                    <div class="card mb-2">
+                    <div class="card mb-2 text-center">
                         <div class="card-body">
                             <h5 class="card-title">Total Sanksi Per Bentuk Sanksi</h5>
                             <!-- Status Chart -->
@@ -100,7 +100,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3">
-                    <div class="card mb-2">
+                    <div class="card mb-2 text-center">
                         <div class="card-body">
                             <h5 class="card-title">Total Sanksi Per Pelanggaran</h5>
                             <!-- Status Chart -->
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3">
-                    <div class="card mb-2">
+                    <div class="card mb-2 text-center">
                         <div class="card-body">
                             <h5 class="card-title">Top 10 Perusahaan Penerima Sanksi</h5>
                             <div style="height: 300px">
@@ -125,7 +125,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3">
-                    <div class="card mb-2">
+                    <div class="card mb-2 text-center">
                         <div class="card-body">
                             <h5 class="card-title">Kategori Pelaku Usaha Penerima Sanksi</h5>
                             <div style="height: 300px">

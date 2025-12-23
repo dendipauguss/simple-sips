@@ -392,7 +392,7 @@
         <table width="100%" style="font-size:9pt;">
             <tr>
                 {{-- TEMBUSAN (KIRI) --}}
-                <td width="70%" style="vertical-align: top;">
+                <td width="70%" style="vertical-align: bottom; justify-content: flex-start;">
 
                 </td>
 
@@ -411,7 +411,6 @@
                 </td>
             </tr>
         </table>
-
         <strong>Tembusan:</strong><br>
         Para Ketua Tim di lingkungan Biro Pengawasan dan Penindakan PBK, SRG dan PLK
 
@@ -419,7 +418,7 @@
         <br>
         @if (!empty($qrBase64))
             <div style="text-align:center; margin-top:20px;">
-                <img src="data:image/png;base64,{{ $qrBase64 }}" width="120">
+                <img src="data:image/png;base64,{{ $qrBase64 }}" width="100">
                 <p style="font-size:10px; margin-top:5px;">
                     Scan untuk verifikasi keaslian dokumen
                 </p>
