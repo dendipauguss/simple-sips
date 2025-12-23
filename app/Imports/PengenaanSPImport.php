@@ -27,8 +27,12 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
         $pelakuNama = strtoupper(trim($row['pelaku_usaha']));
 
         // $jenisPelaku = JenisPelakuUsaha::whereRaw('LOWER(nama) = ?', [$jenisPelakuNama])->first();
-        $jenisPelaku = JenisPelakuUsaha::firstOrCreate(['nama' => $jenisPelakuNama]);
 
+        if ($jenisPelakuNama === "Calon Pedagang Fisik Kripto") {
+            return null;
+        }
+
+        $jenisPelaku = JenisPelakuUsaha::firstOrCreate(['nama' => $jenisPelakuNama]);
         // $pelakuUsaha = PelakuUsaha::whereRaw('UPPER(nama) = ?', [trim($row['pelaku_usaha'])])->first();
         $pelakuUsaha = PelakuUsaha::firstOrCreate([
             'nama' => $pelakuNama,
@@ -44,7 +48,7 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
         $jenisPelanggaran = JenisPelanggaran::whereRaw('LOWER(nama) = ?', [$jenisPelanggaranNama])->first();
 
         $kategoriNama = str_replace('_', ' ', strtolower(trim($row['kategori_sp'])));
-        $kategoriSp = KategoriSp::whereRaw('LOWER(nama) = ?', [$kategoriNama])->first();
+        $kategoriSp = KategoriSP::whereRaw('LOWER(nama) = ?', [$kategoriNama])->first();
 
         // ❌ Jika salah satu tidak ditemukan → skip
         if (!$jenisPelaku || !$pelakuUsaha || !$jenisPelanggaran || !$kategoriSp) {
@@ -78,6 +82,7 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
         } else {
             $status_tanggapan = 'belum_ditanggapi';
         }
+
 
         return new PengenaanSp([
             'no_surat'              => $row['no_surat'],

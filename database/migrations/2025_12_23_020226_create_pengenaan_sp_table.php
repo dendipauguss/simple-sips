@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('pelaku_usaha_id');
             $table->unsignedBigInteger('jenis_pelanggaran_id');
             $table->unsignedBigInteger('kategori_sp_id');
-            $table->string('detail_pelanggaran')->nullable();
+            $table->text('detail_pelanggaran')->nullable();
             $table->string('tanggapan')->nullable();
             $table->enum('status_surat', ['belum_ditanggapi', 'sudah_ditanggapi'])->default('belum_ditanggapi');
             // $table->enum('status_laporan', ['acc', 'pending', 'return'])->default('pending');

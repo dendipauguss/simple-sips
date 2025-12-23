@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         display: true,
                         align: "end",
                         labels: {
-                            color: `#fff`,
+                            color: `rgba(${mutedColorRGB}`,
                             boxWidth: 10,
                         }
                     },
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
                         ticks: {
                             font: { size: 11 },
-                            color: `#fff`,
+                            color: `rgba(${mutedColorRGB}`,
                             beginAtZero: false,
                             stepSize: 100
                         }
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
                         ticks: {
                             font: { size: 11 },
-                            color: `#fff`,
+                            color: `rgba(${mutedColorRGB}`,
                             autoSkip: true,
                             maxRotation: 0,
                             minRotation: 0,
@@ -495,7 +495,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         display: true,
                         align: "end",
                         labels: {
-                            color: `#fff`,
+                            color: `rgba(${mutedColorRGB}`,
                             boxWidth: 10
                         }
                     },
@@ -510,11 +510,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 scales: {
                     x: {
                         grid: {
-                            color: '#fff',
+                            color: `rgba(${mutedColorRGB}`,
                             borderWidth: 0
                         },
                         ticks: {
-                            color: '#fff',
+                            color: `rgba(${mutedColorRGB}`,
                             stepSize: 5,
                             minRotation: 0,
                             maxRotation: 0
@@ -525,7 +525,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             display: false
                         },
                         ticks: {
-                            color: '#fff',
+                            color: `rgba(${mutedColorRGB}`,
                             font: { size: 11 },
                         }
                     }
@@ -559,7 +559,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         display: true,
                         position: "right",
                         labels: {
-                            color: `#000`,
+                            color: `rgba(${mutedColorRGB}`,
                             boxWidth: 10
                         }
                     },
@@ -616,7 +616,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         display: true,
                         align: "end",
                         labels: {
-                            color: `#000`,
+                            color: `rgba(${mutedColorRGB}`,
                             boxWidth: 10
                         }
                     },
@@ -635,7 +635,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             borderWidth: 0
                         },
                         ticks: {
-                            color: `#000`,
+                            color: `rgba(${mutedColorRGB}`,
                             stepSize: 5,
                         }
                     },
@@ -644,7 +644,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             display: false
                         },
                         ticks: {
-                            color: `#000`,
+                            color: `rgba(${mutedColorRGB}`,
                             font: { size: 8 },
                         }
                     }
@@ -690,7 +690,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         display: true,
                         align: "end",
                         labels: {
-                            color: `#000`,
+                            color: `rgba(${mutedColorRGB}`,
                             boxWidth: 10
                         }
                     },
@@ -709,7 +709,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             borderWidth: 0
                         },
                         ticks: {
-                            color: `#000`,
+                            color: `rgba(${mutedColorRGB}`,
                             stepSize: 5
                         }
                     },
@@ -718,7 +718,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             display: false
                         },
                         ticks: {
-                            color: `#000`,
+                            color: `rgba(${mutedColorRGB}`,
                             font: { size: 11 }
                         }
                     }
