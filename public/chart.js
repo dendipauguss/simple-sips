@@ -133,13 +133,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     {
                         label: "Belum Ditanggapi",
                         data: stackData,
-                        borderColor: dangerColor,
-                        backgroundColor: dangerColor,
+                        borderWidth: 0.5,
+                        backgroundColor: grayColor,
                         stack: "combined",
                         fill: "start",
                         parsing: {
                             xAxisKey: "periode_label",
-                            yAxisKey: "belum"
+                            yAxisKey: "total_sanksi"
                         }
                     }
                 ]

@@ -85,7 +85,8 @@ class DashboardController extends Controller
             ->select(
                 DB::raw("DATE_FORMAT(tanggal_mulai, '%Y-%m') as periode"),
                 DB::raw("SUM(status_surat = 'sudah_ditanggapi') as sudah"),
-                DB::raw("SUM(status_surat = 'belum_ditanggapi') as belum")
+                DB::raw("SUM(status_surat = 'belum_ditanggapi') as belum"),
+                DB::raw("COUNT(*) as total_sanksi")
             )
             ->groupBy('periode')
             ->orderBy('periode')
