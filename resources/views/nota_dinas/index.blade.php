@@ -24,26 +24,37 @@
                                                 <td>{{ \Carbon\Carbon::parse($row->tanggal_nota_dinas)->translatedFormat('d F Y') }}
                                                 </td>
                                                 <td>
-                                                    @foreach ($row->pengenaan_sp as $sp)
+                                                    @foreach ($row->pengenaan_sp->take(5) as $sp)
                                                         <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
                                                             class="text-decoration-none">
-                                                            {{ $sp->no_surat }}</a>
+                                                            {{ $sp->no_surat }}
+                                                        </a>
                                                     @endforeach
+
+                                                    @if ($row->pengenaan_sp->count() > 5)
+                                                        <small class="text-muted">
+                                                            +{{ $row->pengenaan_sp->count() - 5 }} data lainnya
+                                                        </small>
+                                                    @endif
                                                 </td>
-                                                <td class="d-flex align-items-center">
-                                                    <div class="input-group">
-                                                        <a href="{{ route('laporan.pdf', $row->id) }}"
-                                                            class="btn btn-sm text-decoration-none" target="_blank"
-                                                            title="Lihat Laporan"><i class="psi-eye fs-4 text-info"></i></a>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
+                                                            class="badge bg-warning me-1 text-decoration-none"
+                                                            title="Edit">
+                                                            Edit <i class="psi-pencil"></i>
+                                                        </a>
+                                                        <a href="#" class="badge bg-danger text-decoration-none"
+                                                            onclick="event.preventDefault(); document.getElementById('delete-{{ $sp->id }}').submit();">
+                                                            Hapus <i class="psi-trash"></i>
+                                                        </a>
 
-                                                        <button class="btn btn-sm upload-btn" data-id="{{ $row->id }}"
-                                                            data-bs-toggle="modal" data-bs-target="#modalStatus"
-                                                            data-status="{{ $row->status_persetujuan }}"
-                                                            data-catatan="{{ $row->catatan }}" title="Validasi Ketua Tim">
-
-                                                            <i
-                                                                class="fs-4 {{ $row->status_persetujuan == 'setuju' ? 'psi-yes text-success' : ($row->status_persetujuan == 'dikembalikan' ? 'psi-close text-danger' : 'psi-danger text-warning') }}"></i>
-                                                        </button>
+                                                        <form id="delete-{{ $sp->id }}"
+                                                            action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
+                                                            method="POST" style="display:none;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
                                                     </div>
                                                 </td>
                                             </tr>

@@ -11,11 +11,7 @@ class NotaDinasController extends Controller
     {
         return view('nota_dinas.index', [
             'title' => 'Nota Dinas',
-            'nota_dinas' => NotaDinas::with([
-                'pengenaan_sp' => function ($q) {
-                    $q->latest()->limit(5);
-                }
-            ])->get()
+            'nota_dinas' => NotaDinas::with(['pengenaan_sp'])->latest()->get()
         ]);
     }
 
