@@ -88,6 +88,7 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
             'no_surat'              => $row['no_surat'],
             'tanggal_mulai'         => $tanggalMulai,
             'tanggal_selesai'       => $tanggalSelesai,
+            'nota_dinas_id'         => $row['nota_dinas_id'],
             'sanksi_id'             => 1,
             'jenis_pelaku_usaha_id' => $jenisPelaku->id,
             'pelaku_usaha_id'       => $pelakuUsaha->id,

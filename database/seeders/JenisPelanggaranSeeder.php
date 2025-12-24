@@ -47,7 +47,7 @@ class JenisPelanggaranSeeder extends Seeder
         ]);
 
         JenisPelanggaran::create([
-            'nama' => 'Teguran Tenda'
+            'nama' => 'Teguran Denda'
         ]);
     }
 }

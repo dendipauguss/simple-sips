@@ -14,10 +14,13 @@ use App\Models\JenisPelakuUsaha;
 use App\Models\JenisPelanggaran;
 use App\Models\KategoriSP;
 use App\Models\Files;
+use App\Models\NotaDinas;
 use App\Models\Sanksi;
 use App\Models\Laporan;
 use App\Models\LaporanItem;
 use App\Imports\PengenaanSPImport;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PengenaanSPController extends Controller
 {
@@ -73,76 +76,101 @@ class PengenaanSPController extends Controller
 
     public function store(Request $request)
     {
+
+        // dd($request);
         $validated = $request->validate([
-            'no_surat' => 'required|string',
-            'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date',
-            'sanksi_id' => 'required|integer|exists:sanksi,id',
-            'jenis_pelaku_usaha_id' => 'required',
-            'pelaku_usaha_id' => 'required',
-            'jenis_pelanggaran_id' => 'required',
-            'kategori_sp_id' => 'required',
-            'detail_pelanggaran' => 'nullable',
+            'no_nota_dinas' => 'required|string',
+            'tanggal_nota_dinas' => 'required|date',
+
+            'no_surat.*' => 'required|string',
+            'tanggal_mulai.*' => 'required|date',
+            'tanggal_selesai.*' => 'required|date',
+            'sanksi_id.*' => 'required|integer|exists:sanksi,id',
+            'jenis_pelaku_usaha_id.*' => 'required',
+            'pelaku_usaha_id.*' => 'required',
+            'jenis_pelanggaran_id.*' => 'required',
+            'kategori_sp_id.*' => 'required',
+            'detail_pelanggaran.*' => 'nullable',
         ], [
-            'no_surat.required' => 'Data tidak ditemukan',
-            'tanggal_mulai.required' => 'Pilih tanggalnya dulu kakak',
-            'tanggal_selesai.required' => 'Pilih tanggalnya dulu kakak',
-            'sanksi_id.required' => 'Pilih dulu sanksinya kakak',
-            'sanksi_id.integer' => 'Tipe datanya tidak sesuai',
-            'jenis_pelaku_usaha_id.required' => 'Data tidak ditemukan',
-            'pelaku_usaha_id.required' => 'Pilih Perusahaannya dulu kakak',
-            'jenis_pelanggaran_id.required' => 'Data tidak ditemukan',
-            'kategori_sp_id.required' => 'Pilih kategorinya dulu kakak'
+            'no_nota_dinas.required' => 'Nomor wajib diisi kakak',
+            'tanggal_nota_dinas.required' => 'Tanggal wajib diisi kakak',
+
+            'no_surat.*.required' => 'Nomor wajib diisi kakak',
+            'tanggal_mulai.*.required' => 'Pilih tanggalnya dulu kakak',
+            'tanggal_selesai.*.required' => 'Pilih tanggalnya dulu kakak',
+            'sanksi_id.*.required' => 'Pilih dulu sanksinya kakak',
+            'sanksi_id.*.integer' => 'Tipe datanya tidak sesuai',
+            'jenis_pelaku_usaha_id.*.required' => 'Data tidak ditemukan',
+            'pelaku_usaha_id.*.required' => 'Pilih Perusahaannya dulu kakak',
+            'jenis_pelanggaran_id.*.required' => 'Data tidak ditemukan',
+            'kategori_sp_id.*.required' => 'Pilih kategorinya dulu kakak'
         ]);
+        DB::transaction(function () use ($request) {
+            // Simpan Nota Dinas
+            $nota_dinas = NotaDinas::create([
+                'no_nota_dinas' => $request->no_nota_dinas,
+                'tanggal_nota_dinas' => $request->tanggal_nota_dinas
+            ]);
 
-        // ---- 1. Generate no_sp awal ----
-        $tahun = Carbon::parse($request->tanggal_mulai)->format('Y');
-        $last_data = PengenaanSP::whereYear('tanggal_mulai', $tahun)->orderBy('id', 'DESC')->first();
-        if ($last_data) {
-            // Pecah nomor surat
-            $parts = explode('/', $last_data->no_surat);
+            $this->uploadFile(
+                $request->file('nota_dinas_file'),
+                'nota_dinas',
+                $nota_dinas->id,
+                'surat'
+            );
 
-            // Ambil nomor urut (index ke-1)
-            $last_number = (int) $parts[1];
+            // ---- 1. Generate no_sp awal ----
+            // $tahun = Carbon::parse($request->tanggal_mulai)->format('Y');
+            // $last_data = PengenaanSP::whereYear('tanggal_mulai', $tahun)->orderBy('id', 'DESC')->first();
+            // if ($last_data) {
+            //     // Pecah nomor surat
+            //     $parts = explode('/', $last_data->no_surat);
 
-            // Tambah 1 dan format 3 digit
-            $urutan = sprintf('%03d', $last_number + 1);
-        } else {
-            // Jika belum ada data di tahun tersebut
-            $urutan = '001';
-        }
+            //     // Ambil nomor urut (index ke-1)
+            //     $last_number = (int) $parts[1];
 
-        $kode_sanksi = Sanksi::where('id', $request->sanksi_id)->value('kode_surat');
-        $no_surat = "{$request->no_surat}/{$urutan}/BAPPEBTI/{$kode_sanksi}";
+            //     // Tambah 1 dan format 3 digit
+            //     $urutan = sprintf('%03d', $last_number + 1);
+            // } else {
+            //     // Jika belum ada data di tahun tersebut
+            //     $urutan = '001';
+            // }
 
-        // ---- 2. Simpan data awal ----
-        $sp = PengenaanSP::create([
-            'no_surat' => $no_surat,
-            'tanggal_mulai' => $request->tanggal_mulai,
-            'tanggal_selesai' => $request->tanggal_selesai,
-            'sanksi_id' => $request->sanksi_id,
-            'jenis_pelaku_usaha_id' => $request->jenis_pelaku_usaha_id,
-            'pelaku_usaha_id' => $request->pelaku_usaha_id,
-            'jenis_pelanggaran_id' => $request->jenis_pelanggaran_id,
-            'kategori_sp_id' => $request->kategori_sp_id,
-            'detail_pelanggaran' => $request->detail_pelanggaran,
-            'user_id' => auth()->id(),
-        ]);
+            // $kode_sanksi = Sanksi::where('id', $request->sanksi_id)->value('kode_surat');
+            // $no_surat = "{$request->no_surat}/{$urutan}/BAPPEBTI/{$kode_sanksi}";
 
-        // ---- 3. Update no_sp dengan bulan/tahun ----
-        $bulan_tersimpan = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('m');
-        $tahun_tersimpan = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y');
+            // ---- 2. Simpan data awal ----
+            foreach ($request->no_surat as $i => $nilai) {
+                $sp = PengenaanSP::create([
+                    'no_surat' => $request->no_surat[$i],
+                    'tanggal_mulai' => $request->tanggal_mulai[$i],
+                    'tanggal_selesai' => $request->tanggal_selesai[$i],
+                    'nota_dinas_id' => $nota_dinas->id,
+                    'sanksi_id' => $request->sanksi_id[$i],
+                    'jenis_pelaku_usaha_id' => $request->jenis_pelaku_usaha_id[$i],
+                    'pelaku_usaha_id' => $request->pelaku_usaha_id[$i],
+                    'jenis_pelanggaran_id' => $request->jenis_pelanggaran_id[$i],
+                    'kategori_sp_id' => $request->kategori_sp_id[$i],
+                    'detail_pelanggaran' => $request->detail_pelanggaran[$i],
+                    'user_id' => auth()->id(),
+                ]);
 
-        $sp->update([
-            'no_surat' => $sp->no_surat . "/{$bulan_tersimpan}/{$tahun_tersimpan}"
-        ]);
+                $this->uploadFile($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat');
+            }
 
-        // ---- 4. Otomatis Export PDF setelah simpan ----
-        // $this->exportPdf($sp->id);
-        $this->uploadFile($request, 'pengenaan_sp', $sp->id, 'surat');
+            // ---- 3. Update no_sp dengan bulan/tahun ----
+            // $bulan_tersimpan = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('m');
+            // $tahun_tersimpan = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y');
 
+            // $sp->update([
+            // 'no_surat' => $sp->no_surat . "/{$bulan_tersimpan}/{$tahun_tersimpan}"
+            // ]);
+
+            // ---- 4. Otomatis Export PDF setelah simpan ----
+            // $this->exportPdf($sp->id);
+        });
         return redirect()->route('pengenaan-sp.index')
-            ->with('success', 'Data berhasil disimpan dan PDF otomatis dibuat.');
+            ->with('success', 'Data berhasil disimpan.');
     }
 
     public function show($id)
@@ -232,27 +260,31 @@ class PengenaanSPController extends Controller
         return back()->with('success', 'Data berhasil dihapus!');
     }
 
-    private function uploadFile(Request $request, $table_name, $table_id, $tipe_dokumen)
+    private function uploadFile(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen)
     {
-        $files = $request->file('lampiran');
+        if (!$files) return;
 
         if (!is_array($files)) {
             $files = [$files];
         }
 
         foreach ($files as $file) {
-            $originalName = $file->getClientOriginalName();
+
             $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            $path = $file->storeAs('uploads/' . $table_name, $filename, 'public');
+            $path = $file->storeAs(
+                "uploads/{$table_name}",
+                $filename,
+                'public'
+            );
 
             Files::create([
                 'table_name'    => $table_name,
                 'table_id'      => $table_id,
                 'tipe'          => $tipe_dokumen,
                 'filename'      => $filename,
-                'original_name' => $originalName,
-                'url_path'      => 'storage/' . $path, // ← perbaikan
+                'original_name' => $file->getClientOriginalName(),
+                'url_path'      => 'storage/' . $path,
             ]);
         }
     }

@@ -33,6 +33,11 @@ class PengenaanSP extends Model
         return $this->belongsTo(PelakuUsaha::class);
     }
 
+    public function nota_dinas()
+    {
+        return $this->belongsTo(NotaDinas::class, 'nota_dinas_id');
+    }
+
     public function sanksi()
     {
         return $this->belongsTo(Sanksi::class, 'sanksi_id');

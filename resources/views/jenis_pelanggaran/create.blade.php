@@ -12,7 +12,7 @@
                                 <button type="button" class="btn btn-success me-1" onclick="addRow()">Tambah
                                     lagi</button>
                                 <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
-                                <button onclick="window.history.back()" class="btn btn-sm btn-light"> ⬅ Kembali</button>
+                                <a href="{{ route('jenis-pelanggaran.index') }}" class="btn btn-sm btn-light"> ⬅ Kembali</a>
                             </div>
                         </div>
                     </div>

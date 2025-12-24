@@ -75,6 +75,14 @@
 
                             <!-- Buat Laporan -->
                             <li class="nav-item">
+                                <a href="{{ url('nota-dinas') }}"
+                                    class="nav-link {{ request()->is('nota-dinas*') ? 'active' : '' }}">
+                                    Nota Dinas Pengenaan Sanksi
+                                </a>
+                            </li>
+
+                            <!-- Buat Laporan -->
+                            <li class="nav-item">
                                 <a href="{{ url('laporan') }}"
                                     class="nav-link {{ request()->is('laporan*') ? 'active' : '' }}">
                                     Laporan Pengenaan Sanksi

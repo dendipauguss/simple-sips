@@ -14,6 +14,7 @@ use App\Http\Controllers\JenisPelanggaranController;
 use App\Http\Controllers\KategoriSPController;
 use App\Http\Controllers\SKController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\NotaDinasController;
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -75,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/pengaturan/jenis-pelanggaran', JenisPelanggaranController::class)->middleware('admin');
     Route::resource('/pengaturan/kategori-sp', KategoriSPController::class)->middleware('admin');
     Route::resource('/penindakan', PengenaanSanksiController::class);
+    Route::resource('/nota-dinas', NotaDinasController::class);
     Route::resource('/pengenaan-sp', PengenaanSPController::class);
     Route::resource('/sk', SKController::class);
 });

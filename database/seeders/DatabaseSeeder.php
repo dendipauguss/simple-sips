@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             // PerihalSeeder::class,
             JenisPelanggaranSeeder::class,
             // KategoriSPSeeder::class,
-            // PengenaanSPSeeder::class
+            // PengenaanSPSeeder::class,
+            NotaDinasSeeder::class
         ]);
     }
 }
