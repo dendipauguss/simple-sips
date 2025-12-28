@@ -79,10 +79,10 @@ class PengenaanSPController extends Controller
     public function store(Request $request)
     {
 
-        // dd($request);
         $validated = $request->validate([
             'no_nota_dinas' => 'required|string',
             'tanggal_nota_dinas' => 'required|date',
+            'dasar_pengenaan_sanksi_id' => 'required|integer',
 
             'no_surat.*' => 'required|string',
             'tanggal_mulai.*' => 'required|date',
@@ -107,11 +107,15 @@ class PengenaanSPController extends Controller
             'jenis_pelanggaran_id.*.required' => 'Data tidak ditemukan',
             'kategori_sp_id.*.required' => 'Pilih kategorinya dulu kakak'
         ]);
+
+        // dd($request);
+
         DB::transaction(function () use ($request) {
             // Simpan Nota Dinas
             $nota_dinas = NotaDinas::create([
                 'no_nota_dinas' => $request->no_nota_dinas,
-                'tanggal_nota_dinas' => $request->tanggal_nota_dinas
+                'tanggal_nota_dinas' => $request->tanggal_nota_dinas,
+                'dasar_pengenaan_sanksi_id' => $request->dasar_pengenaan_sanksi_id
             ]);
 
             $this->uploadFile(

@@ -74,7 +74,7 @@
                                             <th class="text-dark text-center">Tanggal Jatuh Tempo Sanksi</th>
                                             {{-- <th class="text-dark text-center">Bukti Perbaikan</th> --}}
                                             {{-- <th class="text-dark text-center">Tanggapan Atas Perbaikan</th> --}}
-                                            <th class="text-dark text-center" style="width: 15%;">Status</th>
+                                            <th class="text-dark text-center" style="width: 10%;">Status</th>
                                             @if (auth()->user()->role != 'ketua_tim')
                                                 <th class="text-dark text-center">Aksi</th>
                                             @endif

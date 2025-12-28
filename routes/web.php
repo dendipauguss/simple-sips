@@ -78,7 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/pengaturan/jenis-pelanggaran', JenisPelanggaranController::class)->middleware('admin');
     Route::resource('/pengaturan/kategori-sp', KategoriSPController::class)->middleware('admin');
     Route::resource('/penindakan', PengenaanSanksiController::class);
-    Route::resource('/nota-dinas', NotaDinasController::class);
+    Route::resource('/nota-dinas', NotaDinasController::class)->middleware('admin');
     Route::resource('/pengenaan-sp', PengenaanSPController::class);
     Route::resource('/sk', SKController::class);
 });
