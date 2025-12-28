@@ -23,6 +23,24 @@
                             <div class="card-body">
                                 <!-- NOTA DINAS Form -->
                                 <div class="mb-3">
+                                    <label class="form-label">Dasar Pengenaan Sanksi</label>
+                                    <select name="dasar_pengenaan_sanksi_id"
+                                        class="form-select @error('dasar_pengenaan_sanksi_id') is-invalid @enderror dasar-pengenaan-sanksi">
+                                        <option value="" disabled selected>-- Pilih Dasar Pengenaan Sanksi --</option>
+                                        @foreach ($dasar_pengenaan_sanksi as $dps)
+                                            <option value="{{ $dps->id }}"
+                                                {{ old('dasar_pengenaan_sanksi_id') == $dps->id ? 'selected' : '' }}>
+                                                {{ $dps->nama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('dasar_pengenaan_sanksi_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label">No. Nota Dinas</label>
                                     <input type="text" class="form-control @error('no_nota_dinas') is-invalid @enderror"
                                         name="no_nota_dinas" value="{{ old('no_nota_dinas') }}">
@@ -274,6 +292,33 @@
 
             if (pelanggaranOld) {
                 $('.jenis-pelanggaran').trigger('change');
+            }
+
+            $(document).on('change', '.dasar-pengenaan-sanksi', function() {
+
+                let dasarID = $(this).val();
+
+                // ambil semua jenis pelanggaran di semua row SP
+                let jenisPelanggaranSelect = $('.jenis-pelanggaran');
+
+                jenisPelanggaranSelect.html('<option value="">Loading...</option>');
+
+                $.get(`/get-jenis-pelanggaran/${dasarID}`, function(data) {
+
+                    let html = '<option value="">-- Pilih Jenis Pelanggaran --</option>';
+
+                    data.forEach(item => {
+                        html += `<option value="${item.id}">${item.nama}</option>`;
+                    });
+
+                    jenisPelanggaranSelect.html(html);
+                });
+            });
+
+            let dasarPengenaanSanksiOld = $('.dasar-pengenaan-sanksi').val();
+
+            if (dasarPengenaanSanksiOld) {
+                $('.dasar-pengenaan-sanksi').trigger('change');
             }
         });
 

@@ -15,6 +15,7 @@ use App\Http\Controllers\KategoriSPController;
 use App\Http\Controllers\SKController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\NotaDinasController;
+use App\Http\Controllers\DasarPengenaanSanksiController;
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -46,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'import'])->name('pelaku-usaha.import');
     Route::get('/get-pelaku-usaha/{jenis_id}', [PelakuUsahaController::class, 'getPelakuUsahaByJenis']);
     Route::get('/get-kategori-sp/{jenis_pelanggaran_id}', [JenisPelanggaranController::class, 'getKategoriSPByJenis']);
+    Route::get('/get-jenis-pelanggaran/{dasar_pengenaan_sanksi_id}', [DasarPengenaanSanksiController::class, 'getJenisPelanggaranByDasarPengenaanSanksi']);
     Route::get('/pengenaan-sp/export-excel', [PengenaanSPController::class, 'exportExcel'])->name('pengenaan-sp.export.excel');
     Route::get('/pengenaan-sp/export-pdf',   [PengenaanSPController::class, 'exportPdf'])->name('pengenaan-sp.export.pdf');
     Route::get('/pengenaan-sp/generate-laporan',   [PengenaanSPController::class, 'generateLaporan'])->name('pengenaan-sp.generate.laporan');

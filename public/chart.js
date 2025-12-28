@@ -510,7 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 scales: {
                     x: {
                         grid: {
-                            color: `#000`,
+                            color: `rgba(${mutedColorRGB}, .6)`,
                             borderWidth: 0
                         },
                         ticks: {

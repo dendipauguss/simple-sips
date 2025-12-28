@@ -4,23 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Carbon\Carbon;
 use App\Exports\PengenaanSPExport;
+use App\Imports\PengenaanSPImport;
 use App\Models\PengenaanSP;
 use App\Models\PelakuUsaha;
 use App\Models\JenisPelakuUsaha;
-use App\Models\JenisPelanggaran;
 use App\Models\KategoriSP;
-use App\Models\Files;
+use App\Models\JenisPelanggaran;
 use App\Models\NotaDinas;
-use App\Models\Sanksi;
+use App\Models\Files;
 use App\Models\Laporan;
+use App\Models\Sanksi;
 use App\Models\LaporanItem;
-use App\Imports\PengenaanSPImport;
-use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Models\DasarPengenaanSanksi;
 
 class PengenaanSPController extends Controller
 {
@@ -71,6 +72,7 @@ class PengenaanSPController extends Controller
             'sanksi' => Sanksi::all(),
             // template nomor SP awal (belum ada bulan & tahun)
             'no_surat_template' => "UD.02.01/{$nextNumber}/BAPPEBTI/",
+            'dasar_pengenaan_sanksi' => DasarPengenaanSanksi::all()
         ]);
     }
 
@@ -239,7 +241,7 @@ class PengenaanSPController extends Controller
 
         // Panggil fungsi upload file yang sudah kamu buat sebelumnya
         if (!empty($request->lampiran)) {
-            $this->uploadFile($request, 'pengenaan_sp', $request->pengenaan_sp_id, 'bebas');
+            $this->uploadFile($request->lampiran, 'pengenaan_sp', $request->pengenaan_sp_id, 'bebas');
         }
         $pengenaan_sp = PengenaanSP::findOrFail($request->pengenaan_sp_id);
         $pengenaan_sp->tanggapan = $request->tanggapan;

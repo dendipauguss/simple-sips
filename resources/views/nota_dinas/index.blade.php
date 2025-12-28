@@ -11,6 +11,7 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th style="width: 5%">No</th>
+                                            <th style="width: 5%">Nomor Nota Dinas</th>
                                             <th style="width: 7%">Tanggal</th>
                                             <th style="width: 8%">Sanksi</th>
                                             <th style="width: 9%">Aksi</th>
@@ -21,6 +22,7 @@
                                         @foreach ($nota_dinas as $row)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $row->no_nota_dinas }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($row->tanggal_nota_dinas)->translatedFormat('d F Y') }}
                                                 </td>
                                                 <td>

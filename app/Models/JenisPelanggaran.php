@@ -17,4 +17,9 @@ class JenisPelanggaran extends Model
     {
         return $this->hasMany(PengenaanSP::class, 'jenis_pelanggaran_id');
     }
+
+    public function dasar_pengenaan_sanksi()
+    {
+        return $this->belongsTo(DasarPengenaanSanksi::class, 'dasar_pengenaan_sanksi_id');
+    }
 }
