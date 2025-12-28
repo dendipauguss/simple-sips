@@ -428,7 +428,7 @@ class PengenaanSPController extends Controller
     public function importView()
     {
         return view('pengenaan_sp.import', [
-            'title' => 'Import Excel',
+            'title' => 'Import Excel Pengenaan Sanksi',
             'pengenaan_sp' => PengenaanSP::all()
         ]);
     }

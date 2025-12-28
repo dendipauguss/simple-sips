@@ -98,7 +98,7 @@ class KategoriSPController extends Controller
     public function importView()
     {
         return view('kategori_sp.import', [
-            'title' => 'Import Excel',
+            'title' => 'Import Excel Kategori Sanksi',
             'jenis_pelanggaran' => JenisPelanggaran::all()
         ]);
     }

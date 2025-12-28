@@ -98,7 +98,7 @@ class PelakuUsahaController extends Controller
     public function importView()
     {
         return view('pelaku_usaha.import', [
-            'title' => 'Import Excel',
+            'title' => 'Import Excel Perusahaan',
             'jenis_pelaku_usaha' => JenisPelakuUsaha::all()
         ]);
     }
