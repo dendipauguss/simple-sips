@@ -39,7 +39,7 @@ class GoogleDriveService
                 'mimeType' => $file->getMimeType(),
                 'uploadType' => 'multipart',
                 'supportsAllDrives' => true,
-                // 'fields' => 'id, name, mimeType, webViewLink',
+                'fields' => 'id, name, mimeType, webViewLink',
             ]
         );
 
