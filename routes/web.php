@@ -16,6 +16,7 @@ use App\Http\Controllers\SKController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\NotaDinasController;
 use App\Http\Controllers\DasarPengenaanSanksiController;
+use App\Http\Controllers\OneDriveController;
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -70,6 +71,9 @@ Route::middleware('auth')->group(function () {
     // Route::post('laporan/{id}/approve', [LaporanController::class, 'approve'])->name('laporan.approve');
     Route::post('laporan/approve', [LaporanController::class, 'approve'])
         ->name('laporan.approve');
+    Route::get('/auth/microsoft', [OneDriveController::class, 'redirect']);
+    Route::get('/auth/microsoft/callback', [OneDriveController::class, 'callback']);
+    Route::post('/onedrive/upload', [OneDriveController::class, 'upload']);
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');

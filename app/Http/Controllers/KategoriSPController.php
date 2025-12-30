@@ -19,7 +19,7 @@ class KategoriSPController extends Controller
         }
 
         return view('kategori_sp.index', [
-            'title' => 'List Pelaku Usaha',
+            'title' => 'List Kategori Sanksi',
             'kategori_sp' => $kategori_sp,
             'jenis_pelanggaran' => JenisPelanggaran::all()
         ]);

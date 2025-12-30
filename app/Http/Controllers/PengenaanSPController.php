@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Carbon\Carbon;
+use Yaza\LaravelGoogleDriveStorage\Gdrive;
+use App\Services\OneDriveService;
+use App\Services\GoogleDriveService;
 use App\Exports\PengenaanSPExport;
 use App\Imports\PengenaanSPImport;
 use App\Models\PengenaanSP;
@@ -76,7 +82,7 @@ class PengenaanSPController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, GoogleDriveService $googleDrive)
     {
 
         $validated = $request->validate([
@@ -110,7 +116,7 @@ class PengenaanSPController extends Controller
 
         // dd($request);
 
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request, $googleDrive) {
             // Simpan Nota Dinas
             $nota_dinas = NotaDinas::create([
                 'no_nota_dinas' => $request->no_nota_dinas,
@@ -118,11 +124,12 @@ class PengenaanSPController extends Controller
                 'dasar_pengenaan_sanksi_id' => $request->dasar_pengenaan_sanksi_id
             ]);
 
-            $this->uploadFile(
+            $this->uploadFileToGDrive(
                 $request->file('nota_dinas_file'),
                 'nota_dinas',
                 $nota_dinas->id,
-                'surat'
+                'surat',
+                $googleDrive
             );
 
             // ---- 1. Generate no_sp awal ----
@@ -161,7 +168,7 @@ class PengenaanSPController extends Controller
                     'user_id' => auth()->id(),
                 ]);
 
-                $this->uploadFile($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat');
+                $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $googleDrive);
             }
 
             // ---- 3. Update no_sp dengan bulan/tahun ----
@@ -175,6 +182,7 @@ class PengenaanSPController extends Controller
             // ---- 4. Otomatis Export PDF setelah simpan ----
             // $this->exportPdf($sp->id);
         });
+
         return redirect()->route('pengenaan-sp.index')
             ->with('success', 'Data berhasil disimpan.');
     }
@@ -200,9 +208,21 @@ class PengenaanSPController extends Controller
     public function destroy($id)
     {
         $pengenaan_sp = PengenaanSP::findOrFail($id);
+
+        $file = Files::findOrFail($pengenaan_sp->file->id);
+
+        $hapus_file_gdrive = $this->deleteFileFromGDrive($file->google_file_path);
+
+        if ($hapus_file_gdrive) {
+            $pesan = 'Dan Berhasil hapus file google drive';
+        } else {
+            $pesan = 'Tetapi Gagal hapus file google drive';
+        }
+
+        $file->delete();
         $pengenaan_sp->delete();
 
-        return redirect()->route('pengenaan-sp.index')->with('success', 'Data berhasil dihapus!');
+        return redirect()->route('pengenaan-sp.index')->with('success', 'Data berhasil dihapus! ' . $pesan);
     }
 
     public function generatePdf($id)
@@ -292,6 +312,100 @@ class PengenaanSPController extends Controller
                 'original_name' => $file->getClientOriginalName(),
                 'url_path'      => 'storage/' . $path,
             ]);
+        }
+    }
+
+    private function uploadFilesToOneDrive(
+        UploadedFile|array|null $files,
+        string $table_name,
+        int $table_id,
+        string $tipe_dokumen,
+        OneDriveService $oneDrive
+    ) {
+        if (!$files) return;
+
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
+        foreach ($files as $file) {
+
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Upload ke OneDrive
+            $result = $oneDrive->upload(
+                auth()->id(),
+                $file->getRealPath(),
+                $filename,
+                "uploads/{$table_name}"
+            );
+
+            // Simpan metadata ke DB
+            Files::create([
+                'table_name'    => $table_name,
+                'table_id'      => $table_id,
+                'tipe'          => $tipe_dokumen,
+                'filename'      => $filename,
+                'original_name' => $file->getClientOriginalName(),
+                'url_path'      => $result['webUrl'], // URL OneDrive
+                'drive_file_id' => $result['id'],     // PENTING
+            ]);
+        }
+    }
+
+    private function uploadFileToGDrive(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen)
+    {
+        if (!$files) return;
+
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
+        foreach ($files as $file) {
+
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // $path = $file->storeAs(
+            //     "uploads/{$table_name}",
+            //     $filename,
+            //     'public'
+            // );
+
+            // $response = Storage::disk('google')->put($filename, File::get($file));
+
+            Gdrive::put($filename, $file);
+            $content = Gdrive::all('/');
+
+            $uploadedContent = $content->firstWhere('path', $filename);
+
+            if ($uploadedContent) {
+                $fileMeta = $uploadedContent->extraMetaData() ?? [];
+
+                Files::create([
+                    'table_name'    => $table_name,
+                    'table_id'      => $table_id,
+                    'tipe'          => $tipe_dokumen,
+                    'filename'      => $fileMeta['filename'],
+                    'original_name' => $file->getClientOriginalName(),
+                    'url_path'      => 'https://drive.google.com/file/d/' . $fileMeta['id'],
+                    'google_file_id' => $fileMeta['id'],
+                    'google_file_path' => $uploadedContent->path()
+                ]);
+            }
+        }
+    }
+
+    private function deleteFileFromGDrive($file_path): bool
+    {
+        try {
+            Gdrive::delete($file_path);
+            return true;
+        } catch (\Throwable $e) {
+            Log::error('GDrive delete failed', [
+                'path' => $file_path,
+                'error' => $e->getMessage(),
+            ]);
+            return false;
         }
     }
 
@@ -446,5 +560,40 @@ class PengenaanSPController extends Controller
         Excel::import(new PengenaanSPImport, $request->file('file'));
 
         return back()->with('success', 'Data berhasil diimport');
+    }
+
+    private function getOneDriveAccessToken()
+    {
+        $token = DB::table('ms_token')
+            ->where('user_id', auth()->id())
+            ->first();
+
+        // Kalau belum expired → langsung pakai
+        if ($token && now()->lt($token->expires_at)) {
+            return $token->access_token;
+        }
+
+        // Refresh token
+        $response = Http::asForm()->post(
+            'https://login.microsoftonline.com/' . config('services.microsoft.tenant_id') . '/oauth2/v2.0/token',
+            [
+                'client_id' => config('services.microsoft.client_id'),
+                'client_secret' => config('services.microsoft.client_secret'),
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $token->refresh_token,
+                'scope' => 'offline_access Files.ReadWrite',
+            ]
+        );
+
+        $newToken = $response->json();
+
+        DB::table('ms_token')
+            ->where('user_id', auth()->id())
+            ->update([
+                'access_token'  => $newToken['access_token'],
+                'expires_at'    => now()->addSeconds($newToken['expires_in']),
+            ]);
+
+        return $newToken['access_token'];
     }
 }

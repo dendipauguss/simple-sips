@@ -31,4 +31,16 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'microsoft' => [
+        'client_id' => env('MS_CLIENT_ID'),
+        'client_secret' => env('MS_CLIENT_SECRET'),
+        'tenant_id' => env('MS_TENANT_ID'),
+        'redirect' => env('MS_REDIRECT_URI'),
+    ],
+
+    'google' => [
+        'drive_folder_id' => env('GOOGLE_DRIVE_FOLDER_ID'),
+    ],
+
+
 ];
