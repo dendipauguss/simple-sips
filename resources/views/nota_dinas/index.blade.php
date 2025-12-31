@@ -41,18 +41,18 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group" role="group">
-                                                        <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
+                                                        <a href="{{ route('pengenaan-sp.show', $row->id) }}"
                                                             class="badge bg-warning me-1 text-decoration-none"
                                                             title="Edit">
                                                             Edit <i class="psi-pencil"></i>
                                                         </a>
                                                         <a href="#" class="badge bg-danger text-decoration-none"
-                                                            onclick="event.preventDefault(); document.getElementById('delete-{{ $sp->id }}').submit();">
+                                                            onclick="event.preventDefault(); document.getElementById('delete-{{ $row->id }}').submit();">
                                                             Hapus <i class="psi-trash"></i>
                                                         </a>
 
-                                                        <form id="delete-{{ $sp->id }}"
-                                                            action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
+                                                        <form id="delete-{{ $row->id }}"
+                                                            action="{{ route('pengenaan-sp.destroy', $row->id) }}"
                                                             method="POST" style="display:none;">
                                                             @csrf
                                                             @method('DELETE')

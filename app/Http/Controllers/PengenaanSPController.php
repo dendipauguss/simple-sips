@@ -82,7 +82,7 @@ class PengenaanSPController extends Controller
         ]);
     }
 
-    public function store(Request $request, GoogleDriveService $googleDrive)
+    public function store(Request $request)
     {
 
         $validated = $request->validate([
@@ -116,7 +116,7 @@ class PengenaanSPController extends Controller
 
         // dd($request);
 
-        DB::transaction(function () use ($request, $googleDrive) {
+        DB::transaction(function () use ($request) {
             // Simpan Nota Dinas
             $nota_dinas = NotaDinas::create([
                 'no_nota_dinas' => $request->no_nota_dinas,
@@ -124,12 +124,20 @@ class PengenaanSPController extends Controller
                 'dasar_pengenaan_sanksi_id' => $request->dasar_pengenaan_sanksi_id
             ]);
 
+            $dasar = DasarPengenaanSanksi::find($request->dasar_pengenaan_sanksi_id)->nama;
+            $tahun = \Carbon\Carbon::parse($request->tanggal_nota_dinas)->format('Y');
+            $noNota = $this->sanitizeFolderName($request->no_nota_dinas);
+
+            $base = config('filesystems.disks.google.root'); // env('GOOGLE_DRIVE_FOLDER')
+
+            $folderPath = "{$base}/{$dasar}/{$tahun}/{$noNota}";
+
             $this->uploadFileToGDrive(
                 $request->file('nota_dinas_file'),
                 'nota_dinas',
                 $nota_dinas->id,
                 'surat',
-                $googleDrive
+                $folderPath
             );
 
             // ---- 1. Generate no_sp awal ----
@@ -168,7 +176,7 @@ class PengenaanSPController extends Controller
                     'user_id' => auth()->id(),
                 ]);
 
-                $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $googleDrive);
+                $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $folderPath);
             }
 
             // ---- 3. Update no_sp dengan bulan/tahun ----
@@ -353,7 +361,7 @@ class PengenaanSPController extends Controller
         }
     }
 
-    private function uploadFileToGDrive(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen)
+    private function uploadFileToGDrive(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen, string $folderPath)
     {
         if (!$files) return;
 
@@ -364,34 +372,29 @@ class PengenaanSPController extends Controller
         foreach ($files as $file) {
 
             $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $fullPath = "{$folderPath}/{$filename}";
 
-            // $path = $file->storeAs(
-            //     "uploads/{$table_name}",
-            //     $filename,
-            //     'public'
-            // );
+            // ⬅️ INI YANG PALING PENTING
+            Gdrive::put($fullPath, $file);
 
-            // $response = Storage::disk('google')->put($filename, File::get($file));
+            // Ambil metadata file terakhir
+            $content = Gdrive::all($folderPath);
+            $uploaded = $content->last();
 
-            Gdrive::put($filename, $file);
-            $content = Gdrive::all('/');
+            $meta = $uploaded?->extraMetadata() ?? [];
 
-            $uploadedContent = $content->firstWhere('path', $filename);
-
-            if ($uploadedContent) {
-                $fileMeta = $uploadedContent->extraMetaData() ?? [];
-
-                Files::create([
-                    'table_name'    => $table_name,
-                    'table_id'      => $table_id,
-                    'tipe'          => $tipe_dokumen,
-                    'filename'      => $fileMeta['filename'],
-                    'original_name' => $file->getClientOriginalName(),
-                    'url_path'      => 'https://drive.google.com/file/d/' . $fileMeta['id'],
-                    'google_file_id' => $fileMeta['id'],
-                    'google_file_path' => $uploadedContent->path()
-                ]);
-            }
+            Files::create([
+                'table_name' => $table_name,
+                'table_id' => $table_id,
+                'tipe' => $tipe_dokumen,
+                'filename' => $meta['filename'] ?? $filename,
+                'original_name' => $file->getClientOriginalName(),
+                'google_file_id' => $meta['id'] ?? null,
+                'google_file_path' => $uploaded?->path(),
+                'url_path' => isset($meta['id'])
+                    ? 'https://drive.google.com/file/d/' . $meta['id']
+                    : null,
+            ]);
         }
     }
 
@@ -595,5 +598,10 @@ class PengenaanSPController extends Controller
             ]);
 
         return $newToken['access_token'];
+    }
+
+    private function sanitizeFolderName(string $name): string
+    {
+        return str_replace(['/', '\\'], '-', $name);
     }
 }
