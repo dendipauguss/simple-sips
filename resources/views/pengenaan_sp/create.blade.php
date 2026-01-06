@@ -111,18 +111,15 @@
                                         </div>
 
                                         <div class="row mb-3 d-flex align-items-center">
-                                            <label class="col-sm-4 col-form-label">Termasuk Denda atau Tidak</label>
+                                            <label class="col-sm-4 col-form-label">Termasuk Denda</label>
                                             <div class="col-sm-8 pt-3">
                                                 <div class="form-check form-check-inline">
-                                                    <input id="ya" class="form-check-input" type="radio"
-                                                        name="is_denda" value="1">
+                                                    <input type="hidden" name="is_denda[{{ $i }}]"
+                                                        value="0">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        name="is_denda[{{ $i }}]" value="1"
+                                                        {{ old("is_denda.$i") ? 'checked' : '' }}>
                                                     <label for="ya" class="form-check-label">Ya</label>
-                                                </div>
-
-                                                <div class="form-check form-check-inline">
-                                                    <input id="tidak" class="form-check-input" type="radio"
-                                                        name="is_denda" value="0">
-                                                    <label for="tidak" class="form-check-label">Tidak</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -224,7 +221,7 @@
                                         <div class="mb-3">
                                             <label for="lampiran" class="form-label">Dokumen</label>
                                             <input type="file" name="lampiran[{{ $i }}][]" id="lampiran"
-                                                class="form-control">
+                                                class="form-control" multiple>
                                         </div>
 
                                         <button type="button" class="btn btn-sm btn-success" onclick="addRow()">
@@ -260,6 +257,7 @@
     <script>
         const oldPelakuUsahaId = @json(old('pelaku_usaha_id', []));
         const oldKategoriSanksiId = @json(old('kategori_sp_id', []));
+        let rowIndex = document.querySelectorAll('.data-item').length - 1;
 
         $(document).ready(function() {
 
@@ -348,13 +346,36 @@
                 }
             });
 
+            rowIndex++;
+
             let container = document.getElementById('data-container');
             let first = container.querySelector('.data-item');
             let clone = first.cloneNode(true);
 
             // reset semua input
-            clone.querySelectorAll('input, textarea').forEach(el => el.value = '');
+            clone.querySelectorAll('input, textarea').forEach(el => {
+                if (el.type === 'file') {
+                    el.value = '';
+                } else if (el.type == 'checkbox') {
+                    el.checked = false;
+                } else {
+                    el.value = '';
+                }
+                // UPDATE name index  ❗❗❗
+                if (el.name) {
+                    el.name = el.name.replace(/\[\d+\]/g, `[${rowIndex}]`);
+                }
 
+                // UPDATE id
+                if (el.id) {
+                    el.id = el.id.replace(/_\d+$/, `_${rowIndex}`);
+                }
+
+                // UPDATE data-index
+                if (el.dataset.index !== undefined) {
+                    el.dataset.index = rowIndex;
+                }
+            });
             // reset semua select
             clone.querySelectorAll('select').forEach(el => {
                 el.selectedIndex = 0;

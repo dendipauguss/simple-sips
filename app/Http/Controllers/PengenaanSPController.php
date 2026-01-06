@@ -82,7 +82,7 @@ class PengenaanSPController extends Controller
         ]);
     }
 
-    public function store(Request $request, OneDriveService $oneDrive)
+    public function store(Request $request)
     {
 
         $validated = $request->validate([
@@ -90,10 +90,11 @@ class PengenaanSPController extends Controller
             'tanggal_nota_dinas' => 'required|date',
             'dasar_pengenaan_sanksi_id' => 'required|integer',
 
-            'no_surat.*' => 'required|string',
+            'no_surat.*' => 'required|string|distinct|unique:pengenaan_sp,no_surat',
             'tanggal_mulai.*' => 'required|date',
             'tanggal_selesai.*' => 'required|date',
             'sanksi_id.*' => 'required|integer|exists:sanksi,id',
+            'is_denda.*' => 'nullable|in:0,1',
             'jenis_pelaku_usaha_id.*' => 'required',
             'pelaku_usaha_id.*' => 'required',
             'jenis_pelanggaran_id.*' => 'required',
@@ -104,6 +105,7 @@ class PengenaanSPController extends Controller
             'tanggal_nota_dinas.required' => 'Tanggal wajib diisi kakak',
 
             'no_surat.*.required' => 'Nomor wajib diisi kakak',
+            'is_denda.*.required' => 'Kolom tidak terisi',
             'tanggal_mulai.*.required' => 'Pilih tanggalnya dulu kakak',
             'tanggal_selesai.*.required' => 'Pilih tanggalnya dulu kakak',
             'sanksi_id.*.required' => 'Pilih dulu sanksinya kakak',
@@ -114,9 +116,8 @@ class PengenaanSPController extends Controller
             'kategori_sp_id.*.required' => 'Pilih kategorinya dulu kakak'
         ]);
 
-        // dd($request);
 
-        DB::transaction(function () use ($request, $oneDrive) {
+        DB::transaction(function () use ($request) {
             // Simpan Nota Dinas
             $nota_dinas = NotaDinas::create([
                 'no_nota_dinas' => $request->no_nota_dinas,
@@ -130,15 +131,8 @@ class PengenaanSPController extends Controller
 
             $base = config('filesystems.disks.google.root'); // env('GOOGLE_DRIVE_FOLDER')
 
-            $folderPath = "{$base}/{$dasar}/{$tahun}/{$noNota}";
+            $folderPath = "{$base}/{$tahun}/{$dasar}/{$noNota}";
 
-            // $this->uploadFilesToOneDrive(
-            //     $request->file('nota_dinas_file'),
-            //     'nota_dinas',
-            //     $nota_dinas->id,
-            //     'surat',
-            //     $oneDrive
-            // );
             $this->uploadFileToGDrive(
                 $request->file('nota_dinas_file'),
                 'nota_dinas',
@@ -146,31 +140,14 @@ class PengenaanSPController extends Controller
                 'surat',
                 $folderPath
             );
-
-            // ---- 1. Generate no_sp awal ----
-            // $tahun = Carbon::parse($request->tanggal_mulai)->format('Y');
-            // $last_data = PengenaanSP::whereYear('tanggal_mulai', $tahun)->orderBy('id', 'DESC')->first();
-            // if ($last_data) {
-            //     // Pecah nomor surat
-            //     $parts = explode('/', $last_data->no_surat);
-
-            //     // Ambil nomor urut (index ke-1)
-            //     $last_number = (int) $parts[1];
-
-            //     // Tambah 1 dan format 3 digit
-            //     $urutan = sprintf('%03d', $last_number + 1);
-            // } else {
-            //     // Jika belum ada data di tahun tersebut
-            //     $urutan = '001';
-            // }
-
-            // $kode_sanksi = Sanksi::where('id', $request->sanksi_id)->value('kode_surat');
-            // $no_surat = "{$request->no_surat}/{$urutan}/BAPPEBTI/{$kode_sanksi}";
-
+            // dd(
+            //     $request->no_surat,
+            //     $request->file('lampiran')
+            // );
             // ---- 2. Simpan data awal ----
             foreach ($request->no_surat as $i => $nilai) {
                 $sp = PengenaanSP::create([
-                    'no_surat' => $request->no_surat[$i],
+                    'no_surat' => $nilai,
                     'tanggal_mulai' => $request->tanggal_mulai[$i],
                     'tanggal_selesai' => $request->tanggal_selesai[$i],
                     'nota_dinas_id' => $nota_dinas->id,
@@ -183,7 +160,6 @@ class PengenaanSPController extends Controller
                     'user_id' => auth()->id(),
                 ]);
 
-                // $this->uploadFilesToOneDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $oneDrive);
                 $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $folderPath);
             }
 
@@ -379,7 +355,11 @@ class PengenaanSPController extends Controller
 
         foreach ($files as $file) {
 
-            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+            if ($table_name == 'pengenaan_sp') {
+                $filename = 'SP-' . uniqid() . '.' . $file->getClientOriginalExtension();
+            } elseif ($table_name == 'nota_dinas') {
+                $filename = 'ND-' . uniqid() . '.' . $file->getClientOriginalExtension();
+            }
             $fullPath = "{$folderPath}/{$filename}";
 
             // ⬅️ INI YANG PALING PENTING

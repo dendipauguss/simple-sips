@@ -11,6 +11,12 @@
                         <div class="card-body py-4">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex">
+                                    <strong class="me-5" style="width: 150px;">Dokumen SP</strong>
+                                    <span>:
+                                        <a href="{{ $sp->file->url_path }}" class="text-decoration-none"
+                                            target="_blank">{{ $sp->file->original_name }}</a></span>
+                                </li>
+                                <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">No Surat</strong>
                                     <span>:
                                         {{ $sp->no_surat }}</span>
@@ -109,8 +115,15 @@
                     <div class="card h-100">
                         <div class="card-body py-4">
                             @if (isset($sp->file))
-                                <iframe src="{{ asset($sp->file->url_path) }}" frameborder="0" width="100%"
-                                    height="600px"></iframe>
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex">
+                                        <strong class="me-3" style="width: 150px;">Dokumen SP</strong>
+                                        <span>: <a href="{{ $sp->file->url_path }}" class="text-decoration-none"
+                                                target="_blank">{{ $sp->file->original_name }}</a></span>
+                                    </li>
+                                </ul>
+                                <iframe src="https://drive.google.com/file/d/{{ $sp->file->goggle_file_id }}/preview"
+                                    frameborder="0" width="100%" height="600px"></iframe>
                             @endif
                         </div>
                     </div>

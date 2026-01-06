@@ -207,7 +207,7 @@
 
         <table border="1" cellpadding="4" cellspacing="0" class="tabel-word" align="center">
             <thead>
-                <th style="width: 5%">No</th>
+                <th style="width: 6%">No</th>
                 <th>Nama Perusahaan</th>
                 <th>Kategori Pelaku Usaha</th>
                 <th>Bentuk Sanksi</th>
@@ -401,9 +401,20 @@
                     Ketua Tim Bidang Penindakan<br>
                     PBK, Pasar Fisik, SRG dan PLK<br>
                     serta Entitas PBK Ilegal,
-                    <br><br><br>
-                    <div style="text-align: center;">{{ $laporan->status_persetujuan == 'setuju' ? 'TTD' : '' }}</div>
-                    <br><br><br>
+                    <br>
+                    @if ($laporan->status_persetujuan == 'setuju')
+                        @if (!empty($qrBase64))
+                            <div style="text-align:center; margin-top:20px;">
+                                <img src="data:image/png;base64,{{ $qrBase64 }}" height="65">
+                                <p style="font-size:10px; margin-top:5px;">
+                                    Scan untuk verifikasi keaslian dokumen
+                                </p>
+                            </div>
+                        @endif
+                    @else
+                        <br><br><br><br>
+                    @endif
+                    <br>
                     <div style="text-align: center;">
                         <strong><u>{{ $laporan->user->nama ?? 'Ketua Tim Belum Validasi' }}</u></strong><br>
                     </div>
@@ -416,14 +427,7 @@
 
         <br>
         <br>
-        @if (!empty($qrBase64))
-            <div style="text-align:center; margin-top:20px;">
-                <img src="data:image/png;base64,{{ $qrBase64 }}" width="100">
-                <p style="font-size:10px; margin-top:5px;">
-                    Scan untuk verifikasi keaslian dokumen
-                </p>
-            </div>
-        @endif
+
     </body>
 
 </html>

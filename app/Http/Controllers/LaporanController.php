@@ -126,7 +126,7 @@ class LaporanController extends Controller
         $urutan = sprintf('%03d', $laporan->id);
         $bulan = $laporan->updated_at->format('m');
         $tahun = $laporan->updated_at->format('Y');
-        $nomor_laporan = "UD.01.00/{$urutan}/BAPPEBTI.3/ND/{$bulan}/{$tahun}";
+        $nomor_laporan = "UD.01.00/{$urutan}/BAPPEBTI.3/ND.DK-S/{$bulan}/{$tahun}";
         $nama_bulan = Carbon::createFromDate($bulan, 1)->translatedFormat('F');
 
         $qrBase64 = null;
@@ -164,6 +164,7 @@ class LaporanController extends Controller
             'catatan' => 'nullable|string'
         ]);
 
+        dd($request);
         if (auth()->user()->role != 'ketua_tim') {
             abort(403, 'Anda tidak memiliki akses (Hanya Ketua Tim).');
         }
