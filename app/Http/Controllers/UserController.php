@@ -79,14 +79,39 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'nama' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required',
-            'password' => 'nullable|min:5',
+            'nama' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => [
+                'required',
+                'email',
+                'regex:/@(gmail\.com|yahoo\.com|outlook\.com)$/i',
+            ],
+            'role' => ['required'],
+            'password' => [
+                'required',
+                'min:8',
+                'regex:/[a-z]/',      // huruf kecil
+                'regex:/[A-Z]/',      // huruf besar
+                'regex:/[0-9]/',      // angka
+                'regex:/[\W_]/',      // simbol
+            ],
+        ], [
+            'nama.required' => 'Nama tidak boleh kosong',
+            'nama.max' => 'Maksimal 255 karakter',
+            'username.required' => 'Username tidak boleh kosong',
+            'username.max' => 'Maksimal 255 karakter',
+            'username.unique' => 'Username telah dipakai',
+            'email.required' => 'Email tidak boleh kosong',
+            'email.regex' => 'Email harus menggunakan provider yang diperbolehkan.',
+            'email.email' => 'Harus berupa email',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.regex' => 'Password harus mengandung huruf besar, kecil, angka, dan simbol.',
+            'password.required' => 'Password tidak boleh kosong',
         ]);
 
         $data = [
             'nama' => $request->nama,
+            'username' => $request->username,
             'email' => $request->email,
             'role' => $request->role,
         ];

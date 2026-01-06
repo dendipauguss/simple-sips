@@ -17,8 +17,9 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\NotaDinasController;
 use App\Http\Controllers\DasarPengenaanSanksiController;
 use App\Http\Controllers\OneDriveController;
+use App\Http\Controllers\HomeController;
 
-
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -30,7 +31,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // AUTH ROUTES
 // Route yang hanya boleh diakses jika sudah login
 Route::middleware('auth')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/chart', [DashboardController::class, 'chartData']);
     // Route::get('/pengaturan/perintah-sanksi', [PerintahSanksiController::class, 'index'])->name('perintah-sanksi');
@@ -73,7 +73,8 @@ Route::middleware('auth')->group(function () {
         ->name('laporan.approve');
     Route::get('/auth/microsoft', [OneDriveController::class, 'redirect']);
     Route::get('/auth/microsoft/callback', [OneDriveController::class, 'callback']);
-    Route::post('/onedrive/upload', [OneDriveController::class, 'upload']);
+    Route::get('/onedrive/upload', [OneDriveController::class, 'index']);
+    Route::post('/onedrive/upload', [OneDriveController::class, 'upload'])->name('store-file');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');

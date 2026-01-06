@@ -110,6 +110,23 @@
                                             @enderror
                                         </div>
 
+                                        <div class="row mb-3 d-flex align-items-center">
+                                            <label class="col-sm-4 col-form-label">Termasuk Denda atau Tidak</label>
+                                            <div class="col-sm-8 pt-3">
+                                                <div class="form-check form-check-inline">
+                                                    <input id="ya" class="form-check-input" type="radio"
+                                                        name="is_denda" value="1">
+                                                    <label for="ya" class="form-check-label">Ya</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input id="tidak" class="form-check-input" type="radio"
+                                                        name="is_denda" value="0">
+                                                    <label for="tidak" class="form-check-label">Tidak</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="mb-3">
                                             <label class="form-label">Tanggal Surat</label>
                                             <input type="date" name="tanggal_mulai[]"

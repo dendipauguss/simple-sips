@@ -7,25 +7,33 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Services\OneDriveService;
 use Illuminate\Support\Str;
+use App\Models\Files;
 
 class OneDriveController extends Controller
 {
+
+    public function index()
+    {
+        return view('welcome', [
+            'files' => Files::all()
+        ]);
+    }
     /* ===========================
      * 1. Redirect ke Microsoft
      * =========================== */
     public function redirect()
     {
         $query = http_build_query([
-            'client_id'     => env('MS_CLIENT_ID'),
+            'client_id'     => env('ONEDRIVE_CLIENT_ID'),
             'response_type' => 'code',
-            'redirect_uri'  => env('MS_REDIRECT_URI'),
+            'redirect_uri'  => env('ONEDRIVE_REDIRECT_URI'),
             'response_mode' => 'query',
             'scope'         => 'openid profile offline_access https://graph.microsoft.com/Files.ReadWrite',
             'state'         => csrf_token(),
         ]);
 
         return redirect(
-            "https://login.microsoftonline.com/" . env('MS_TENANT_ID') . "/oauth2/v2.0/authorize?$query"
+            "https://login.microsoftonline.com/" . env('ONEDRIVE_TENANT_ID') . "/oauth2/v2.0/authorize?$query"
         );
     }
 
@@ -35,13 +43,13 @@ class OneDriveController extends Controller
     public function callback(Request $request)
     {
         $response = Http::asForm()->post(
-            "https://login.microsoftonline.com/" . env('MS_TENANT_ID') . "/oauth2/v2.0/token",
+            "https://login.microsoftonline.com/" . env('ONEDRIVE_TENANT_ID') . "/oauth2/v2.0/token",
             [
-                'client_id'     => env('MS_CLIENT_ID'),
-                'client_secret' => env('MS_CLIENT_SECRET'),
+                'client_id'     => env('ONEDRIVE_CLIENT_ID'),
+                'client_secret' => env('ONEDRIVE_CLIENT_SECRET'),
                 'grant_type'    => 'authorization_code',
                 'code'          => $request->code,
-                'redirect_uri'  => env('MS_REDIRECT_URI'),
+                'redirect_uri'  => env('ONEDRIVE_REDIRECT_URI'),
             ]
         );
 
@@ -70,6 +78,7 @@ class OneDriveController extends Controller
      * =========================== */
     public function upload(Request $request)
     {
+
         $request->validate([
             'dokumen' => 'required|file|max:10240'
         ]);
@@ -77,15 +86,21 @@ class OneDriveController extends Controller
         $accessToken = $this->getAccessToken(auth()->id());
 
         $file = $request->file('dokumen');
-        $path = '/SIPS/' . time() . '_' . $file->getClientOriginalName();
+        $path = '/SIOMES Files/' . time() . '_' . $file->getClientOriginalName();
 
-        $response = Http::withToken($accessToken)->put(
-            "https://graph.microsoft.com/v1.0/me/drive/root:$path:/content",
-            file_get_contents($file)
-        );
+        $response = Http::withToken($accessToken)
+            ->withBody(
+                file_get_contents($file),
+                'application/octet-stream'
+            )
+            ->put("https://graph.microsoft.com/v1.0/me/drive/root:$path:/content");
 
         if (!$response->successful()) {
-            return back()->withErrors($response->json());
+            $error = $response->json();
+
+            return back()->withErrors([
+                'onedrive' => $error['error']['message'] ?? 'Upload ke OneDrive gagal'
+            ]);
         }
 
         return back()->with('success', 'Upload ke OneDrive berhasil');
@@ -103,10 +118,10 @@ class OneDriveController extends Controller
         }
 
         $response = Http::asForm()->post(
-            "https://login.microsoftonline.com/" . env('MS_TENANT_ID') . "/oauth2/v2.0/token",
+            "https://login.microsoftonline.com/" . env('ONEDRIVE_TENANT_ID') . "/oauth2/v2.0/token",
             [
-                'client_id'     => env('MS_CLIENT_ID'),
-                'client_secret' => env('MS_CLIENT_SECRET'),
+                'client_id'     => env('ONEDRIVE_CLIENT_ID'),
+                'client_secret' => env('ONEDRIVE_CLIENT_SECRET'),
                 'grant_type'    => 'refresh_token',
                 'refresh_token' => $token->refresh_token,
                 'scope'         => 'https://graph.microsoft.com/.default',

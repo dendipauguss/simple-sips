@@ -82,7 +82,7 @@ class PengenaanSPController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, OneDriveService $oneDrive)
     {
 
         $validated = $request->validate([
@@ -116,7 +116,7 @@ class PengenaanSPController extends Controller
 
         // dd($request);
 
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request, $oneDrive) {
             // Simpan Nota Dinas
             $nota_dinas = NotaDinas::create([
                 'no_nota_dinas' => $request->no_nota_dinas,
@@ -132,6 +132,13 @@ class PengenaanSPController extends Controller
 
             $folderPath = "{$base}/{$dasar}/{$tahun}/{$noNota}";
 
+            // $this->uploadFilesToOneDrive(
+            //     $request->file('nota_dinas_file'),
+            //     'nota_dinas',
+            //     $nota_dinas->id,
+            //     'surat',
+            //     $oneDrive
+            // );
             $this->uploadFileToGDrive(
                 $request->file('nota_dinas_file'),
                 'nota_dinas',
@@ -176,6 +183,7 @@ class PengenaanSPController extends Controller
                     'user_id' => auth()->id(),
                 ]);
 
+                // $this->uploadFilesToOneDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $oneDrive);
                 $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $folderPath);
             }
 
