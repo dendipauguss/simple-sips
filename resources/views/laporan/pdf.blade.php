@@ -402,7 +402,9 @@
                     PBK, Pasar Fisik, SRG dan PLK<br>
                     serta Entitas PBK Ilegal,
                     <br>
-                    @if ($laporan->status_persetujuan == 'setuju')
+                    @if ($laporan->status_persetujuan == 'pending')
+                        <br><br><br><br>
+                    @else
                         @if (!empty($qrBase64))
                             <div style="text-align:center; margin-top:20px;">
                                 <img src="data:image/png;base64,{{ $qrBase64 }}" height="65">
@@ -411,14 +413,12 @@
                                 </p>
                             </div>
                         @endif
-                    @else
-                        <br><br><br><br>
                     @endif
                     <br>
                     <div style="text-align: center;">
                         <strong><u>{{ $laporan->user->nama ?? 'Ketua Tim Belum Validasi' }}</u></strong><br>
                     </div>
-                    NIP. 19xxxxxxxxxxxx
+                    {{-- NIP. 19xxxxxxxxxxxx --}}
                 </td>
             </tr>
         </table>

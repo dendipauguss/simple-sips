@@ -164,7 +164,6 @@ class LaporanController extends Controller
             'catatan' => 'nullable|string'
         ]);
 
-        dd($request);
         if (auth()->user()->role != 'ketua_tim') {
             abort(403, 'Anda tidak memiliki akses (Hanya Ketua Tim).');
         }
