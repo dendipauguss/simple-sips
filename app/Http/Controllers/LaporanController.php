@@ -20,7 +20,7 @@ class LaporanController extends Controller
     public function index()
     {
         return view('laporan.index', [
-            'title' => 'Data Laporan Pengenaan Sanksi',
+            'title' => 'Laporan Pengenaan Sanksi',
             'laporan' => Laporan::orderBy('tahun', 'desc')
                 ->orderBy('bulan', 'desc')
                 ->get()
@@ -32,17 +32,23 @@ class LaporanController extends Controller
         $request->validate([
             'bulan' => 'nullable|integer|min:1|max:12',
             'tahun' => 'nullable|integer|min:2000',
-            'perusahaan_id' => 'nullable|exists:pelaku_usaha,id'
+            'perusahaan_id' => 'nullable|exists:pelaku_usaha,id',
+            'status_surat' => 'nullable|in:sudah_ditanggapi,belum_ditanggapi',
         ]);
 
         $bulan = $request->bulan;   // 0 = Semua Bulan
         $tahun = $request->tahun;   // 0 = Semua Tahun
         $perusahaan_id = $request->perusahaan_id;
+        $status_surat = $request->status_surat;
 
         // Cek duplikasi hanya jika bulan & tahun spesifik
+        if (!$bulan && !$tahun && !$perusahaan_id && !$status_surat) {
+            return back()->with('error', 'Pilih minimal satu filter.');
+        }
         // Cek duplikasi laporan
         $exists = Laporan::where('bulan', $bulan)
             ->where('tahun', $tahun)
+            ->where('status_surat', $status_surat)
             ->when(
                 $perusahaan_id,
                 fn($q) =>
@@ -60,6 +66,7 @@ class LaporanController extends Controller
         if ($bulan) $query->whereMonth('tanggal_mulai', $bulan);
         if ($tahun) $query->whereYear('tanggal_mulai', $tahun);
         if ($perusahaan_id) $query->where('pelaku_usaha_id', $perusahaan_id);
+        if ($status_surat) $query->where('status_surat', $status_surat);
 
         $data = $query->get();
 
@@ -71,7 +78,8 @@ class LaporanController extends Controller
         $laporan = Laporan::create([
             'bulan' => $bulan,
             'tahun' => $tahun,
-            'pelaku_usaha_id' => $perusahaan_id
+            'pelaku_usaha_id' => $perusahaan_id,
+            'status_surat' => $status_surat
         ]);
 
         foreach ($data as $sp) {

@@ -36,6 +36,19 @@
                                             @endforeach
                                         </select>
                                     </div>
+
+                                    {{-- <div class="col-md-3">
+                                        <select name="status_surat" class="form-select">
+                                            <option value="">Semua Status</option>
+                                            <option value="sudah_ditanggapi">
+                                                Sudah Ditanggapi
+                                            </option>
+                                            <option value="belum_ditanggapi">
+                                                Belum Ditanggapi
+                                            </option>
+                                        </select>
+                                    </div> --}}
+
                                     <div class="col-sm-3">
                                         <div class="input-group">
                                             <button class="btn btn-primary ms-1">Generate Laporan</button>
@@ -49,6 +62,21 @@
                                 </div>
                             </form>
 
+                            <form method="GET" action="{{ route('pengenaan-sp.index') }}" class="d-flex gap-2 mt-2">
+                                <div class="col-sm-3">
+                                    <select name="status" class="form-select" onchange="this.form.submit()">
+                                        <option value="">Semua Status</option>
+                                        <option value="sudah_ditanggapi"
+                                            {{ request('status') == 'sudah_ditanggapi' ? 'selected' : '' }}>
+                                            Sudah Ditanggapi
+                                        </option>
+                                        <option value="belum_ditanggapi"
+                                            {{ request('status') == 'belum_ditanggapi' ? 'selected' : '' }}>
+                                            Belum Ditanggapi
+                                        </option>
+                                    </select>
+                                </div>
+                            </form>
                             {{-- <div class="row row-cols-md-auto">
                                 <div class="input-group ms-2">
                                     <a href="{{ route('laporan.generate', request()->all()) }}"

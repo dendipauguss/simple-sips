@@ -619,12 +619,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     },
                     tooltip: {
-                        position: "nearest"
+                        position: "average"
                     }
                 },
                 interaction: {
                     mode: "index",
-                    intersect: false
+                    intersect: true
                 },
                 scales: {
                     x: {
@@ -692,12 +692,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     },
                     tooltip: {
-                        position: "nearest"
+                        position: "average"
                     }
                 },
                 interaction: {
                     mode: "index",
-                    intersect: false
+                    intersect: true
                 },
                 scales: {
                     x: {

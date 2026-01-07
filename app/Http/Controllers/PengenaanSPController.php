@@ -34,7 +34,14 @@ class PengenaanSPController extends Controller
 {
     public function index(Request $request)
     {
+
         $query = PengenaanSP::query();
+
+        $status = $request->status;
+
+        if ($status) {
+            $query->where('status_surat', $status);
+        }
 
         $bulanList = PengenaanSP::selectRaw('MONTH(tanggal_mulai) as bulan')
             ->groupBy('bulan')
@@ -54,8 +61,9 @@ class PengenaanSPController extends Controller
             ->orderBy('nama')
             ->get();
 
+
         return view('pengenaan_sp.index', [
-            'title' => 'Pengenaan Sanksi',
+            'title' => 'Monitoring Pengenaan Sanksi',
             'pengenaan_sp' => $pengenaan_sp,
             'bulanList' => $bulanList,
             'tahunList' => $tahunList,
