@@ -11,12 +11,6 @@
                         <div class="card-body py-4">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex">
-                                    <strong class="me-5" style="width: 150px;">Dokumen SP</strong>
-                                    <span>:
-                                        <a href="{{ $sp->file->url_path }}" class="text-decoration-none"
-                                            target="_blank">{{ $sp->file->original_name }}</a></span>
-                                </li>
-                                <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">No Surat</strong>
                                     <span>:
                                         {{ $sp->no_surat }}</span>
@@ -82,7 +76,6 @@
                                                                     class="psi-trash text-danger"></i>]</button>
                                                         </form>
                                                     </div>
-                                                    <br>
                                                 @endif
                                             @endforeach
                                         @else
@@ -111,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl">
+                <div class="col-xl-5">
                     <div class="card h-100">
                         <div class="card-body py-4">
                             @if (isset($sp->file))
@@ -122,8 +115,9 @@
                                                 target="_blank">{{ $sp->file->original_name }}</a></span>
                                     </li>
                                 </ul>
-                                <iframe src="https://drive.google.com/file/d/{{ $sp->file->goggle_file_id }}/preview"
-                                    frameborder="0" width="100%" height="600px"></iframe>
+                                <iframe
+                                    src="https://drive.google.com/file/d/{{ $sp->file->google_file_id }}/preview?usp=sharing"
+                                    frameborder="0" width="100%" height="600px" allowfullscreen></iframe>
                             @endif
                         </div>
                     </div>
@@ -137,6 +131,10 @@
             <form action="{{ route('pengenaan-sp.upload-dokumen') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="pengenaan_sp_id" id="pengenaan_sp_id">
+                <input type="hidden" name="dasar_pengenaan_sanksi_id"
+                    value="{{ $sp->nota_dinas->dasar_pengenaan_sanksi_id }}">
+                <input type="hidden" name="tanggal_nota_dinas" value="{{ $sp->nota_dinas->tanggal_nota_dinas }}">
+                <input type="hidden" name="no_nota_dinas" value="{{ $sp->nota_dinas->no_nota_dinas }}">
 
                 <div class="modal-content">
                     <div class="modal-header">

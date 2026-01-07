@@ -13,6 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Carbon\Carbon;
 use Yaza\LaravelGoogleDriveStorage\Gdrive;
+use Illuminate\Support\Facades\Response;
 use App\Services\OneDriveService;
 use App\Services\GoogleDriveService;
 use App\Exports\PengenaanSPExport;
@@ -133,12 +134,15 @@ class PengenaanSPController extends Controller
 
             $folderPath = "{$base}/{$tahun}/{$dasar}/{$noNota}";
 
+            $filename = "ND-{$noNota}";
+
             $this->uploadFileToGDrive(
                 $request->file('nota_dinas_file'),
                 'nota_dinas',
                 $nota_dinas->id,
                 'surat',
-                $folderPath
+                $folderPath,
+                $filename
             );
             // dd(
             //     $request->no_surat,
@@ -160,7 +164,9 @@ class PengenaanSPController extends Controller
                     'user_id' => auth()->id(),
                 ]);
 
-                $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $folderPath);
+                $filename = "SP-{$this->sanitizeFolderName($sp->no_surat)}";
+
+                $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $folderPath, $filename);
             }
 
             // ---- 3. Update no_sp dengan bulan/tahun ----
@@ -243,23 +249,35 @@ class PengenaanSPController extends Controller
         ]);
     }
 
-    public function uploadDokumen(Request $request)
+    public function uploadDokumenTanggapan(Request $request)
     {
         // dd($request);
         $request->validate([
             'pengenaan_sp_id' => 'required|exists:pengenaan_sp,id',
             'tanggapan' => 'required|string',
             'lampiran.*'    => 'nullable|file|max:5120', // 5 MB
+            'dasar_pengenaan_sanksi_id' => 'required|integer',
+            'tanggal_nota_dinas' => 'required|date',
+            'no_nota_dinas' => 'required|string'
         ], [
             'pengenaan_sp_id.required' => 'ID tidak ditemukan',
             'tanggapan.required' => 'Tidak boleh kosong kakak'
         ]);
 
+        $dasar = DasarPengenaanSanksi::find($request->dasar_pengenaan_sanksi_id)->nama;
+        $tahun = \Carbon\Carbon::parse($request->tanggal_nota_dinas)->format('Y');
+        $noNota = $this->sanitizeFolderName($request->no_nota_dinas);
+
+        $base = config('filesystems.disks.google.root'); // env('GOOGLE_DRIVE_FOLDER')
+        $folderPath = "{$base}/{$tahun}/{$dasar}/{$noNota}";
+        $pengenaan_sp = PengenaanSP::findOrFail($request->pengenaan_sp_id);
+
+        $filename = "TANGGAPAN-SP-{$this->sanitizeFolderName($pengenaan_sp->no_surat)}";
+
         // Panggil fungsi upload file yang sudah kamu buat sebelumnya
         if (!empty($request->lampiran)) {
-            $this->uploadFile($request->lampiran, 'pengenaan_sp', $request->pengenaan_sp_id, 'bebas');
+            $this->uploadFileToGDrive($request->lampiran, 'pengenaan_sp', $request->pengenaan_sp_id, 'bebas', $folderPath, $filename);
         }
-        $pengenaan_sp = PengenaanSP::findOrFail($request->pengenaan_sp_id);
         $pengenaan_sp->tanggapan = $request->tanggapan;
         $pengenaan_sp->status_surat = 'sudah_ditanggapi';
         $pengenaan_sp->save();
@@ -345,7 +363,7 @@ class PengenaanSPController extends Controller
         }
     }
 
-    private function uploadFileToGDrive(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen, string $folderPath)
+    private function uploadFileToGDrive(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen, string $folderPath, string $filenamed)
     {
         if (!$files) return;
 
@@ -353,13 +371,16 @@ class PengenaanSPController extends Controller
             $files = [$files];
         }
 
+        // 🔑 HITUNG FILE YANG SUDAH ADA
+        $no = Files::where('table_name', $table_name)
+            ->where('table_id', $table_id)
+            ->where('tipe', $tipe_dokumen)
+            ->count() + 1;
+
         foreach ($files as $file) {
 
-            if ($table_name == 'pengenaan_sp') {
-                $filename = 'SP-' . uniqid() . '.' . $file->getClientOriginalExtension();
-            } elseif ($table_name == 'nota_dinas') {
-                $filename = 'ND-' . uniqid() . '.' . $file->getClientOriginalExtension();
-            }
+            $filename = sprintf('%s-%02d.%s', $filenamed, $no++, $file->getClientOriginalExtension());
+
             $fullPath = "{$folderPath}/{$filename}";
 
             // ⬅️ INI YANG PALING PENTING
