@@ -13,8 +13,9 @@ use App\Models\Sanksi;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $tahun = $request->tahun;
         $jenis = JenisPelanggaran::all();
 
         $labels_bar = [];
@@ -40,47 +41,6 @@ class DashboardController extends Controller
         $belum = PengenaanSP::where('status_surat', 'belum_ditanggapi')->count();
         $selesai = PengenaanSP::where('status_surat', 'sudah_ditanggapi')->count();
 
-        $top_pelaku = PelakuUsaha::withCount([
-            'pengenaan_sp as total_sanksi',
-            'pengenaan_sp as sudah_ditanggapi' => function ($query) {
-                $query->where('status_surat', 'sudah_ditanggapi');
-            },
-            'pengenaan_sp as belum_ditanggapi' => function ($query) {
-                $query->where('status_surat', 'belum_ditanggapi');
-            },
-        ])
-            ->orderByDesc('total_sanksi')
-            ->limit(10)
-            ->get();
-
-        $top_jenis_pelaku = JenisPelakuUsaha::withCount([
-            'pengenaan_sp as total_sanksi',
-            'pengenaan_sp as sudah_ditanggapi' => fn($q) =>
-            $q->where('status_surat', 'sudah_ditanggapi'),
-            'pengenaan_sp as belum_ditanggapi' => fn($q) =>
-            $q->where('status_surat', 'belum_ditanggapi')
-        ])
-            ->orderByDesc('total_sanksi')
-            ->get()
-            ->map(function ($item) {
-                $item->persen = $item->total_sanksi > 0
-                    ? round(($item->sudah_ditanggapi / $item->total_sanksi) * 100, 1)
-                    : 0;
-                return $item;
-            });
-
-        //     $sanksi_per_periode = DB::table('pengenaan_sp')
-        //         ->selectRaw("
-        //     DATE_FORMAT(tanggal_mulai, '%b %Y') as periode,
-        //     SUM(CASE WHEN status_surat = 'sudah_ditanggapi' THEN 1 ELSE 0 END) as sudah,
-        //     SUM(CASE WHEN status_surat = 'belum_ditanggapi' THEN 1 ELSE 0 END) as belum,
-        //     COUNT(*) as total
-        // ")
-        //         ->whereNotNull('tanggal_mulai')
-        //         ->groupByRaw("YEAR(tanggal_mulai), MONTH(tanggal_mulai)")
-        //         ->orderByRaw("YEAR(tanggal_mulai), MONTH(tanggal_mulai)")
-        //         ->get();
-
         $sanksi_per_periode = DB::table('pengenaan_sp')
             ->select(
                 DB::raw("DATE_FORMAT(tanggal_mulai, '%Y-%m') as periode"),
@@ -88,6 +48,7 @@ class DashboardController extends Controller
                 DB::raw("SUM(status_surat = 'belum_ditanggapi') as belum"),
                 DB::raw("COUNT(*) as total_sanksi")
             )
+            ->when($tahun, fn($q) => $q->whereYear('tanggal_mulai', $tahun))
             ->groupBy('periode')
             ->orderBy('periode')
             ->get()
@@ -98,29 +59,109 @@ class DashboardController extends Controller
                 return $row;
             });
 
-        $sanksi_per_pelanggaran = JenisPelanggaran::withCount('pengenaan_sp')
+        $top_jenis_pelaku = JenisPelakuUsaha::withCount([
+            'pengenaan_sp as total_sanksi' => fn($q) =>
+            $q->when(
+                $tahun,
+                fn($qq) =>
+                $qq->whereYear('tanggal_mulai', $tahun)
+            ),
+            'pengenaan_sp as sudah_ditanggapi' => fn($q) =>
+            $q->where('status_surat', 'sudah_ditanggapi')
+                ->when(
+                    $tahun,
+                    fn($qq) =>
+                    $qq->whereYear('tanggal_mulai', $tahun)
+                ),
+            'pengenaan_sp as belum_ditanggapi' => fn($q) =>
+            $q->where('status_surat', 'belum_ditanggapi')
+                ->when(
+                    $tahun,
+                    fn($qq) =>
+                    $qq->whereYear('tanggal_mulai', $tahun)
+                )
+        ])
+            ->orderByDesc('total_sanksi')
+            ->get()
+            ->map(function ($item) {
+                $item->persen = $item->total_sanksi > 0
+                    ? round(($item->sudah_ditanggapi / $item->total_sanksi) * 100, 1)
+                    : 0;
+                return $item;
+            });
+
+        $sanksi_per_bentuk = Sanksi::withCount([
+            'pengenaan_sp' => fn($q) =>
+            $q->when($tahun, fn($qq) => $qq->whereYear('tanggal_mulai', $tahun))
+        ])
             ->orderByDesc('pengenaan_sp_count')
             ->get();
 
-        $sanksi_per_bentuk = Sanksi::withCount('pengenaan_sp')
+        $sanksi_per_pelanggaran = JenisPelanggaran::withCount([
+            'pengenaan_sp' => fn($q) =>
+            $q->when($tahun, fn($qq) => $qq->whereYear('tanggal_mulai', $tahun))
+        ])
             ->orderByDesc('pengenaan_sp_count')
             ->get();
 
+        $top_pelaku = PelakuUsaha::withCount([
+            'pengenaan_sp as total_sanksi' => fn($q) =>
+            $q->when(
+                $tahun,
+                fn($qq) =>
+                $qq->whereYear('tanggal_mulai', $tahun)
+            ),
+            'pengenaan_sp as sudah_ditanggapi' => fn($q) =>
+            $q->where('status_surat', 'sudah_ditanggapi')
+                ->when(
+                    $tahun,
+                    fn($qq) =>
+                    $qq->whereYear('tanggal_mulai', $tahun)
+                ),
+            'pengenaan_sp as belum_ditanggapi' => fn($q) =>
+            $q->where('status_surat', 'belum_ditanggapi')
+                ->when(
+                    $tahun,
+                    fn($qq) =>
+                    $qq->whereYear('tanggal_mulai', $tahun)
+                )
+        ])
+            ->orderByDesc('total_sanksi')
+            ->limit(10)
+            ->get();
 
         $top_jenis_pelaku_bar = JenisPelakuUsaha::withCount([
-            'pengenaan_sp as total_sanksi',
-            'pengenaan_sp as sudah_ditanggapi' => function ($query) {
-                $query->where('status_surat', 'sudah_ditanggapi');
-            },
-            'pengenaan_sp as belum_ditanggapi' => function ($query) {
-                $query->where('status_surat', 'belum_ditanggapi');
-            },
+            'pengenaan_sp as total_sanksi' => fn($q) =>
+            $q->when(
+                $tahun,
+                fn($qq) =>
+                $qq->whereYear('tanggal_mulai', $tahun)
+            ),
+            'pengenaan_sp as sudah_ditanggapi' => fn($q) =>
+            $q->where('status_surat', 'sudah_ditanggapi')
+                ->when(
+                    $tahun,
+                    fn($qq) =>
+                    $qq->whereYear('tanggal_mulai', $tahun)
+                ),
+            'pengenaan_sp as belum_ditanggapi' => fn($q) =>
+            $q->where('status_surat', 'belum_ditanggapi')
+                ->when(
+                    $tahun,
+                    fn($qq) =>
+                    $qq->whereYear('tanggal_mulai', $tahun)
+                )
         ])
             ->orderByDesc('total_sanksi')
             ->limit(10)
             ->get();
 
         $total_sanksi = $top_jenis_pelaku->sum('total_sanksi');
+
+        $tahunList = PengenaanSP::selectRaw('YEAR(tanggal_mulai) as tahun')
+            ->groupBy('tahun')
+            ->orderByDesc('tahun')
+            ->pluck('tahun');
 
         return view('dashboard', [
             'title' => 'Dashboard',
@@ -135,7 +176,8 @@ class DashboardController extends Controller
             'total_sanksi' => $total_sanksi,
             'sanksi_per_pelanggaran' => $sanksi_per_pelanggaran,
             'sanksi_per_bentuk' => $sanksi_per_bentuk,
-            'top_jenis_pelaku_bar' => $top_jenis_pelaku_bar
+            'top_jenis_pelaku_bar' => $top_jenis_pelaku_bar,
+            'tahun_list' => $tahunList
         ]);
     }
 

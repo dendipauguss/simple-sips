@@ -466,7 +466,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // }    
 
     const sanksiPerBentukCanvas = document.getElementById("sanksi_per_bentuk_chart");
-
     if (sanksiPerBentukCanvas) {
         const labels = JSON.parse(sanksiPerBentukCanvas.dataset.labels);
         const values = JSON.parse(sanksiPerBentukCanvas.dataset.values);
@@ -580,7 +579,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const topPelakuCanvas = document.getElementById("top_pelaku_chart");
-
     if (topPelakuCanvas) {
         const labels = JSON.parse(topPelakuCanvas.dataset.labels);
         const sudah = JSON.parse(topPelakuCanvas.dataset.sudah);
@@ -654,7 +652,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const topJenisPelakuCanvas = document.getElementById("top_jenis_pelaku_chart");
-
     if (topJenisPelakuCanvas) {
         const labels = JSON.parse(topJenisPelakuCanvas.dataset.labels);
         const sudah = JSON.parse(topJenisPelakuCanvas.dataset.sudah);

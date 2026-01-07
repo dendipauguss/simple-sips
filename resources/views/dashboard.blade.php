@@ -44,6 +44,19 @@
                         </div>
                     </div> --}}
 
+                    <div class="card-body">
+                        <div class="col-sm-3 ms-auto card text-dark text-center">
+                            <form action="" method="get" id="filter_tahun">
+                                <select name="tahun" class="form-select" onchange="this.form.submit()">
+                                    <option value="">Semua Tahun</option>
+                                    @foreach ($tahun_list as $t)
+                                        <option value="{{ $t }}" {{ request('tahun') == $t ? 'selected' : '' }}>
+                                            {{ $t }}</option>
+                                    @endforeach
+                                </select>
+                            </form>
+                        </div>
+                    </div>
                     <div class="card mb-2 text-dark text-center">
                         <div class="card-body">
                             <h5 class="card-title">Trend Pengenaan Sanksi Tiap Bulan</h5>
