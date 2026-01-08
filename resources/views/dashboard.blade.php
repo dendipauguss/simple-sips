@@ -58,7 +58,7 @@
                         </div> --}}
                         <div class="ms-auto">
                             <form action="" method="GET" id="filter_tahun">
-                                <div class="input-group">
+                                <div class="btn-group">
                                     <button name="tahun" value=""
                                         class="btn btn-outline-light {{ request('tahun') == '' ? 'active' : '' }}">Semua
                                         Tahun</button>
