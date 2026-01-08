@@ -26,7 +26,7 @@
                         <div class="card-body mt-1">
                             <div class="table-responsive">
                                 <table class="table table-hover table-sm" id="dataTables">
-                                    <thead class="table-light">
+                                    <thead class="table-dark">
                                         <tr>
                                             <th style="width: 5%">No</th>
                                             <th>Perusahaan</th>

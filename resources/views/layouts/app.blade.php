@@ -20,10 +20,21 @@
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&amp;family=Ubuntu:wght@400;500;700&amp;display=swap"
             rel="stylesheet">
         <!-- Bootstrap CSS [ REQUIRED ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/bootstrap.min.css">
+        {{-- <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/bootstrap.min.css">
 
         <!-- Nifty CSS [ REQUIRED ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/nifty.min.css">
+        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/nifty.min.css"> --}}
+
+        <!-- Bootstrap CSS [ REQUIRED ] -->
+        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/navy/bootstrap.min.css">
+
+        <!-- Nifty CSS [ REQUIRED ] -->
+        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/navy/nifty.min.css">
+
+        <!-- Nifty Color Schemes -->
+        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/dark/nifty.min.css">
+
+        {{-- <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/brand/night/nifty.min.css"> --}}
 
         <!-- Nifty Premium Line Icons [ OPTIONAL ] -->
         <link rel="stylesheet"
@@ -130,16 +141,18 @@
         <script src="{{ env('JQUERY_LINK') }}/jquery-3.7.1.min.js"></script>
     </head>
 
-    <body class="jumping">
+    <body class="jumping {{ request()->is('dashboard') ? 'centered-layout' : '' }}">
 
         <!-- PAGE CONTAINER -->
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <div id="root" class="root hd--expanded mn--min mn--sticky">
+        <div id="root"
+            class="root hd--expanded {{ request()->is('dashboard') ? 'mn--slide' : 'mn--min' }} mn--sticky {{ request()->is('pengenaan-sp/create') ? '' : 'hd--sticky' }}">
 
             <!-- CONTENTS -->
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
             <section id="content" class="content">
-                <div class="content__header content__boxed overlapping">
+                <div
+                    class="content__header content__boxed {{ request()->is('dashboard') ? 'rounded-0' : 'overlapping' }}">
                     <div class="content__wrap">
 
                         <!-- Page title and information -->

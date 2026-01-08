@@ -22,11 +22,11 @@
                         <div class="card-body py-0">
                             <div class="table-responsive">
                                 <table class="table table-hover" id="dataTables">
-                                    <thead class="table-primary">
+                                    <thead class="table-dark">
                                         <tr>
-                                            <th class="text-dark text-center" style="width: 5%;">No</th>
-                                            <th class="text-dark text-center">Kategori Pelaku Usaha</th>
-                                            <th class="text-dark text-center" style="width: 15%;">Aksi</th>
+                                            <th class="text-center" style="width: 5%;">No</th>
+                                            <th class="text-center">Kategori Pelaku Usaha</th>
+                                            <th class="text-center" style="width: 15%;">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>

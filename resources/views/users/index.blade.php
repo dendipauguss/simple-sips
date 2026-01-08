@@ -21,14 +21,14 @@
                         <div class="card-body py-0">
                             <div class="table-responsive">
                                 <table class="table table-hover" id="dataTables">
-                                    <thead class="table-primary">
+                                    <thead class="table-dark">
                                         <tr>
-                                            <th class="text-dark text-center" style="width: 5%;">No</th>
-                                            <th class="text-dark text-center">Nama</th>
-                                            <th class="text-dark text-center">Email</th>
-                                            <th class="text-dark text-center">Username</th>
-                                            <th class="text-dark text-center">Role</th>
-                                            <th class="text-dark text-center" style="width: 15%;">Aksi</th>
+                                            <th class="text-center" style="width: 5%;">No</th>
+                                            <th class="text-center">Nama</th>
+                                            <th class="text-center">Email</th>
+                                            <th class="text-center">Username</th>
+                                            <th class="text-center">Role</th>
+                                            <th class="text-center" style="width: 15%;">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>

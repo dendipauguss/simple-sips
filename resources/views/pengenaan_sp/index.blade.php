@@ -62,7 +62,7 @@
                                 </div>
                             </form>
 
-                            <form method="GET" action="{{ route('pengenaan-sp.index') }}" class="d-flex gap-2 mt-2">
+                            <form method="GET" action="{{ route('pengenaan-sp.index') }}" class="d-flex gap-3 mt-2">
                                 <div class="col-sm-3">
                                     <select name="status" class="form-select" onchange="this.form.submit()">
                                         <option value="">Semua Status</option>

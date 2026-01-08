@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="content__boxed">
+    <div class="content__header content__boxed rounded-0">
         <div class="content__wrap">
             <div class="row justify-content-between">
                 <div class="col-xl-12">
@@ -44,8 +44,8 @@
                         </div>
                     </div> --}}
 
-                    <div class="card-body">
-                        <div class="col-sm-3 ms-auto card text-dark text-center">
+                    <div class="card mb-2 text-white text-center bg-transparent shadow-none">
+                        {{-- <div class="col-sm-3 ms-auto card text-dark text-center mb-2">
                             <form action="" method="get" id="filter_tahun">
                                 <select name="tahun" class="form-select" onchange="this.form.submit()">
                                     <option value="">Semua Tahun</option>
@@ -55,9 +55,23 @@
                                     @endforeach
                                 </select>
                             </form>
+                        </div> --}}
+                        <div class="ms-auto">
+                            <form action="" method="GET" id="filter_tahun">
+                                <div class="input-group">
+                                    <button name="tahun" value=""
+                                        class="btn btn-outline-light {{ request('tahun') == '' ? 'active' : '' }}">Semua
+                                        Tahun</button>
+                                    @foreach ($tahun_list as $t)
+                                        <button name="tahun" value="{{ $t }}"
+                                            class="btn btn-outline-light {{ request('tahun') == $t ? 'active' : '' }}"
+                                            type="submit">{{ $t }}</button>
+                                    @endforeach
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="card mb-2 text-dark text-center">
+                    <div class="card mb-2 text-white text-center bg-transparent shadow-none">
                         <div class="card-body">
                             <h5 class="card-title">Trend Pengenaan Sanksi Tiap Bulan</h5>
                             <!-- Stacked chart -->
@@ -69,28 +83,27 @@
                     </div>
                 </div>
                 <div class="col-xl-12">
-                    <div class="card mb-2 text-center">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
                         <div class="card-body">
                             <h5 class="card-title">Persentase Kategori Pelaku Usaha Penerima Sanksi</h5>
-                            <div class="row g-5">
+                            <div class="row gap-1 justify-content-evenly">
                                 @foreach ($top_jenis_pelaku as $i => $item)
-                                    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                        <div class="card mb-3 mb-md-3 shadow-none bg-transparent">
-                                            <div class="card-body text-center d-flex flex-column align-items-center">
-                                                <div style="width: 150px; height: 120px;" class="mb-1">
+                                    <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 px-1">
+                                        <div class="card bg-transparent shadow-none">
+                                            <div class="card-body p-2 text-center d-flex flex-column align-items-center">
+                                                <div style="width: 170px; height: 170px;">
                                                     <canvas class="donut-mini" id="donut-{{ $i }}"
                                                         data-persen="{{ $item->persen }}" data-nama="{{ $item->nama }}">
                                                     </canvas>
                                                 </div>
-
-                                                <div class="badge bg-success d-flex justify-content-between mb-1">
+                                                {{-- <div class="badge bg-success d-flex justify-content-between mb-1">
                                                     <span>Sudah Ditanggapi</span>
                                                     <span class="text-dark">{{ $item->sudah_ditanggapi }}</span>
                                                 </div>
                                                 <div class="badge bg-danger d-flex justify-content-between mb-1">
                                                     <span>Belum Ditanggapi</span>
                                                     <span class="text-dark">{{ $item->belum_ditanggapi }}</span>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -99,8 +112,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3">
-                    <div class="card mb-2 text-center">
+                <div class="col-xl-6">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
                         <div class="card-body">
                             <h5 class="card-title">Total Sanksi Per Bentuk Sanksi</h5>
                             <!-- Status Chart -->
@@ -112,8 +125,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3">
-                    <div class="card mb-2 text-center">
+                <div class="col-xl-6">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
                         <div class="card-body">
                             <h5 class="card-title">Total Sanksi Per Pelanggaran</h5>
                             <!-- Status Chart -->
@@ -125,8 +138,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3">
-                    <div class="card mb-2 text-center">
+                <div class="col-xl-6">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
                         <div class="card-body">
                             <h5 class="card-title">Top 10 Perusahaan Penerima Sanksi</h5>
                             <div style="height: 300px">
@@ -137,8 +150,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3">
-                    <div class="card mb-2 text-center">
+                <div class="col-xl-6">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
                         <div class="card-body">
                             <h5 class="card-title">Kategori Pelaku Usaha Penerima Sanksi</h5>
                             <div style="height: 300px">

@@ -15,7 +15,7 @@
                         <div class="card-body py-0">
                             <div class="table-responsive">
                                 <table class="table table-striped" id="dataTables">
-                                    <thead>
+                                    <thead class="table-dark">
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>

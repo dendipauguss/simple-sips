@@ -22,8 +22,9 @@
                                 <div class="col-12">
                                     {{-- <input type="date" class="form-control" id="tanggal_selesai" name="end"
                                         value="{{ request('end') }}"> --}}
-                                    <select name="jenis_pelaku_usaha" id="jenis_pelaku_usaha" class="form-select">
-                                        <option>-- Jenis Pelaku Usaha --</option>
+                                    <select name="jenis_pelaku_usaha" id="jenis_pelaku_usaha" class="form-select"
+                                        onchange="this.form.submit()">
+                                        <option value="">-- Semua Pelaku Usaha --</option>
                                         @foreach ($jenis_pelaku_usaha as $jp)
                                             <option value="{{ $jp->id }}"
                                                 {{ request('jenis_pelaku_usaha') == $jp->id ? 'selected' : '' }}>
@@ -31,21 +32,21 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-12">
+                                {{-- <div class="col-12">
                                     <button type="submit" class="btn btn-sm btn-primary">Filter</button>
                                     <a href="{{ url('pengaturan/pelaku-usaha') }}" class="btn btn-sm btn-light">Reset</a>
-                                </div>
+                                </div> --}}
                             </form>
                         </div>
                         <div class="card-body py-0">
                             <div class="table-responsive">
                                 <table class="table table-hover" id="dataTables">
-                                    <thead class="table-primary">
+                                    <thead class="table-dark">
                                         <tr>
-                                            <th class="text-dark text-center">No</th>
-                                            <th class="text-dark text-center">Nama Pelaku Usaha</th>
-                                            <th class="text-dark text-center">Jenis Pelaku Usaha</th>
-                                            <th class="text-dark text-center" style="width: 15%;">Aksi</th>
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">Nama Pelaku Usaha</th>
+                                            <th class="text-center">Jenis Pelaku Usaha</th>
+                                            <th class="text-center" style="width: 15%;">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>

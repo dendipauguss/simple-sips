@@ -113,6 +113,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const sanksiPerBulanCanvas = document.getElementById("sanksi_per_bulan_chart");
     if (sanksiPerBulanCanvas) {
         const stackData = JSON.parse(sanksiPerBulanCanvas.dataset.stack);
+        const ctx = sanksiPerBulanCanvas.getContext("2d");
+
+        // Gradient hijau
+        const gradientSuccess = ctx.createLinearGradient(0, 0, 0, sanksiPerBulanCanvas.height);
+        gradientSuccess.addColorStop(0, successColor);
+        gradientSuccess.addColorStop(1, "rgba(159, 204, 46, 0.05)");
+
         const stackChart = new Chart(sanksiPerBulanCanvas, {
             type: "line",
             data: {
@@ -120,8 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     {
                         label: "Sudah Ditanggapi",
                         data: stackData,
+                        borderWidth: 0.5,
                         borderColor: successColor,
-                        backgroundColor: successColor,
+                        backgroundColor: gradientSuccess,
                         // stack: "combined",
                         // type: "line",
                         fill: "start",
@@ -134,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         label: "Total Sanksi",
                         data: stackData,
                         borderWidth: 0.5,
-                        backgroundColor: grayColor,
+                        borderColor: grayColor,
                         // stack: "combined",
                         fill: "start",
                         parsing: {
@@ -153,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         display: true,
                         align: "end",
                         labels: {
-                            color: `#000`,
+                            color: `#fff`,
                             boxWidth: 10,
                         }
                     },
@@ -173,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
                         ticks: {
                             font: { size: 11 },
-                            color: `#000`,
+                            color: `#fff`,
                             beginAtZero: false,
                             stepSize: 100
                         }
@@ -185,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
                         ticks: {
                             font: { size: 11 },
-                            color: `#000`,
+                            color: `#fff`,
                             autoSkip: true,
                             maxRotation: 0,
                             minRotation: 0,
@@ -204,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         hoverRadius: 3
                     },
                     line: {
-                        tension: 0.25
+                        tension: 0.4
                     }
                 }
             }
@@ -465,265 +473,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //     );
     // }    
 
-    const sanksiPerBentukCanvas = document.getElementById("sanksi_per_bentuk_chart");
-    if (sanksiPerBentukCanvas) {
-        const labels = JSON.parse(sanksiPerBentukCanvas.dataset.labels);
-        const values = JSON.parse(sanksiPerBentukCanvas.dataset.values);
-        const bgColors = generateRandomColors(labels.length);
-
-        new Chart(sanksiPerBentukCanvas, {
-            type: "bar",
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: "Total Sanksi",
-                        data: values,
-                        backgroundColor: infoColor,
-                        borderColor: infoColor,
-                        borderWidth: 2
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'x', // 🔥 INI KUNCI MENYAMPING
-                plugins: {
-                    legend: {
-                        display: true,
-                        align: "end",
-                        labels: {
-                            color: `#000`,
-                            boxWidth: 10
-                        }
-                    },
-                    tooltip: {
-                        position: "nearest"
-                    }
-                },
-                interaction: {
-                    mode: "index",
-                    intersect: false
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            color: `rgba(${mutedColorRGB}, .6)`,
-                            borderWidth: 0
-                        },
-                        ticks: {
-                            color: `#000`,
-                            stepSize: 5,
-                            minRotation: 0,
-                            maxRotation: 0
-                        }
-                    },
-                    y: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: `#000`,
-                            font: { size: 11 },
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    const pieCanvasSanksiPerPelanggaran = document.getElementById("sanksi_per_pelanggaran_chart");
-    if (pieCanvasSanksiPerPelanggaran) {
-        const labels = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.labels);
-        const values = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.values);
-        const bgColors = generateRandomColors(labels.length);
-
-        const pieChart = new Chart(
-            pieCanvasSanksiPerPelanggaran, {
-            type: "pie",
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: bgColors,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: "right",
-                        labels: {
-                            color: `#000`,
-                            boxWidth: 10
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (ctx) {
-                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                                const value = ctx.raw;
-                                const percent = ((value / total) * 100).toFixed(1);
-                                return `${ctx.label}: ${value} (${percent}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        );
-    }
-
-    const topPelakuCanvas = document.getElementById("top_pelaku_chart");
-    if (topPelakuCanvas) {
-        const labels = JSON.parse(topPelakuCanvas.dataset.labels);
-        const sudah = JSON.parse(topPelakuCanvas.dataset.sudah);
-        const total = JSON.parse(topPelakuCanvas.dataset.total);
-
-        new Chart(topPelakuCanvas, {
-            type: "bar",
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: "Total Sanksi",
-                        data: total,
-                        backgroundColor: primaryColor,
-                        borderColor: primaryColor,
-                        borderWidth: 2
-                    },
-                    {
-                        label: "Sudah Ditanggapi",
-                        data: sudah,
-                        backgroundColor: successColor,
-                        borderColor: successColor,
-                        borderWidth: 2
-                    },
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y', // 🔥 INI KUNCI MENYAMPING
-                plugins: {
-                    legend: {
-                        display: true,
-                        align: "end",
-                        labels: {
-                            color: `#000`,
-                            boxWidth: 10
-                        }
-                    },
-                    tooltip: {
-                        position: "average"
-                    }
-                },
-                interaction: {
-                    mode: "index",
-                    intersect: true
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            color: `rgba(${mutedColorRGB}, .6)`,
-                            borderWidth: 0
-                        },
-                        ticks: {
-                            color: `#000`,
-                            stepSize: 5,
-                        }
-                    },
-                    y: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: `#000`,
-                            font: { size: 8 },
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    const topJenisPelakuCanvas = document.getElementById("top_jenis_pelaku_chart");
-    if (topJenisPelakuCanvas) {
-        const labels = JSON.parse(topJenisPelakuCanvas.dataset.labels);
-        const sudah = JSON.parse(topJenisPelakuCanvas.dataset.sudah);
-        const total = JSON.parse(topJenisPelakuCanvas.dataset.total);
-
-        new Chart(topJenisPelakuCanvas, {
-            type: "bar",
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: "Total Sanksi",
-                        data: total,
-                        backgroundColor: primaryColor,
-                        borderColor: primaryColor,
-                        borderWidth: 2
-                    },
-                    {
-                        label: "Sudah Ditanggapi",
-                        data: sudah,
-                        backgroundColor: successColor,
-                        borderColor: successColor,
-                        borderWidth: 2
-                    },
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y', // 🔥 INI KUNCI MENYAMPING
-                plugins: {
-                    legend: {
-                        display: true,
-                        align: "end",
-                        labels: {
-                            color: `#000`,
-                            boxWidth: 10
-                        }
-                    },
-                    tooltip: {
-                        position: "average"
-                    }
-                },
-                interaction: {
-                    mode: "index",
-                    intersect: true
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            color: `rgba(${mutedColorRGB}, .6)`,
-                            borderWidth: 0
-                        },
-                        ticks: {
-                            color: `#000`,
-                            stepSize: 5
-                        }
-                    },
-                    y: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: `#000`,
-                            font: { size: 11 }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
     document.querySelectorAll(".donut-mini").forEach((el) => {
         const persen = parseFloat(el.dataset.persen);
         const nama = el.dataset.nama;
@@ -779,7 +528,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     // === NAMA ===
                     ctx.font = "10px sans-serif";
-                    ctx.fillStyle = `rgb(${mutedColorRGB})`;
+                    ctx.fillStyle = `#fff`;
 
                     // potong teks jika kepanjangan
                     const maxWidth = 90;
@@ -792,6 +541,265 @@ document.addEventListener("DOMContentLoaded", () => {
             }]
         });
     });
+
+    const sanksiPerBentukCanvas = document.getElementById("sanksi_per_bentuk_chart");
+    if (sanksiPerBentukCanvas) {
+        const labels = JSON.parse(sanksiPerBentukCanvas.dataset.labels);
+        const values = JSON.parse(sanksiPerBentukCanvas.dataset.values);
+        const bgColors = generateRandomColors(labels.length);
+
+        new Chart(sanksiPerBentukCanvas, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Total Sanksi",
+                        data: values,
+                        backgroundColor: infoColor,
+                        borderColor: infoColor,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'x', // 🔥 INI KUNCI MENYAMPING
+                plugins: {
+                    legend: {
+                        display: true,
+                        align: "end",
+                        labels: {
+                            color: `#fff`,
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: {
+                        position: "nearest"
+                    }
+                },
+                interaction: {
+                    mode: "index",
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: `rgba(${mutedColorRGB}, .6)`,
+                            borderWidth: 0
+                        },
+                        ticks: {
+                            color: `#fff`,
+                            stepSize: 5,
+                            minRotation: 0,
+                            maxRotation: 0
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: `#fff`,
+                            font: { size: 11 },
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const pieCanvasSanksiPerPelanggaran = document.getElementById("sanksi_per_pelanggaran_chart");
+    if (pieCanvasSanksiPerPelanggaran) {
+        const labels = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.labels);
+        const values = JSON.parse(pieCanvasSanksiPerPelanggaran.dataset.values);
+        const bgColors = generateRandomColors(labels.length);
+
+        const pieChart = new Chart(
+            pieCanvasSanksiPerPelanggaran, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: bgColors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: "right",
+                        labels: {
+                            color: `#fff`,
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const value = ctx.raw;
+                                const percent = ((value / total) * 100).toFixed(1);
+                                return `${ctx.label}: ${value} (${percent}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        );
+    }
+
+    const topPelakuCanvas = document.getElementById("top_pelaku_chart");
+    if (topPelakuCanvas) {
+        const labels = JSON.parse(topPelakuCanvas.dataset.labels);
+        const sudah = JSON.parse(topPelakuCanvas.dataset.sudah);
+        const total = JSON.parse(topPelakuCanvas.dataset.total);
+
+        new Chart(topPelakuCanvas, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Total Sanksi",
+                        data: total,
+                        backgroundColor: primaryColor,
+                        borderColor: primaryColor,
+                        borderWidth: 2
+                    },
+                    {
+                        label: "Sudah Ditanggapi",
+                        data: sudah,
+                        backgroundColor: successColor,
+                        borderColor: successColor,
+                        borderWidth: 2
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y', // 🔥 INI KUNCI MENYAMPING
+                plugins: {
+                    legend: {
+                        display: true,
+                        align: "end",
+                        labels: {
+                            color: `#fff`,
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: {
+                        position: "average"
+                    }
+                },
+                interaction: {
+                    mode: "index",
+                    intersect: true
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: `rgba(${mutedColorRGB}, .6)`,
+                            borderWidth: 0
+                        },
+                        ticks: {
+                            color: `#fff`,
+                            stepSize: 5,
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: `#fff`,
+                            font: { size: 8 },
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const topJenisPelakuCanvas = document.getElementById("top_jenis_pelaku_chart");
+    if (topJenisPelakuCanvas) {
+        const labels = JSON.parse(topJenisPelakuCanvas.dataset.labels);
+        const sudah = JSON.parse(topJenisPelakuCanvas.dataset.sudah);
+        const total = JSON.parse(topJenisPelakuCanvas.dataset.total);
+
+        new Chart(topJenisPelakuCanvas, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Total Sanksi",
+                        data: total,
+                        backgroundColor: primaryColor,
+                        borderColor: primaryColor,
+                        borderWidth: 2
+                    },
+                    {
+                        label: "Sudah Ditanggapi",
+                        data: sudah,
+                        backgroundColor: successColor,
+                        borderColor: successColor,
+                        borderWidth: 2
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y', // 🔥 INI KUNCI MENYAMPING
+                plugins: {
+                    legend: {
+                        display: true,
+                        align: "end",
+                        labels: {
+                            color: `#fff`,
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: {
+                        position: "average"
+                    }
+                },
+                interaction: {
+                    mode: "index",
+                    intersect: true
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: `rgba(${mutedColorRGB}, .6)`,
+                            borderWidth: 0
+                        },
+                        ticks: {
+                            color: `#fff`,
+                            stepSize: 5
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: `#fff`,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     // Polar Area chart
     // ----------------------------------------------
