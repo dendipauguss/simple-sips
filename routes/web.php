@@ -8,7 +8,6 @@ use App\Http\Controllers\SanksiController;
 use App\Http\Controllers\PerintahSanksiController;
 use App\Http\Controllers\PelakuUsahaController;
 use App\Http\Controllers\JenisPelakuUsahaController;
-use App\Http\Controllers\PengenaanSanksiController;
 use App\Http\Controllers\PengenaanSPController;
 use App\Http\Controllers\JenisPelanggaranController;
 use App\Http\Controllers\KategoriSPController;
@@ -33,16 +32,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/chart', [DashboardController::class, 'chartData']);
-    // Route::get('/pengaturan/perintah-sanksi', [PerintahSanksiController::class, 'index'])->name('perintah-sanksi');
-    Route::get('/penindakan/laporan', [PengenaanSanksiController::class, 'laporan']);
-    Route::get('/penindakan/export-excel', [PengenaanSanksiController::class, 'exportExcel'])->name('penindakan.export.excel');
-    Route::get('/penindakan/export-pdf',   [PengenaanSanksiController::class, 'exportPdf'])->name('penindakan.export.pdf');
-    Route::put('/penindakan/perintah/status/{id}', [PengenaanSanksiController::class, 'updatePerintahStatus']);
-    // Route::put('penindakan/update-status/{id}', [PengenaanSanksiController::class, 'updateStatus'])->name('penindakan.updateStatus');
-    Route::get('/penindakan/status-updated', function () {
-        return redirect()->back()->with('success', 'Status perintah berhasil diperbarui!');
-    });
-    Route::post('penindakan/upload-file', [PengenaanSanksiController::class, 'uploadDokumen']);
+    // Route::get('/pengaturan/perintah-sanksi', [PerintahSanksiController::class, 'index'])->name('perintah-sanksi');    
     // Route::get('/pengaturan/perintah-sanksi/{id}', [PerintahSanksiController::class, 'show']);
     Route::get('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'importView']);
     Route::post('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'import'])->name('pelaku-usaha.import');
@@ -82,7 +72,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('/pengaturan/users', UserController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelanggaran', JenisPelanggaranController::class)->middleware('admin');
     Route::resource('/pengaturan/kategori-sp', KategoriSPController::class)->middleware('admin');
-    Route::resource('/penindakan', PengenaanSanksiController::class);
     Route::resource('/nota-dinas', NotaDinasController::class)->middleware('admin');
     Route::resource('/pengenaan-sp', PengenaanSPController::class);
     Route::resource('/sk', SKController::class);

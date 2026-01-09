@@ -11,6 +11,11 @@
                         <div class="card-body py-4">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex">
+                                    <strong class="me-3" style="width: 150px;">Bentuk Sanksi</strong>
+                                    <span>:
+                                        {{ $sp->pengenaan_sp_sanksi->pluck('sanksi.nama')->implode(', ') }}</span>
+                                </li>
+                                <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">No Surat</strong>
                                     <span>:
                                         {{ $sp->no_surat }}</span>
@@ -44,6 +49,15 @@
                                     <strong class="me-3" style="width: 150px;">Detail Pelanggaran</strong>
                                     <span>: {{ $sp->detail_pelanggaran }}</span>
                                 </li>
+                                @if ($sp->pengenaan_sp_sanksi->whereNotNull('nominal_denda')->isNotEmpty())
+                                    <li class="list-group-item d-flex">
+                                        <strong class="me-3" style="width: 150px;">Nominal Denda</strong>
+                                        <span>:
+                                            <b class="text-danger">{{ $sp->pengenaan_sp_sanksi->whereNotNull('nominal_denda')->map(fn($i) => 'Rp ' . number_format($i->nominal_denda, 0, ',', '.'))->implode(', ') }}
+                                            </b>
+                                        </span>
+                                    </li>
+                                @endif
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">Jangka Waktu Hari</strong>
                                     <span>:

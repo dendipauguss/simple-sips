@@ -91,8 +91,16 @@ class DashboardController extends Controller
             });
 
         $sanksi_per_bentuk = Sanksi::withCount([
-            'pengenaan_sp' => fn($q) =>
-            $q->when($tahun, fn($qq) => $qq->whereYear('tanggal_mulai', $tahun))
+            'pengenaan_sp_sanksi as pengenaan_sp_count' => function ($q) use ($tahun) {
+                $q->whereHas('pengenaan_sp', function ($qq) use ($tahun) {
+                    if ($tahun) {
+                        $qq->whereYear('tanggal_mulai', $tahun);
+                    }
+                    // if ($bulan) {
+                    //     $qq->whereMonth('tanggal_mulai', $bulan);
+                    // }
+                });
+            }
         ])
             ->orderByDesc('pengenaan_sp_count')
             ->get();

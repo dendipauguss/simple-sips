@@ -19,12 +19,15 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&amp;family=Ubuntu:wght@400;500;700&amp;display=swap"
             rel="stylesheet">
-
         <!-- Bootstrap CSS [ REQUIRED ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/bootstrap.min.css">
+        <link rel="stylesheet"
+            href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/night/bootstrap.min.css">
 
         <!-- Nifty CSS [ REQUIRED ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/nifty.min.css">
+        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/night/nifty.min.css">
+
+        <!-- Nifty Color Schemes -->
+        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/dark/nifty.min.css">
 
         <!-- Nifty Demo Icons [ OPTIONAL ] -->
         <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/demo-purpose/demo-icons.min.css">
@@ -73,7 +76,6 @@
                 <div
                     class="content__boxed w-100 min-vh-100 d-flex flex-column align-items-center justify-content-center">
                     <div class="content__wrap">
-
                         <!-- Login card -->
                         <div class="card shadow-lg">
                             <div class="card-body">

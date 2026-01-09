@@ -556,8 +556,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     {
                         label: "Total Sanksi",
                         data: values,
-                        backgroundColor: infoColor,
-                        borderColor: infoColor,
+                        backgroundColor: primaryColor,
+                        borderColor: primaryColor,
                         borderWidth: 2
                     }
                 ]

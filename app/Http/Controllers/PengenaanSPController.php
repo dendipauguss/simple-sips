@@ -34,8 +34,12 @@ class PengenaanSPController extends Controller
 {
     public function index(Request $request)
     {
-
-        $query = PengenaanSP::query();
+        $query = PengenaanSP::query()->with([
+            'sanksi', // 🔥 WAJIB
+            'pelaku_usaha.jenis_pelaku_usaha',
+            'jenis_pelanggaran',
+            'user'
+        ]);
 
         $status = $request->status;
 
@@ -54,13 +58,18 @@ class PengenaanSPController extends Controller
             ->pluck('tahun');
 
         $pengenaan_sp = $query
+            ->with([
+                'sanksi', // 🔥 WAJIB
+                'pelaku_usaha.jenis_pelaku_usaha',
+                'jenis_pelanggaran',
+                'user'
+            ])
             ->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')
             ->get();
 
         $perusahaan = PelakuUsaha::whereHas('pengenaan_sp')
             ->orderBy('nama')
             ->get();
-
 
         return view('pengenaan_sp.index', [
             'title' => 'Monitoring Pengenaan Sanksi',
@@ -152,10 +161,7 @@ class PengenaanSPController extends Controller
                 $folderPath,
                 $filename
             );
-            // dd(
-            //     $request->no_surat,
-            //     $request->file('lampiran')
-            // );
+
             // ---- 2. Simpan data awal ----
             foreach ($request->no_surat as $i => $nilai) {
                 $sp = PengenaanSP::create([
@@ -163,7 +169,6 @@ class PengenaanSPController extends Controller
                     'tanggal_mulai' => $request->tanggal_mulai[$i],
                     'tanggal_selesai' => $request->tanggal_selesai[$i],
                     'nota_dinas_id' => $nota_dinas->id,
-                    'sanksi_id' => $request->sanksi_id[$i],
                     'jenis_pelaku_usaha_id' => $request->jenis_pelaku_usaha_id[$i],
                     'pelaku_usaha_id' => $request->pelaku_usaha_id[$i],
                     'jenis_pelanggaran_id' => $request->jenis_pelanggaran_id[$i],
@@ -175,6 +180,34 @@ class PengenaanSPController extends Controller
                 $filename = "SP-{$this->sanitizeFolderName($sp->no_surat)}";
 
                 $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $folderPath, $filename);
+
+                $sanksiUtamaId = $request->sanksi_id[$i];
+                $isDenda       = $request->is_denda[$i] ?? 0;
+
+                // ambil data sanksi utama
+                $sanksiUtama = Sanksi::find($sanksiUtamaId);
+
+                // simpan sanksi utama
+                DB::table('pengenaan_sp_sanksi')->insert([
+                    'pengenaan_sp_id' => $sp->id,
+                    'sanksi_id' => $sanksiUtamaId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                // jika sanksi utama BUKAN denda & denda dicentang
+                if ($sanksiUtama->kode_surat !== 'DA' && $isDenda == 1) {
+
+                    $idDenda = Sanksi::where('kode_surat', 'DA')->value('id');
+
+                    DB::table('pengenaan_sp_sanksi')->insert([
+                        'pengenaan_sp_id' => $sp->id,
+                        'sanksi_id' => $idDenda,
+                        'nominal_denda' => $request->nominal_denda[$i],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
 
             // ---- 3. Update no_sp dengan bulan/tahun ----
@@ -197,7 +230,12 @@ class PengenaanSPController extends Controller
     {
         return view('pengenaan_sp.show', [
             'title' => 'Detail Sanksi',
-            'sp' => PengenaanSP::findOrFail($id)
+            'sp' => PengenaanSP::with([
+                'pengenaan_sp_sanksi.sanksi',
+                'pelaku_usaha',
+                'jenis_pelanggaran',
+                'user'
+            ])->findOrFail($id)
         ]);
     }
 

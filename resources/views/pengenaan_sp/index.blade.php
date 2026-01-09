@@ -95,13 +95,8 @@
                                             <th class="text-dark text-center">Kategori Pelaku Usaha</th>
                                             <th class="text-dark text-center">Perusahaan</th>
                                             <th class="text-dark text-center">Kategori Pelanggaran</th>
-                                            {{-- <th class="text-dark text-center">Kategori SP</th> --}}
-                                            {{-- <th class="text-dark text-center">Detail Pelanggaran</th> --}}
-                                            {{-- <th class="text-dark text-center">Jangka Waktu Hari</th> --}}
                                             <th class="text-dark text-center">Bentuk Sanksi</th>
                                             <th class="text-dark text-center">Tanggal Jatuh Tempo Sanksi</th>
-                                            {{-- <th class="text-dark text-center">Bukti Perbaikan</th> --}}
-                                            {{-- <th class="text-dark text-center">Tanggapan Atas Perbaikan</th> --}}
                                             <th class="text-dark text-center" style="width: 10%;">Status</th>
                                             @if (auth()->user()->role != 'ketua_tim')
                                                 <th class="text-dark text-center">Aksi</th>
@@ -124,61 +119,22 @@
                                                 <td class="text-center">{{ $sp->pelaku_usaha->nama }}</td>
                                                 <td class="text-center">{{ $sp->jenis_pelanggaran->nama }}
                                                 </td>
-                                                {{-- <td>
-                                                    <strong>{{ $sp->jenis_pelanggaran->nama }}</strong>
-                                                </td>
+
                                                 <td>
-                                                    <strong>{{ $sp->kategori_sp->nama }}</strong>
-                                                </td>
-                                                <td>{{ $sp->detail_pelanggaran }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($sp->tanggal_mulai)->diffInDays(\Carbon\Carbon::parse($sp->tanggal_selesai)) }}
-                                                </td> --}}
-                                                <td>
-                                                    {{ $sp->sanksi->nama }}
+                                                    {{ $sp->sanksi->isNotEmpty() ? $sp->sanksi->pluck('nama')->implode(', ') : '-' }}
                                                 </td>
                                                 <td class="text-center">
                                                     {{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}
                                                 </td>
-                                                {{-- <td class="text-center">
-                                                    {{ $sp->tanggapan }}
-                                                    @if (!empty($sp->files))
-                                                        @foreach ($sp->files as $file)
-                                                            <a href="{{ asset('storage/' . $file->url_path) }}"
-                                                                target="_blank" class="text-decoration-none">
-                                                                <span>{{ $file->original_name }}</span>
-                                                            </a>
-                                                            <br>
-                                                        @endforeach
-                                                    @else
-                                                        <span>Belum ada dokumen</span>
-                                                    @endif
-                                                    <br>
-                                                    <button class="btn btn-sm btn-primary upload-btn mt-1"
-                                                        data-id="{{ $sp->id }}" data-bs-toggle="modal"
-                                                        data-bs-target="#modalUpload">
-                                                        Upload Bukti
-                                                    </button>
-                                                </td> --}}
+
                                                 <td class="text-center">
                                                     <span id="status-penindakan-{{ $sp->id }}"
                                                         class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
 
-                                                    {{-- 
-                                                    <form action="{{ route('penindakan.updateStatus', $sp->id) }}"
-                                                        method="POST" style="margin-top:6px;">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <button class="badge bg-primary border-0">Ganti Status</button>
-                                                    </form> --}}
                                                 </td>
                                                 @if (auth()->user()->role != 'ketua_tim')
                                                     <td class="text-center">
                                                         <div class="btn-group" role="group">
-                                                            {{-- <a href="{{ route('sk.create', $sp->id) }}"
-                                                            class="badge bg-info me-1 text-decoration-none"
-                                                            title="Tindak Lanjut">
-                                                            Tindak Lanjut <i class="psi-paper"></i>
-                                                        </a> --}}
                                                             @if (auth()->user()->id == $sp->user->id)
                                                                 <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
                                                                     class="badge bg-warning me-1 text-decoration-none"

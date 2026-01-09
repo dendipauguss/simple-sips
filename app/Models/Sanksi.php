@@ -19,6 +19,17 @@ class Sanksi extends Model
 
     public function pengenaan_sp()
     {
-        return $this->hasMany(PengenaanSP::class, 'sanksi_id');
+        return $this->belongsToMany(
+            PengenaanSP::class,
+            'pengenaan_sp_sanksi',
+            'pengenaan_sp_id'
+        )->using(PengenaanSPSanksi::class)
+            ->withPivot('nominal_denda', 'status')
+            ->withTimestamps();
+    }
+
+    public function pengenaan_sp_sanksi()
+    {
+        return $this->hasMany(PengenaanSPSanksi::class);
     }
 }

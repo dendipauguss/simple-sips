@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('pengenaan_sp', function (Blueprint $table) {
             $table->id();
-            $table->string('no_surat')->unique();
+            $table->string('no_surat');
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->unsignedBigInteger('nota_dinas_id');

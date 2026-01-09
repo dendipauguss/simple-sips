@@ -5,6 +5,7 @@ namespace App\Imports;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Collection;
 use App\Models\PengenaanSP;
+use App\Models\PengenaanSPSanksi;
 use App\Models\JenisPelakuUsaha;
 use App\Models\PelakuUsaha;
 use App\Models\JenisPelanggaran;
@@ -83,8 +84,7 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
             $status_tanggapan = 'belum_ditanggapi';
         }
 
-
-        return new PengenaanSp([
+        $sp = PengenaanSp::create([
             'no_surat'              => $row['no_surat'],
             'tanggal_mulai'         => $tanggalMulai,
             'tanggal_selesai'       => $tanggalSelesai,
@@ -99,6 +99,22 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
             'status_surat'          => $status_tanggapan,
             'user_id'               => 2,
         ]);
+
+        PengenaanSPSanksi::create([
+            'pengenaan_sp_id' => $sp->id,
+            'sanksi_id'       => 1, // SP
+        ]);
+
+        // JIKA ADA DENDA
+        if (!empty($row['nominal_denda']) && $row['nominal_denda'] > 0) {
+            PengenaanSPSanksi::create([
+                'pengenaan_sp_id' => $sp->id,
+                'sanksi_id'       => 2, // DENDA
+                'nominal_denda'   => str_replace('.', '', $row['nominal_denda']),
+            ]);
+        }
+
+        return $sp;
     }
 
     private function parseTanggal($value)

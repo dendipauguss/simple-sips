@@ -26,10 +26,11 @@
         <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/nifty.min.css"> --}}
 
         <!-- Bootstrap CSS [ REQUIRED ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/navy/bootstrap.min.css">
+        <link rel="stylesheet"
+            href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/night/bootstrap.min.css">
 
         <!-- Nifty CSS [ REQUIRED ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/navy/nifty.min.css">
+        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/night/nifty.min.css">
 
         <!-- Nifty Color Schemes -->
         <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/dark/nifty.min.css">

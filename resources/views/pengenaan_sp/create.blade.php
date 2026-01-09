@@ -91,11 +91,11 @@
                                         <div class="mb-3">
                                             <label class="form-label">Bentuk Sanksi</label>
                                             <select name="sanksi_id[]"
-                                                class="form-select @error("sanksi_id.$i") is-invalid @enderror"
+                                                class="form-select @error("sanksi_id.$i") is-invalid @enderror sanksi-id"
                                                 data-index="{{ $i }}">
                                                 <option value="" disabled selected>-- Pilih Bentuk Sanksi --</option>
                                                 @foreach ($sanksi as $s)
-                                                    <option value="{{ $s->id }}"
+                                                    <option data-kode="{{ $s->kode_surat }}" value="{{ $s->id }}"
                                                         {{ old("sanksi_id.$i") == $s->id ? 'selected' : '' }}>
                                                         {{ $s->kode_surat }}
                                                         -
@@ -110,18 +110,24 @@
                                             @enderror
                                         </div>
 
-                                        <div class="row mb-3 d-flex align-items-center">
-                                            <label class="col-sm-4 col-form-label">Termasuk Denda</label>
-                                            <div class="col-sm-8 pt-3">
-                                                <div class="form-check form-check-inline">
-                                                    <input type="hidden" name="is_denda[{{ $i }}]"
-                                                        value="0">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        name="is_denda[{{ $i }}]" value="1"
-                                                        {{ old("is_denda.$i") ? 'checked' : '' }}>
-                                                    <label for="ya" class="form-check-label">Ya</label>
+                                        <div class="form-check form-check-inline mb-3 is-denda">
+                                            <label for="ya" class="form-check-label">Termasuk Denda</label>
+                                            <input type="hidden" name="is_denda[{{ $i }}]" value="0">
+                                            <input class="form-check-input" type="checkbox"
+                                                name="is_denda[{{ $i }}]" value="1"
+                                                {{ old("is_denda.$i") ? 'checked' : '' }}>
+                                        </div>
+
+                                        <div class="mb-3 nominal-denda">
+                                            <label class="form-label">Nominal Denda</label>
+                                            <input type="number" name="nominal_denda[]"
+                                                class="form-control @error('nominal_denda') is-invalid @enderror"
+                                                value="{{ old("nominal_denda.$i") }}">
+                                            @error('nominal_denda')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
                                                 </div>
-                                            </div>
+                                            @enderror
                                         </div>
 
                                         <div class="mb-3">
@@ -335,6 +341,53 @@
             if (dasarPengenaanSanksiOld) {
                 $('.dasar-pengenaan-sanksi').trigger('change');
             }
+
+            function handleSanksi(row) {
+                let select = row.find('.sanksi-id');
+                let selected = select.find('option:selected');
+                let kode = selected.data('kode');
+
+                let isDendaWrapper = row.find('.is-denda');
+                let checkbox = isDendaWrapper.find('input[type="checkbox"]');
+                let hidden = isDendaWrapper.find('input[type="hidden"]');
+                let nominalWrapper = row.find('.nominal-denda');
+
+                if (kode === 'DA') {
+                    // Denda murni
+                    isDendaWrapper.hide();
+                    checkbox.prop('checked', true);
+                    hidden.val(1);
+                    nominalWrapper.show();
+                } else {
+                    // Selain Denda
+                    isDendaWrapper.show();
+
+                    if (checkbox.is(':checked')) {
+                        hidden.val(1);
+                        nominalWrapper.show();
+                    } else {
+                        hidden.val(0);
+                        nominalWrapper.hide();
+                        nominalWrapper.find('input').val('');
+                    }
+                }
+            }
+
+            // onchange sanksi
+            $(document).on('change', '.sanksi-id', function() {
+                handleSanksi($(this).closest('.data-item'));
+            });
+
+            // onchange checkbox is-denda
+            $(document).on('change', '.is-denda input[type="checkbox"]', function() {
+                handleSanksi($(this).closest('.data-item'));
+            });
+
+            // init untuk edit / old()
+            $('.data-item').each(function() {
+                handleSanksi($(this));
+            });
+
         });
 
         function addRow() {
