@@ -258,17 +258,24 @@
 
                                     {{-- 4. BENTUK SANKSI --}}
                                     <td class="{{ !$firstSanksi ? 'no-border-top' : '' }}">
-                                        {{ $firstSanksi ? $namaSanksi : '' }}
+                                        @if ($firstSanksi)
+                                            @if (str_contains(strtolower($namaSanksi), 'denda') && $row->nominal)
+                                                {{ $namaSanksi }} sebesar
+                                                Rp. {{ number_format($row->nominal, 0, ',', '.') }}
+                                            @else
+                                                {{ $namaSanksi }}
+                                            @endif
+                                        @endif
                                     </td>
 
                                     {{-- 5. PELANGGARAN (Selalu tampil setiap baris) --}}
                                     <td>
-                                        {{ $row->jenis_pelanggaran->nama }}
+                                        {{ $row->sp->jenis_pelanggaran->nama }}
                                     </td>
 
                                     {{-- 6. TANGGAPAN (Selalu tampil setiap baris) --}}
                                     <td>
-                                        {{ $row->status_surat == 'belum_ditanggapi' ? 'Belum Ditanggapi' : 'Sudah Ditanggapi' }}
+                                        {{ $row->sp->status_surat == 'belum_ditanggapi' ? 'Belum Ditanggapi' : 'Sudah Ditanggapi' }}
                                     </td>
                                 </tr>
 
@@ -336,11 +343,11 @@
 @endif
 
                                     {{-- PELANGGARAN --}}
-                                    <td>{{ $row->jenis_pelanggaran->nama }}</td>
+                                    <td>{{ $row->sp->jenis_pelanggaran->nama }}</td>
 
                                     {{-- TANGGAPAN --}}
                                     <td>
-                                        {{ $row->status_surat == 'belum_ditanggapi' ? 'Belum Ditanggapi' : 'Sudah Ditanggapi' }}
+                                        {{ $row->sp->status_surat == 'belum_ditanggapi' ? 'Belum Ditanggapi' : 'Sudah Ditanggapi' }}
                                     </td>
 
                                 </tr>

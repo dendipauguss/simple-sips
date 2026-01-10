@@ -111,14 +111,33 @@ class LaporanController extends Controller
 
     public function pdf($id)
     {
-        $laporan = Laporan::with(['pengenaan_sp'])->findOrFail($id);
+        $laporan = Laporan::with([
+            'pengenaan_sp.pelaku_usaha.jenis_pelaku_usaha',
+            'pengenaan_sp.pengenaan_sp_sanksi.sanksi',
+            'pengenaan_sp.jenis_pelanggaran'
+        ])->findOrFail($id);
 
         $items = $laporan->pengenaan_sp
-            ->load(['pelaku_usaha.jenis_pelaku_usaha', 'sanksi', 'jenis_pelanggaran'])
+            ->load([
+                'pelaku_usaha.jenis_pelaku_usaha',
+                'pengenaan_sp_sanksi.sanksi',
+                'jenis_pelanggaran'
+            ])
+            ->flatMap(function ($sp) {
+                return $sp->pengenaan_sp_sanksi->map(function ($pss) use ($sp) {
+                    return (object) [
+                        'pelaku_usaha' => $sp->pelaku_usaha,
+                        'jenis_pelaku' => $sp->pelaku_usaha->jenis_pelaku_usaha,
+                        'sanksi'       => $pss->sanksi,
+                        'nominal'      => $pss->nominal_denda,
+                        'sp'           => $sp,
+                    ];
+                });
+            })
             ->groupBy([
-                fn($item) => $item->pelaku_usaha->nama,
-                fn($item) => $item->pelaku_usaha->jenis_pelaku_usaha->nama,
-                fn($item) => $item->sanksi->nama,
+                fn($i) => $i->pelaku_usaha->nama,
+                fn($i) => $i->jenis_pelaku->nama,
+                fn($i) => $i->sanksi->nama,
             ]);
 
         $jumlah_status = [
