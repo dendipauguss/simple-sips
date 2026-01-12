@@ -118,27 +118,20 @@ class LaporanController extends Controller
         ])->findOrFail($id);
 
         $items = $laporan->pengenaan_sp
-            ->load([
-                'pelaku_usaha.jenis_pelaku_usaha',
-                'pengenaan_sp_sanksi.sanksi',
-                'jenis_pelanggaran'
-            ])
-            ->flatMap(function ($sp) {
-                return $sp->pengenaan_sp_sanksi->map(function ($pss) use ($sp) {
-                    return (object) [
-                        'pelaku_usaha' => $sp->pelaku_usaha,
-                        'jenis_pelaku' => $sp->pelaku_usaha->jenis_pelaku_usaha,
-                        'sanksi'       => $pss->sanksi,
-                        'nominal'      => $pss->nominal_denda,
-                        'sp'           => $sp,
-                    ];
-                });
-            })
             ->groupBy([
-                fn($i) => $i->pelaku_usaha->nama,
-                fn($i) => $i->jenis_pelaku->nama,
-                fn($i) => $i->sanksi->nama,
+                fn($sp) => $sp->pelaku_usaha->nama,
+                fn($sp) => $sp->pelaku_usaha->jenis_pelaku_usaha->nama,
             ]);
+
+        $rekap_perusahaan = $laporan->pengenaan_sp
+            ->groupBy(fn($sp) => $sp->pelaku_usaha->nama)
+            ->map(function ($group) {
+                return [
+                    'sudah' => $group->where('status_surat', 'sudah_ditanggapi')->count(),
+                    'belum' => $group->where('status_surat', 'belum_ditanggapi')->count(),
+                    'total' => $group->count(),
+                ];
+            });
 
         $jumlah_status = [
             'belum' => $laporan->pengenaan_sp
@@ -168,7 +161,7 @@ class LaporanController extends Controller
             );
         }
 
-        $pdf = PDF::loadView('laporan.pdf', compact('laporan', 'items', 'jumlah_status', 'nomor_laporan', 'qrBase64'));
+        $pdf = PDF::loadView('laporan.pdf', compact('laporan', 'items', 'jumlah_status', 'nomor_laporan', 'qrBase64', 'rekap_perusahaan'));
 
         return $pdf->stream("NOTA DINAS {$nama_bulan}-{$laporan->tahun}.pdf");
     }
