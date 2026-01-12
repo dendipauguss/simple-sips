@@ -121,6 +121,7 @@ class LaporanController extends Controller
             ->groupBy([
                 fn($sp) => $sp->pelaku_usaha->nama,
                 fn($sp) => $sp->pelaku_usaha->jenis_pelaku_usaha->nama,
+                fn($sp) => Carbon::parse($sp->tanggal_mulai)->format('Y-m')
             ]);
 
         $rekap_perusahaan = $laporan->pengenaan_sp

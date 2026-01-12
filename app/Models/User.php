@@ -20,6 +20,7 @@ class User extends Authenticatable
         'email',
         'role',
         'password',
+        'status'
     ];
 
     protected $hidden = [
@@ -31,11 +32,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    public function pengenaan_sanksi()
-    {
-        return $this->hasMany(PengenaanSanksi::class, 'user_id');
-    }
 
     public function pengenaan_sp()
     {

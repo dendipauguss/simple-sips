@@ -48,7 +48,7 @@ class SanksiController extends Controller
     public function show($id)
     {
         $sanksi = Sanksi::findOrFail($id);
-        $title = 'Sanksi';
+        $title = 'Detail Sanksi';
         return view('sanksi.show', compact('sanksi', 'title'));
     }
 

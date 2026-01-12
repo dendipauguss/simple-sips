@@ -14,7 +14,7 @@
                                     <label for="nama" class="col-sm-2 col-form-label">Nama Pelaku Usaha</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                                            id="nama" name="nama">
+                                            id="nama" name="nama" value="{{ old('nama') }}">
                                         @error('nama')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -27,7 +27,9 @@
                                     <div class="col-sm-10">
                                         <select name="jenis_id" id="jenis_id" class="form-select">
                                             @foreach ($jenis_pelaku_usaha as $jp)
-                                                <option value="{{ $jp->id }}">{{ $jp->nama }}</option>
+                                                <option value="{{ $jp->id }}"
+                                                    {{ old('jenis_id') == $jp->id ? 'selected' : '' }}>{{ $jp->nama }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>

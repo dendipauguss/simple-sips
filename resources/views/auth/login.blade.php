@@ -29,11 +29,13 @@
         <!-- Nifty Color Schemes -->
         <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/dark/nifty.min.css">
 
-        <!-- Nifty Demo Icons [ OPTIONAL ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/demo-purpose/demo-icons.min.css">
+        <!-- Nifty Premium Line Icons [ OPTIONAL ] -->
+        <link rel="stylesheet"
+            href="{{ env('THM_LINK') }}/assets/premium/icon-sets/icons/line-icons/premium-line-icons.min.css">
 
-        <!-- Demo purpose CSS [ DEMO ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/demo-purpose/demo-settings.min.css">
+        <!-- Nifty Premium Solid Icons -->
+        <link rel="stylesheet"
+            href="{{ env('THM_LINK') }}/assets/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css">
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~---
 
@@ -62,6 +64,8 @@
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
             }
         </style>
+
+        <script src="{{ env('JQUERY_LINK') }}/jquery-3.7.1.min.js"></script>
     </head>
 
     <body class="jumping">
@@ -98,14 +102,19 @@
                                         @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <input type="password"
-                                            class="form-control @error('password') is-invalid @enderror"
-                                            placeholder="Password" name="password">
-                                        @error('password')
-                                            <span class="invalid-feedback" role="alert">
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
+                                        <div class="input-group has-validation">
+                                            <input type="password"
+                                                class="form-control @error('password') is-invalid @enderror"
+                                                placeholder="Password" name="password" id="password">
+                                            <button type="button" id="togglePassword" class="input-group-text">
+                                                <i class="psi-eye-visible"></i>
+                                            </button>
+                                            @error('password')
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
+                                        </div>
                                     </div>
                                     <div class="d-grid mt-5">
                                         <button class="btn btn-primary btn-lg" type="submit">Sign In</button>
@@ -176,16 +185,25 @@
         <!-- Chart JS Scripts [ OPTIONAL ] -->
         <script src="{{ env('THM_LINK') }}/assets/vendors/chart.js/chart.min.js" defer=""></script>
 
-        <!-- Initialize [ SAMPLE ] -->
-        <script src="{{ env('THM_LINK') }}/assets/pages/dashboard-1.js" defer=""></script>
-
         <script defer=""
             src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
             integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
             data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;281c8ce144eb4533a36e841b30b677c5&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}"
             crossorigin="anonymous"></script>
 
+        <script>
+            $('#togglePassword').on('click', function() {
+                const pass = $('#password');
 
+                // Ganti type
+                const type = pass.attr('type') === 'password' ? 'text' : 'password';
+                pass.attr('type', type);
+
+                // Ganti icon (optional)
+                $(this).html(type === 'password' ? '<i class="psi-eye-visible"></i>' :
+                    '<i class="psi-eye-invisible"></i>');
+            });
+        </script>
     </body>
 
 </html>

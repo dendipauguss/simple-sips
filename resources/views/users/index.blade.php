@@ -45,7 +45,7 @@
                                                     {{ $user->username }}
                                                 </td>
                                                 <td>
-                                                    {{ ucfirst($user->role) }}
+                                                    {{ ucwords(str_replace('_', ' ', $user->role)) }}
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="btn-group" role="group">

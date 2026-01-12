@@ -9,43 +9,49 @@
                             <h5 class="card-title"></h5>
                             <!-- Horizontal Form -->
                             <form
-                                action="{{ isset($perintah_sanksi) ? url('pengaturan/perintah-sanksi', $perintah_sanksi->id) : url('pengaturan/perintah-sanksi') }}"
+                                action="{{ isset($kategori_sp) ? url('pengaturan/kategori-sp', $kategori_sp->id) : url('pengaturan/kategori-sp') }}"
                                 method="POST">
                                 @csrf
-                                @isset($perintah_sanksi)
+                                @isset($kategori_sp)
                                     @method('PUT')
                                 @endisset
                                 <div class="row mb-3">
-                                    <label for="nama" class="col-sm-2 col-form-label">Bentuk Sanksi</label>
+                                    <label for="jenis_pelanggaran" class="col-sm-2 col-form-label">Jenis Pelanggaran</label>
                                     <div class="col-sm-10">
-                                        <select name="sanksi_id" id="sanksi_id" class="form-select">
+                                        <select name="jenis_pelanggaran_id" id="jenis_pelanggaran_id" class="form-select">
                                             @php
                                                 $selected = old(
-                                                    'sanksi_id',
-                                                    isset($perintah_sanksi) ? $perintah_sanksi->sanksi_id : null,
+                                                    'jenis_pelanggaran_id',
+                                                    isset($kategori_sp) ? $kategori_sp->jenis_pelanggaran_id : null,
                                                 );
                                             @endphp
-                                            @foreach ($sanksi as $s)
-                                                <option value="{{ $s->id }}"
-                                                    {{ $selected == $s->id ? 'selected' : '' }}>{{ $s->nama }}
+                                            @foreach ($jenis_pelanggaran as $jp)
+                                                <option value="{{ $jp->id }}"
+                                                    {{ $selected == $jp->id ? 'selected' : '' }}>{{ $jp->nama }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="nama" class="col-sm-2 col-form-label">Nama Perintah Sanksi</label>
+                                    <label for="nama" class="col-sm-2 col-form-label">Nama Kategori Sanksi</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="nama" name="nama"
-                                            value="{{ isset($perintah_sanksi) ? $perintah_sanksi->nama : old('nama') }}">
+                                        <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                            id="nama" name="nama"
+                                            value="{{ isset($kategori_sp) ? old('nama', $kategori_sp->nama) : old('nama') }}">
+                                        @error('nama')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                 </div>
-                                @if (isset($perintah_sanksi))
+                                @if (isset($kategori_sp))
                                     <button type="submit" class="btn btn-sm btn-primary">Update</button>
                                 @else
                                     <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
                                 @endif
-                                <a href="{{ url('pengaturan/perintah-sanksi') }}" class="btn btn-sm btn-light"> ⬅
+                                <a href="{{ url('pengaturan/kategori-sp') }}" class="btn btn-sm btn-light"> ⬅
                                     Kembali</a>
                             </form>
                             <!-- END : Horizontal Form -->

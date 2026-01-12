@@ -81,7 +81,7 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
         if (!empty($row['tanggapan'])) {
             $status_tanggapan = 'sudah_ditanggapi';
         } else {
-            $status_tanggapan = 'belum_ditanggapi';
+            $status_tanggapan = 'pending';
         }
 
         $sp = PengenaanSp::create([

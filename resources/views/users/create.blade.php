@@ -82,6 +82,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if (isset($user))
+                                    <div class="row mb-3">
+                                        <label for="status" class="col-sm-2 col-form-label">Status</label>
+                                        <div class="col-sm-10">
+                                            <select name="status" id="status"
+                                                class="form-select @error('status') is-invalid @enderror">
+                                                <option value="1"
+                                                    {{ old('status', isset($user) ? $user->status : null) == 1 ? 'selected' : '' }}>
+                                                    Aktif
+                                                </option>
+                                                <option value="0"
+                                                    {{ old('status', isset($user) ? $user->status : null) == 0 ? 'selected' : '' }}>
+                                                    Nonaktif
+                                                </option>
+                                            </select>
+                                            @error('status')
+                                                <div class="invalid-feedback"> {{ $message }} </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                @endif
 
                                 <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
                                 <a href="{{ route('users.index') }}" class="btn btn-sm btn-light"> ⬅ Kembali</a>

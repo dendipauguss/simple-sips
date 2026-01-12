@@ -210,6 +210,7 @@
                 <th style="width: 6%">No</th>
                 <th style="width: 25%">Nama Perusahaan</th>
                 <th>Kategori Pelaku Usaha</th>
+                <th>Periode (MMMM yyyy)</th>
                 <th>Bentuk Sanksi</th>
                 <th>Pelanggaran</th>
                 <th>Tanggapan</th>
@@ -220,67 +221,86 @@
                 @foreach ($items as $namaPerusahaan => $kategoriGroup)
                     @php $firstPerusahaan = true; @endphp
 
-                    @foreach ($kategoriGroup as $kategoriPU => $rows)
+                    @foreach ($kategoriGroup as $kategoriPU => $periodeGroup)
                         @php $firstKategori = true; @endphp
 
-                        @foreach ($rows as $sp)
-                            <tr>
-                                {{-- NO --}}
-                                <td class="center {{ !$firstPerusahaan ? 'no-border-top' : '' }}">
-                                    {{ $firstPerusahaan ? $no++ : '' }}
-                                </td>
+                        @foreach ($periodeGroup as $periode => $rows)
+                            @php $firstPeriode = true; @endphp
 
-                                {{-- NAMA PERUSAHAAN --}}
-                                <td class="{{ !$firstPerusahaan ? 'no-border-top' : '' }}">
-                                    {{-- {{ $firstPerusahaan ? $namaPerusahaan : '' }} --}}
-                                    @if ($firstPerusahaan)
-                                        <strong>{{ $namaPerusahaan }}</strong>
+                            @foreach ($rows as $sp)
+                                <tr>
+                                    {{-- NO --}}
+                                    <td class="center {{ !$firstPerusahaan ? 'no-border-top' : '' }}">
+                                        {{ $firstPerusahaan ? $no++ : '' }}
+                                    </td>
 
-                                        <div style="font-size:11px; margin-top:6px;">
-                                            <div>Sudah Ditanggapi = {{ $rekap_perusahaan[$namaPerusahaan]['sudah'] }}
+                                    {{-- NAMA PERUSAHAAN --}}
+                                    <td class="{{ !$firstPerusahaan ? 'no-border-top' : '' }}">
+                                        {{-- {{ $firstPerusahaan ? $namaPerusahaan : '' }} --}}
+                                        @if ($firstPerusahaan)
+                                            <strong>{{ $namaPerusahaan }}</strong>
+
+                                            <div style="font-size:11px; margin-top:6px;">
+                                                <div>Sudah Ditanggapi =
+                                                    {{ $rekap_perusahaan[$namaPerusahaan]['sudah'] }}
+                                                </div>
+                                                <div>Belum Ditanggapi =
+                                                    {{ $rekap_perusahaan[$namaPerusahaan]['belum'] }}
+                                                </div>
+                                                <div><strong>Total =
+                                                        {{ $rekap_perusahaan[$namaPerusahaan]['total'] }}</strong>
+                                                </div>
                                             </div>
-                                            <div>Belum Ditanggapi = {{ $rekap_perusahaan[$namaPerusahaan]['belum'] }}
+                                        @endif
+                                    </td>
+
+                                    {{-- KATEGORI --}}
+                                    <td class="{{ !$firstKategori ? 'no-border-top' : '' }}">
+                                        <strong>{{ $firstKategori ? $kategoriPU : '' }}</strong>
+                                    </td>
+
+                                    {{-- PERIODE --}}
+                                    <td class="{{ !$firstPeriode ? 'no-border-top' : '' }}">
+                                        {{ $firstPeriode ? \Carbon\Carbon::createFromFormat('Y-m', $periode)->translatedFormat('F Y') : '' }}
+                                    </td>
+
+                                    {{-- BENTUK SANKSI (GABUNG SEMUA) --}}
+                                    <td>
+                                        @foreach ($sp->pengenaan_sp_sanksi as $pss)
+                                            <div>
+                                                @if (str_contains(strtolower($pss->sanksi->nama), 'denda') && $pss->nominal_denda)
+                                                    {{ $pss->sanksi->nama }} sebesar
+                                                    Rp. {{ number_format($pss->nominal_denda, 0, ',', '.') }}
+                                                @else
+                                                    {{ $pss->sanksi->nama }}
+                                                @endif
                                             </div>
-                                            <div><strong>Total =
-                                                    {{ $rekap_perusahaan[$namaPerusahaan]['total'] }}</strong></div>
-                                        </div>
-                                    @endif
-                                </td>
+                                        @endforeach
+                                    </td>
 
-                                {{-- KATEGORI --}}
-                                <td class="{{ !$firstKategori ? 'no-border-top' : '' }}">
-                                    <strong>{{ $firstKategori ? $kategoriPU : '' }}</strong>
-                                </td>
+                                    {{-- PELANGGARAN --}}
+                                    <td>
+                                        {{ $sp->jenis_pelanggaran->nama }}
+                                    </td>
 
-                                {{-- BENTUK SANKSI (GABUNG SEMUA) --}}
-                                <td>
-                                    @foreach ($sp->pengenaan_sp_sanksi as $pss)
-                                        <div>
-                                            @if (str_contains(strtolower($pss->sanksi->nama), 'denda') && $pss->nominal_denda)
-                                                {{ $pss->sanksi->nama }} sebesar
-                                                Rp. {{ number_format($pss->nominal_denda, 0, ',', '.') }}
-                                            @else
-                                                {{ $pss->sanksi->nama }}
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </td>
+                                    {{-- TANGGAPAN --}}
+                                    <td>
+                                        @if ($sp->status_surat == 'belum_ditanggapi')
+                                            Belum Ditanggapi
+                                        @elseif($sp->status_surat == 'sudah_ditanggapi')
+                                            Sudah Ditanggapi
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                </tr>
 
-                                {{-- PELANGGARAN --}}
-                                <td>
-                                    {{ $sp->jenis_pelanggaran->nama }}
-                                </td>
-
-                                {{-- TANGGAPAN --}}
-                                <td>
-                                    {{ $sp->status_surat == 'belum_ditanggapi' ? 'Belum Ditanggapi' : 'Sudah Ditanggapi' }}
-                                </td>
-                            </tr>
-
-                            @php
-                                $firstPerusahaan = false;
-                                $firstKategori = false;
-                            @endphp
+                                @php
+                                    $firstPerusahaan = false;
+                                    $firstKategori = false;
+                                    $firstPeriode = false;
+                                @endphp
+                            @endforeach
                         @endforeach
                     @endforeach
                 @endforeach

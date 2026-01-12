@@ -18,6 +18,7 @@
                                     <thead class="table-dark">
                                         <tr>
                                             <th>No</th>
+                                            <th>Dasar Pengenaan Sanksi</th>
                                             <th>Nama</th>
                                             <th>Actions</th>
                                         </tr>
@@ -26,6 +27,7 @@
                                         @foreach ($jenis_pelanggaran as $jp)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $jp->dasar_pengenaan_sanksi->nama }}</td>
                                                 <td>
                                                     {{ $jp->nama }}
                                                 </td>
@@ -41,7 +43,7 @@
                                                             Edit <i class="psi-pencil"></i>
                                                         </a>
                                                         <a href="#" class="badge bg-danger text-decoration-none"
-                                                            onclick="event.preventDefault(); document.getElementById('delete-{{ $jp->id }}').submit();">
+                                                            onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $jp->id }}').submit();">
                                                             Hapus <i class="psi-trash"></i>
                                                         </a>
 

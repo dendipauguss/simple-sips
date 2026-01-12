@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('kategori_sp_id');
             $table->text('detail_pelanggaran')->nullable();
             $table->string('tanggapan')->nullable();
-            $table->enum('status_surat', ['belum_ditanggapi', 'sudah_ditanggapi'])->default('belum_ditanggapi');
+            $table->enum('status_surat', ['pending', 'belum_ditanggapi', 'sudah_ditanggapi'])->default('belum_ditanggapi');
             // $table->enum('status_laporan', ['acc', 'pending', 'return'])->default('pending');
             $table->unsignedBigInteger('user_id');
             $table->tinyInteger('status')->default(1);

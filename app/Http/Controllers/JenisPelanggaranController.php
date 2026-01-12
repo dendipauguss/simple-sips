@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DasarPengenaanSanksi;
 use Illuminate\Http\Request;
 use App\Models\KategoriSP;
 use App\Models\JenisPelanggaran;
@@ -19,7 +20,8 @@ class JenisPelanggaranController extends Controller
     public function create()
     {
         return view('jenis_pelanggaran.create', [
-            'title' => 'Tambah Jenis Pelanggaran Baru'
+            'title' => 'Tambah Jenis Pelanggaran Baru',
+            'dasar_pengenaan_sanksi' => DasarPengenaanSanksi::with(['jenis_pelanggaran'])->get()
         ]);
     }
 
@@ -27,15 +29,19 @@ class JenisPelanggaranController extends Controller
     {
         // dd($request);
         $request->validate([
-            'nama.*'    => ['required', 'string', 'max:255']
+            'nama.*'    => ['required', 'string', 'max:255'],
+            'dasar_pengenaan_sanksi_id.*' => ['required', 'integer']
         ], [
-            'nama.*.required' => 'Kolom nama ke-:number wajib diisi!'
+            'nama.*.required' => 'Kolom nama ke-:number wajib diisi!',
+            'dasar_pengenaan_sanksi_id.*.required' => 'Data tidak ditemukan'
         ]);
+
         $data = [];
 
         foreach ($request->nama as $nama) {
             $data[] = [
-                'nama' => $nama
+                'nama' => $nama,
+                'dasar_pengenaan_sanksi_id' => $request->dasar_pengenaan_sanksi_id
             ];
         }
 
@@ -55,14 +61,19 @@ class JenisPelanggaranController extends Controller
     public function edit(string $id)
     {
         $jenis_pelanggaran = JenisPelanggaran::findOrFail($id);
+        $dasar_pengenaan_sanksi = DasarPengenaanSanksi::with(['jenis_pelanggaran'])->get();
         $title = 'Edit Jenis Pelanggaran';
-        return view('jenis_pelanggaran.edit', compact('jenis_pelanggaran', 'title'));
+        return view('jenis_pelanggaran.edit', compact('jenis_pelanggaran', 'dasar_pengenaan_sanksi', 'title'));
     }
 
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'nama' => 'required'
+            'dasar_pengenaan_sanksi_id' => 'required|integer',
+            'nama' => 'required|string'
+        ], [
+            'dasar_pengenaan_sanksi_id.required' => 'Data tidak ditemukan',
+            'nama.required' => 'Kolom tidak boleh kosong kakak'
         ]);
 
         $jenis_pelanggaran = JenisPelanggaran::findOrFail($id);

@@ -29,7 +29,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // AUTH ROUTES
 // Route yang hanya boleh diakses jika sudah login
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'user-aktif')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/chart', [DashboardController::class, 'chartData']);
     // Route::get('/pengaturan/perintah-sanksi', [PerintahSanksiController::class, 'index'])->name('perintah-sanksi');    

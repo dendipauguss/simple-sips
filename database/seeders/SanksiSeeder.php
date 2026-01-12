@@ -14,27 +14,27 @@ class SanksiSeeder extends Seeder
             'kode_surat' => 'SP'
         ]);
         Sanksi::create([
-            'nama' => 'Denda administratif',
+            'nama' => 'Denda Administratif',
             'kode_surat' => 'DA'
         ]);
         Sanksi::create([
-            'nama' => 'Pembatasan kegiatan usaha',
+            'nama' => 'Pembatasan Kegiatan Usaha',
             'kode_surat' => 'BTS'
         ]);
         Sanksi::create([
-            'nama' => 'Pembekuan kegiatan usaha',
+            'nama' => 'Pembekuan Kegiatan Usaha',
             'kode_surat' => 'BKU'
         ]);
         Sanksi::create([
-            'nama' => 'Pencabutan izin usaha',
+            'nama' => 'Pencabutan Izin Usaha',
             'kode_surat' => 'CBTU'
         ]);
         Sanksi::create([
-            'nama' => 'Pembatalan persetujuan',
+            'nama' => 'Pembatalan Persetujuan',
             'kode_surat' => 'BTLP'
         ]);
         Sanksi::create([
-            'nama' => 'Pembatalan sertifikat pendaftaran',
+            'nama' => 'Pembatalan Sertifikat Pendaftaran',
             'kode_surat' => 'BTLSP'
         ]);
     }

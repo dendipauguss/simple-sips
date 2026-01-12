@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -12,7 +13,7 @@ class UserController extends Controller
     {
         return view('users.index', [
             'title' => 'Data User',
-            'users' => User::latest()->get()
+            'users' => User::latest()->where('status', 1)->get()
         ]);
     }
 
@@ -68,6 +69,14 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan');
     }
 
+    public function show(User $user)
+    {
+        return view('users.show', [
+            'title' => 'Detail User',
+            'user' => $user
+        ]);
+    }
+
     public function edit(User $user)
     {
         return view('users.create', [
@@ -80,11 +89,12 @@ class UserController extends Controller
     {
         $request->validate([
             'nama' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'username' => ['required', 'string', 'max:255', Rule::unique('users', 'username')->ignore($user->id)],
             'email' => [
                 'required',
                 'email',
                 'regex:/@(gmail\.com|yahoo\.com|outlook\.com)$/i',
+                Rule::unique('users', 'email')->ignore($user->id)
             ],
             'role' => ['required'],
             'password' => [
@@ -95,6 +105,7 @@ class UserController extends Controller
                 'regex:/[0-9]/',      // angka
                 'regex:/[\W_]/',      // simbol
             ],
+            'status' => 'required'
         ], [
             'nama.required' => 'Nama tidak boleh kosong',
             'nama.max' => 'Maksimal 255 karakter',
@@ -107,6 +118,7 @@ class UserController extends Controller
             'password.min' => 'Password minimal 8 karakter.',
             'password.regex' => 'Password harus mengandung huruf besar, kecil, angka, dan simbol.',
             'password.required' => 'Password tidak boleh kosong',
+            'status.required' => 'Data tidak ditemukan'
         ]);
 
         $data = [
@@ -114,6 +126,7 @@ class UserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'role' => $request->role,
+            'status' => $request->status
         ];
 
         if ($request->password) {
@@ -127,7 +140,9 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $user->delete();
+        $user->update([
+            'status' => 0
+        ]);
 
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus');
     }

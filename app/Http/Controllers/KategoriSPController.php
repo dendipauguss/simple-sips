@@ -28,7 +28,7 @@ class KategoriSPController extends Controller
     public function create()
     {
         return view('kategori_sp.create', [
-            'title' => 'Tambah Pelaku Usaha Baru',
+            'title' => 'Tambah Kategori Sanksi Baru',
             'jenis_pelanggaran' => JenisPelanggaran::all()
         ]);
     }
@@ -51,13 +51,13 @@ class KategoriSPController extends Controller
         ]);
 
         // Redirect dengan pesan sukses
-        return redirect('pengaturan/pelaku-usaha')->with('success', 'Data Pelaku Usaha berhasil disimpan!');
+        return redirect('pengaturan/kategori-sp')->with('success', 'Data Kategori Sanksi berhasil disimpan!');
     }
 
     public function show($id)
     {
         $kategori_sp = KategoriSP::findOrFail($id);
-        $title = 'Detail Pelaku Usaha';
+        $title = 'Detail Kategori Sanksi';
         return view('kategori_sp.show', compact('kategori_sp', 'title'));
     }
 
@@ -65,8 +65,8 @@ class KategoriSPController extends Controller
     {
         $kategori_sp = KategoriSP::findOrFail($id);
         $jenis_pelanggaran = JenisPelanggaran::all();
-        $title = 'Edit Pelaku Usaha';
-        return view('kategori_sp.edit', compact('kategori_sp', 'jenis_pelanggaran', 'title'));
+        $title = 'Edit Kategori Sanksi';
+        return view('kategori_sp.create', compact('kategori_sp', 'jenis_pelanggaran', 'title'));
     }
 
     public function update(Request $request, $id)
@@ -84,7 +84,7 @@ class KategoriSPController extends Controller
         $kategori_sp->jenis_pelanggaran_id = $request->jenis_pelanggaran_id;
         $kategori_sp->save();
 
-        return redirect()->route('pelaku-usaha.index')->with('success', 'Data Pelaku Usaha berhasil diperbarui!');
+        return redirect()->route('kategori-sp.index')->with('success', 'Data Kategori Sanksi berhasil diperbarui!');
     }
 
     public function destroy($id)
@@ -92,7 +92,7 @@ class KategoriSPController extends Controller
         $kategori_sp = KategoriSP::findOrFail($id);
         $kategori_sp->delete();
 
-        return redirect()->route('pelaku-usaha.index')->with('success', 'Data Pelaku Usaha berhasil dihapus!');
+        return redirect()->route('kategori-sp.index')->with('success', 'Data Kategori Sanksi berhasil dihapus!');
     }
 
     public function importView()
@@ -111,7 +111,7 @@ class KategoriSPController extends Controller
 
         Excel::import(new KategoriSPImport, $request->file('file'));
 
-        return back()->with('success', 'Data Pelaku Usaha berhasil diimport!');
+        return back()->with('success', 'Data Kategori Sanksi berhasil diimport!');
     }
 
     public function getPelakuUsahaByJenis($jenis_pelanggaran_id)

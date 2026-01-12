@@ -24,6 +24,26 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="mb-2">
+                                            <label for="dasar_pengenaan_sanksi" class="col col-form-label">Jenis
+                                                Pelanggaran</label>
+                                            <select name="dasar_pengenaan_sanksi_id" id="dasar_pengenaan_sanksi_id"
+                                                class="form-select">
+                                                @php
+                                                    $selected = old(
+                                                        'dasar_pengenaan_sanksi_id',
+                                                        isset($jenis_pelanggaran)
+                                                            ? $jenis_pelanggaran->dasar_pengenaan_sanksi_id
+                                                            : null,
+                                                    );
+                                                @endphp
+                                                @foreach ($dasar_pengenaan_sanksi as $jp)
+                                                    <option value="{{ $jp->id }}"
+                                                        {{ $selected == $jp->id ? 'selected' : '' }}>{{ $jp->nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-2">
                                             <label for="nama" class="col col-form-label">Nama Jenis Pelanggaran</label>
                                             <input type="text"
                                                 class="form-control @error("nama.$i") is-invalid @enderror" id="nama"
@@ -49,11 +69,19 @@
     <script>
         function addRow() {
             let container = document.getElementById("dataContainer");
-            let firstRow = document.querySelector(".data-item");
-            let newRow = firstRow.cloneNode(true); // Clone seluruh elemen
+            let rows = container.querySelectorAll(".data-item");
+
+            let lastRow = rows[rows.length - 1];
+            let newRow = lastRow.cloneNode(true);
 
             // Kosongkan input baru
             newRow.querySelectorAll("input").forEach(input => input.value = "");
+
+            // Ambil option sebelumnya
+            newRow.querySelectorAll("select").forEach((select, i) => {
+                let prevSelect = lastRow.querySelectorAll("select")[i];
+                select.value = prevSelect.value;
+            });
 
             container.appendChild(newRow);
         }
