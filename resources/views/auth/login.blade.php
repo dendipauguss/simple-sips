@@ -77,87 +77,66 @@
             <!-- CONTENTS -->
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
             <section id="content" class="content">
-                <div
-                    class="content__boxed w-100 min-vh-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="content__boxed w-50 mx-auto my-auto row align-items-center justify-content-center">
+                    <!-- Login card -->
                     <div class="content__wrap">
-                        <!-- Login card -->
-                        <div class="card shadow-lg">
-                            <div class="card-body">
+                        <div class="card rounded-1 bg-dark border-info">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <h1 class="h3 text-white">Login</h1>
+                                            <small>Silahkan masuk menggunakan akun yang sudah terdaftar.</small>
+                                        </div>
 
-                                <div class="text-center">
-                                    <h1 class="h3">Masuk</h1>
-                                </div>
-
-                                <form class="mt-4" action="{{ route('login') }}" method="POST">
-                                    @csrf
-                                    <div class="mb-3">
-                                        <input type="text"
-                                            class="form-control @error('username_or_email') is-invalid @enderror"
-                                            placeholder="Username or Email" name="username_or_email" autofocus=""
-                                            id="username_or_email">
-                                        @error('username_or_email')
-                                            <span class="invalid-feedback" role="alert">
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
+                                        <form class="mt-4" action="{{ route('login') }}" method="POST">
+                                            @csrf
+                                            <div class="mb-3">
+                                                <input type="text"
+                                                    class="form-control @error('username_or_email') is-invalid @enderror bg-primary border-info text-white"
+                                                    placeholder="Username or Email" name="username_or_email"
+                                                    autofocus="" id="username_or_email">
+                                                @error('username_or_email')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="input-group">
+                                                    <input type="password"
+                                                        class="form-control @error('password') is-invalid @enderror bg-primary border-info text-white"
+                                                        placeholder="Password" name="password" id="password">
+                                                    <button type="button" id="togglePassword"
+                                                        class="input-group-text bg-primary border-info">
+                                                        <i class="psi-eye-visible"></i>
+                                                    </button>
+                                                    @error('password')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="d-grid mt-5">
+                                                <button class="btn btn-outline-light btn-lg" type="submit">Sign
+                                                    In</button>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="mb-3">
-                                        <div class="input-group has-validation">
-                                            <input type="password"
-                                                class="form-control @error('password') is-invalid @enderror"
-                                                placeholder="Password" name="password" id="password">
-                                            <button type="button" id="togglePassword" class="input-group-text">
-                                                <i class="psi-eye-visible"></i>
-                                            </button>
-                                            @error('password')
-                                                <span class="invalid-feedback" role="alert">
-                                                    {{ $message }}
-                                                </span>
-                                            @enderror
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <img src="/img/kemendag-bappebti-logo.jpg" alt="" srcset=""
+                                                class="img-thumbnail rounded">
                                         </div>
                                     </div>
-                                    <div class="d-grid mt-5">
-                                        <button class="btn btn-primary btn-lg" type="submit">Sign In</button>
-                                    </div>
-                                </form>
-
-                                {{-- <div class="d-flex justify-content-between mt-4">
-                                    <a href="./front-pages-password-reminder.html"
-                                        class="btn-link text-decoration-none">Forgot password ?</a>
-                                    <a href="./front-pages-register.html" class="btn-link text-decoration-none">Create a
-                                        new account</a>
                                 </div>
-
-                                <div class="d-flex align-items-center justify-content-between border-top pt-3 mt-3">
-                                    <h5 class="m-0">Login with</h5>
-
-                                    <!-- Social media buttons -->
-                                    <div class="ms-3">
-                                        <a href="#"
-                                            class="btn btn-sm btn-icon btn-hover btn-primary text-inherit">
-                                            <i class="demo-psi-facebook fs-5"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-icon btn-hover btn-info text-inherit">
-                                            <i class="demo-psi-twitter fs-5"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-icon btn-hover btn-danger text-inherit">
-                                            <i class="demo-psi-google-plus fs-5"></i>
-                                        </a>
-                                        <a href="#"
-                                            class="btn btn-sm btn-icon btn-hover btn-warning text-inherit">
-                                            <i class="demo-psi-instagram fs-5"></i>
-                                        </a>
-                                    </div>
-                                    <!-- END : Social media buttons -->
-
-                                </div> --}}
-
                             </div>
                         </div>
-                        <!-- END : Login card -->
-
-
                     </div>
+                    <!-- END : Login card -->
                 </div>
             </section>
 

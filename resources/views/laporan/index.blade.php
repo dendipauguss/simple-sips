@@ -4,7 +4,7 @@
         <div class="content__wrap">
             <div class="row">
                 <div class="col-xl-12 mb-3 mb-xl-0">
-                    <div class="card">
+                    <div class="card bg-primary border-info text-white">
                         {{-- <div class="card-header d-flex justify-content-between border-0">
                             <form action="{{ route('laporan.generate') }}" method="GET" class="d-flex gap-2">
                                 <select name="bulan" class="form-control form-control-sm" required>
@@ -25,7 +25,7 @@
                         </div> --}}
                         <div class="card-body mt-1">
                             <div class="table-responsive">
-                                <table class="table table-hover table-sm" id="dataTables">
+                                <table class="table table-hover table-sm bg-primary border-info text-white" id="dataTables">
                                     <thead class="table-dark">
                                         <tr>
                                             <th style="width: 5%">No</th>

@@ -81,12 +81,12 @@
 
             /* Pagination container */
             .dataTables_wrapper .dataTables_paginate .paginate_button {
-                color: #00327d !important;
-                border: 1px solid #0d6efd33;
+                background: transparent;
+                color: #aaa !important;
+                border: 1px solid #ddd;
                 padding: 6px 12px;
                 margin: 0 3px;
                 border-radius: 6px;
-                background: transparent;
                 transition: 0.3s;
             }
 
@@ -106,9 +106,9 @@
 
             /* Disabled button */
             .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+                background: transparent !important;
                 color: #aaa !important;
                 border-color: #ddd !important;
-                background: transparent !important;
             }
 
             /* Remove default shadows/border */
@@ -125,14 +125,14 @@
             .select2-container .select2-selection--single {
                 height: calc(1.5em + .75rem + 2px);
                 padding: .375rem .75rem;
-                border: 1px solid #ced4da;
+                border: 1px solid rgba(var(--bs-info-rgb));
                 border-radius: .375rem;
-                background-color: #fff;
+                background-color: rgba(var(--bs-primary-rgb));
             }
 
             .select2-container--default .select2-selection--single .select2-selection__rendered {
                 line-height: calc(1.5em + .75rem);
-                color: #212529;
+                color: rgba(var(--bs-light-rgb));
             }
 
             .select2-container--default .select2-selection--single .select2-selection__arrow {

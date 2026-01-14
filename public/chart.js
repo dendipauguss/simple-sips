@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const warningColor = _body.getPropertyValue("--bs-warning");
     const mutedColorRGB = _body.getPropertyValue("--bs-muted-color-rgb");
     const dangerColor = _body.getPropertyValue("--bs-danger");
+    const lightColor = _body.getPropertyValue("--bs-light");
     const grayColor = "rgba( 180,180,180, .2 )";
 
 
@@ -116,9 +117,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const ctx = sanksiPerBulanCanvas.getContext("2d");
 
         // Gradient hijau
-        const gradientSuccess = ctx.createLinearGradient(0, 0, 0, sanksiPerBulanCanvas.height);
+        const gradientSuccess = ctx.createLinearGradient(0, 100, 0, 250);
+        const gradientLight = ctx.createLinearGradient(0, 150, 0, 250);
         gradientSuccess.addColorStop(0, successColor);
-        gradientSuccess.addColorStop(1, "rgba(159, 204, 46, 0.05)");
+        gradientSuccess.addColorStop(1, "rgba(159, 204, 46, 0.08)");
+        gradientLight.addColorStop(0, lightColor);
+        gradientLight.addColorStop(0.8, dangerColor);
+        gradientLight.addColorStop(1, "rgba(225, 231, 240, 0.08)");
 
         const stackChart = new Chart(sanksiPerBulanCanvas, {
             type: "line",
@@ -143,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         data: stackData,
                         borderWidth: 0.5,
                         borderColor: grayColor,
+                        backgroundColor: gradientLight,
                         // stack: "combined",
                         fill: "start",
                         parsing: {

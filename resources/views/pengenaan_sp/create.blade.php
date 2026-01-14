@@ -7,11 +7,11 @@
                 @csrf
                 <div class="row sticky-top mb-2">
                     <div class="col-xl-12 mb-xl-0">
-                        <div class="card">
+                        <div class="card bg-primary border-info text-white">
                             <div class="card-body">
                                 <div class="input-group justify-content-end">
                                     <a href="{{ route('pengenaan-sp.index') }}" class="btn btn-sm btn-light">Kembali</a>
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="submit" class="btn btn-outline-success">Simpan</button>
                                 </div>
                             </div>
                         </div>
@@ -19,13 +19,13 @@
                 </div>
                 <div class="row">
                     <div class="col-xl-6 mb-3 mb-xl-0">
-                        <div class="card sticky-top">
+                        <div class="card sticky-top bg-primary border-info text-white">
                             <div class="card-body">
                                 <!-- NOTA DINAS Form -->
                                 <div class="mb-3">
                                     <label class="form-label">Dasar Pengenaan Sanksi</label>
                                     <select name="dasar_pengenaan_sanksi_id"
-                                        class="form-select @error('dasar_pengenaan_sanksi_id') is-invalid @enderror dasar-pengenaan-sanksi">
+                                        class="form-select @error('dasar_pengenaan_sanksi_id') is-invalid @enderror dasar-pengenaan-sanksi bg-primary border-info text-white">
                                         <option value="" disabled selected>-- Pilih Dasar Pengenaan Sanksi --</option>
                                         @foreach ($dasar_pengenaan_sanksi as $dps)
                                             <option value="{{ $dps->id }}"
@@ -42,7 +42,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">No. Nota Dinas</label>
-                                    <input type="text" class="form-control @error('no_nota_dinas') is-invalid @enderror"
+                                    <input type="text"
+                                        class="form-control @error('no_nota_dinas') is-invalid @enderror bg-primary border-info text-white"
                                         name="no_nota_dinas" value="{{ old('no_nota_dinas') }}">
                                     @error('no_nota_dinas')
                                         <div class="invalid-feedback">
@@ -53,7 +54,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Tanggal Nota Dinas</label>
                                     <input type="date"
-                                        class="form-control @error('tanggal_nota_dinas') is-invalid @enderror"
+                                        class="form-control @error('tanggal_nota_dinas') is-invalid @enderror bg-primary border-info text-white"
                                         name="tanggal_nota_dinas" value="{{ old('tanggal_nota_dinas') }}">
                                     @error('tanggal_nota_dinas')
                                         <div class="invalid-feedback">
@@ -64,7 +65,8 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Dokumen Nota Dinas</label>
-                                    <input type="file" name="nota_dinas_file" class="form-control">
+                                    <input type="file" name="nota_dinas_file"
+                                        class="form-control bg-primary border-info text-white">
                                 </div>
                                 <!-- END : NOTA DINAS Form -->
                             </div>
@@ -73,13 +75,13 @@
                     <div class="col-xl-6 mb-3 mb-xl-0">
                         <div id="data-container">
                             @for ($i = 0; $i < $jumlah; $i++)
-                                <div class="card h-100 data-item mb-2">
+                                <div class="card h-100 data-item mb-2 bg-primary border-info text-white">
                                     <div class="card-body">
                                         <!-- PENGENAAN SANKSI Form -->
                                         <div class="mb-3">
                                             <label class="form-label">No. Surat</label>
                                             <input type="text"
-                                                class="form-control @error('no_surat') is-invalid @enderror"
+                                                class="form-control @error('no_surat') is-invalid @enderror bg-primary border-info text-white"
                                                 name="no_surat[]" id="no_surat" value="{{ old("no_surat.$i") }}">
                                             @error("no_surat.$i")
                                                 <div class="invalid-feedback">
@@ -91,7 +93,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Bentuk Sanksi</label>
                                             <select name="sanksi_id[]"
-                                                class="form-select @error("sanksi_id.$i") is-invalid @enderror sanksi-id"
+                                                class="form-select @error("sanksi_id.$i") is-invalid @enderror sanksi-id bg-primary border-info text-white"
                                                 data-index="{{ $i }}">
                                                 <option value="" disabled selected>-- Pilih Bentuk Sanksi --</option>
                                                 @foreach ($sanksi as $s)
@@ -113,15 +115,15 @@
                                         <div class="form-check form-check-inline mb-3 is-denda">
                                             <label for="ya" class="form-check-label">Termasuk Denda</label>
                                             <input type="hidden" name="is_denda[{{ $i }}]" value="0">
-                                            <input class="form-check-input" type="checkbox"
-                                                name="is_denda[{{ $i }}]" value="1"
+                                            <input class="form-check-input bg-primary border-info text-white"
+                                                type="checkbox" name="is_denda[{{ $i }}]" value="1"
                                                 {{ old("is_denda.$i") ? 'checked' : '' }}>
                                         </div>
 
                                         <div class="mb-3 nominal-denda">
                                             <label class="form-label">Nominal Denda</label>
                                             <input type="number" name="nominal_denda[]"
-                                                class="form-control @error('nominal_denda') is-invalid @enderror"
+                                                class="form-control @error('nominal_denda') is-invalid @enderror bg-primary border-info text-white"
                                                 value="{{ old("nominal_denda.$i") }}">
                                             @error('nominal_denda')
                                                 <div class="invalid-feedback">
@@ -133,7 +135,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Tanggal Surat</label>
                                             <input type="date" name="tanggal_mulai[]"
-                                                class="form-control @error('tanggal_mulai') is-invalid @enderror"
+                                                class="form-control @error('tanggal_mulai') is-invalid @enderror bg-primary border-info text-white"
                                                 value="{{ old("tanggal_mulai.$i") }}">
                                             @error('tanggal_mulai')
                                                 <div class="invalid-feedback">
@@ -145,7 +147,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Tanggal Jatuh Tempo</label>
                                             <input type="date" name="tanggal_selesai[]"
-                                                class="form-control @error('tanggal_selesai') is-invalid @enderror"
+                                                class="form-control @error('tanggal_selesai') is-invalid @enderror bg-primary border-info text-white"
                                                 value="{{ old("tanggal_selesai.$i") }}">
                                             @error('tanggal_selesai')
                                                 <div class="invalid-feedback">
@@ -157,7 +159,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Jenis Pelaku Usaha</label>
                                             <select name="jenis_pelaku_usaha_id[]"
-                                                class="form-select @error("jenis_pelaku_usaha_id.$i") is-invalid @enderror jenis-pelaku-usaha"
+                                                class="form-select @error("jenis_pelaku_usaha_id.$i") is-invalid @enderror jenis-pelaku-usaha bg-primary border-info text-white"
                                                 data-index="{{ $i }}">
                                                 @foreach ($jenis_pelaku_usaha as $p)
                                                     <option value="{{ $p->id }}"
@@ -175,7 +177,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Perusahaan</label>
                                             <select name="pelaku_usaha_id[]"
-                                                class="form-select select2 @error("pelaku_usaha_id.$i") is-invalid @enderror pelaku-usaha"
+                                                class="form-select select2 @error("pelaku_usaha_id.$i") is-invalid @enderror pelaku-usaha bg-primary border-info text-white"
                                                 data-index="{{ $i }}">
                                                 <option>-- Pilih Jenis Pelaku Usaha Terlebih Dahulu --</option>
                                             </select>
@@ -188,7 +190,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Jenis Pelanggaran</label>
                                             <select name="jenis_pelanggaran_id[]"
-                                                class="form-select @error("jenis_pelanggaran_id.$i") is-invalid @enderror jenis-pelanggaran"
+                                                class="form-select @error("jenis_pelanggaran_id.$i") is-invalid @enderror jenis-pelanggaran bg-primary border-info text-white"
                                                 data-index="{{ $i }}">
                                                 @foreach ($jenis_pelanggaran as $j)
                                                     <option value="{{ $j->id }}"
@@ -206,7 +208,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Kategori Sanksi</label>
                                             <select name="kategori_sp_id[]"
-                                                class="form-select @error("kategori_sp_id.$i") is-invalid @enderror kategori-sp"
+                                                class="form-select @error("kategori_sp_id.$i") is-invalid @enderror kategori-sp bg-primary border-info text-white"
                                                 data-index="{{ $i }}">
                                                 <option>-- Pilih Jenis Pelanggaran Terlebih Dahulu
                                                     --</option>
@@ -220,17 +222,17 @@
 
                                         <div class="mb-3">
                                             <label class="form-label">Detail Pelanggaran</label>
-                                            <textarea name="detail_pelanggaran[]" class="form-control" style="height: 100px">{{ old("detail_pelanggaran.$i") }}</textarea>
+                                            <textarea name="detail_pelanggaran[]" class="form-control bg-primary border-info text-white" style="height: 100px">{{ old("detail_pelanggaran.$i") }}</textarea>
                                         </div>
                                         <!-- END : PENGENAAN SANKSI Form -->
 
                                         <div class="mb-3">
                                             <label for="lampiran" class="form-label">Dokumen</label>
                                             <input type="file" name="lampiran[{{ $i }}][]" id="lampiran"
-                                                class="form-control" multiple>
+                                                class="form-control bg-primary border-info text-white" multiple>
                                         </div>
 
-                                        <button type="button" class="btn btn-sm btn-success" onclick="addRow()">
+                                        <button type="button" class="btn btn-sm btn-light" onclick="addRow()">
                                             + Tambah Pengenaan Sanksi
                                         </button>
 

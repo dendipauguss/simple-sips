@@ -4,12 +4,12 @@
         <div class="content__wrap">
             <div class="row">
                 <div class="col-xl-12 mb-3 mb-xl-0">
-                    <div class="card h-100">
+                    <div class="card h-100 bg-primary border-info text-white">
                         <div class="card-header border-0">
                             <form action="{{ route('laporan.generate') }}" method="GET">
                                 <div class="row align-items-center">
                                     <div class="col-md-3">
-                                        <select name="bulan" class="form-select">
+                                        <select name="bulan" class="form-select bg-primary border-info text-white">
                                             <option value="">Semua Bulan</option>
                                             @foreach ($bulanList as $b)
                                                 <option value="{{ $b }}">
@@ -20,7 +20,7 @@
                                     </div>
 
                                     <div class="col-md-3">
-                                        <select name="tahun" class="form-select">
+                                        <select name="tahun" class="form-select bg-primary border-info text-white">
                                             <option value="">Semua Tahun</option>
                                             @foreach ($tahunList as $t)
                                                 <option value="{{ $t }}">{{ $t }}</option>
@@ -51,7 +51,7 @@
 
                                     <div class="col-sm-3">
                                         <div class="input-group">
-                                            <button class="btn btn-primary ms-1">Generate Laporan</button>
+                                            <button class="btn btn-light ms-1">Generate Laporan</button>
                                             @if (auth()->user()->role == 'admin')
                                                 <a href="{{ url('pengenaan-sp/import') }}" class="btn btn-sm btn-success">+
                                                     Import
@@ -62,19 +62,22 @@
                                 </div>
                             </form>
 
-                            <form method="GET" action="{{ route('pengenaan-sp.index') }}" class="d-flex gap-3 mt-2">
-                                <div class="col-sm-3">
-                                    <select name="status" class="form-select" onchange="this.form.submit()">
-                                        <option value="">Semua Status</option>
-                                        <option value="sudah_ditanggapi"
-                                            {{ request('status') == 'sudah_ditanggapi' ? 'selected' : '' }}>
-                                            Sudah Ditanggapi
-                                        </option>
-                                        <option value="belum_ditanggapi"
-                                            {{ request('status') == 'belum_ditanggapi' ? 'selected' : '' }}>
-                                            Belum Ditanggapi
-                                        </option>
-                                    </select>
+                            <form method="GET" action="{{ route('pengenaan-sp.index') }}">
+                                <div class="row align-items-center mt-2">
+                                    <div class="col-sm-3">
+                                        <select name="status" class="form-select bg-primary border-info text-white"
+                                            onchange="this.form.submit()">
+                                            <option value="">Semua Status</option>
+                                            <option value="sudah_ditanggapi"
+                                                {{ request('status') == 'sudah_ditanggapi' ? 'selected' : '' }}>
+                                                Sudah Ditanggapi
+                                            </option>
+                                            <option value="belum_ditanggapi"
+                                                {{ request('status') == 'belum_ditanggapi' ? 'selected' : '' }}>
+                                                Belum Ditanggapi
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
                             </form>
                             {{-- <div class="row row-cols-md-auto">
@@ -86,7 +89,7 @@
                         </div>
                         <div class="card-body mt-1">
                             <div class="table-responsive">
-                                <table class="table table-hover" id="dataTables">
+                                <table class="table table-hover bg-primary text-white" id="dataTables">
                                     <thead class="table-primary">
                                         <tr>
                                             <th class="text-dark text-center">No</th>
@@ -128,8 +131,12 @@
                                                 </td>
 
                                                 <td class="text-center">
-                                                    <span id="status-penindakan-{{ $sp->id }}"
-                                                        class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
+                                                    @if ($sp->status_surat == 'pending')
+                                                        <span id="status-penindakan-{{ $sp->id }}">-</span>
+                                                    @else
+                                                        <span id="status-penindakan-{{ $sp->id }}"
+                                                            class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
+                                                    @endif
 
                                                 </td>
                                                 @if (auth()->user()->role != 'ketua_tim')

@@ -3,7 +3,8 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Laporan {{ $laporan->status_disetujui == 'setuju' ? 'Disetujui' : 'Belum Disetujui' }}</title>
+        <title>Laporan {{ $laporan->status_persetujuan == 'setuju' ? 'Disetujui' : ($laporan->status_persetujuan == 'dikembalikan' ? 'Dikembalikan' : 'Dipending') }}
+        </title>
         <style>
             /* @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap'); */
 
@@ -206,14 +207,15 @@
         @endphp
 
         <table border="1" cellpadding="4" cellspacing="0" class="tabel-word" align="center">
-            <thead>
+            <thead style="font-size: 8pt">
                 <th style="width: 6%">No</th>
-                <th style="width: 25%">Nama Perusahaan</th>
+                <th style="width: 18%">Nama Perusahaan</th>
                 <th>Kategori Pelaku Usaha</th>
                 <th>Periode (MMMM yyyy)</th>
                 <th>Bentuk Sanksi</th>
                 <th>Pelanggaran</th>
                 <th>Tanggapan</th>
+                <th>Tanggal Jatuh Tempo</th>
             </thead>
             <tbody>
                 @php $no = 1; @endphp
@@ -293,6 +295,11 @@
                                             -
                                         @endif
                                     </td>
+
+                                    {{-- TANGGAL JATUH TEMPO --}}
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                                    </td>
                                 </tr>
 
                                 @php
@@ -319,6 +326,12 @@
                 <td style="padding:2px 0;"><strong>{{ $jumlah_status['sudah'] }}</strong></td>
             </tr>
             <tr>
+                <td style="padding:2px 0;">Pending
+                </td>
+                <td style="padding:2px 0;">=</td>
+                <td style="padding:2px 0;"><strong>{{ $jumlah_status['pending'] }}</strong></td>
+            </tr>
+            <tr>
                 <td style="padding:2px 0;">Belum Ditanggapi
                 </td>
                 <td style="padding:2px 0;">=</td>
@@ -329,7 +342,7 @@
                 </td>
                 <td style="padding:2px 0;">=</td>
                 <td style="padding:2px 0;">
-                    <strong>{{ $jumlah_status['belum'] + $jumlah_status['sudah'] }}</strong>
+                    <strong>{{ $jumlah_status['belum'] + $jumlah_status['pending'] + $jumlah_status['sudah'] }}</strong>
                 </td>
             </tr>
         </table>

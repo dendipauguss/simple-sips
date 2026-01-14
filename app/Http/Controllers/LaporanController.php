@@ -142,6 +142,10 @@ class LaporanController extends Controller
             'sudah' => $laporan->pengenaan_sp
                 ->where('status_surat', 'sudah_ditanggapi')
                 ->count(),
+
+            'pending' => $laporan->pengenaan_sp
+                ->where('status_surat', 'pending')
+                ->count(),
         ];
 
         $urutan = sprintf('%03d', $laporan->id);

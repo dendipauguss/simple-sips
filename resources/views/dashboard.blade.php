@@ -71,7 +71,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="card mb-2 text-white text-center bg-transparent shadow-none">
+                    <div class="card mb-2 text-white text-center bg-transparent shadow-lg border-info">
                         <div class="card-body">
                             <h5 class="card-title">Trend Pengenaan Sanksi Tiap Bulan</h5>
                             <!-- Stacked chart -->
@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <div class="col-xl-12">
-                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-lg border-info">
                         <div class="card-body">
                             <h5 class="card-title">Persentase Kategori Pelaku Usaha Penerima Sanksi</h5>
                             <div class="row gap-1 justify-content-evenly">
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div class="col-xl-6">
-                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-lg border-info">
                         <div class="card-body">
                             <h5 class="card-title">Total Sanksi Per Bentuk Sanksi</h5>
                             <!-- Status Chart -->
@@ -126,7 +126,7 @@
                     </div>
                 </div>
                 <div class="col-xl-6">
-                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-lg border-info">
                         <div class="card-body">
                             <h5 class="card-title">Total Sanksi Per Pelanggaran</h5>
                             <!-- Status Chart -->
@@ -139,7 +139,7 @@
                     </div>
                 </div>
                 <div class="col-xl-6">
-                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-lg border-info">
                         <div class="card-body">
                             <h5 class="card-title">Top 10 Perusahaan Penerima Sanksi</h5>
                             <div style="height: 300px">
@@ -151,7 +151,7 @@
                     </div>
                 </div>
                 <div class="col-xl-6">
-                    <div class="card mb-2 text-center text-white bg-transparent shadow-none">
+                    <div class="card mb-2 text-center text-white bg-transparent shadow-lg border-info">
                         <div class="card-body">
                             <h5 class="card-title">Kategori Pelaku Usaha Penerima Sanksi</h5>
                             <div style="height: 300px">
