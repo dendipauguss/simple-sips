@@ -86,6 +86,14 @@
                                         class="btn btn-sm btn-danger" target="_blank">Generate Laporan</a>
                                 </div>
                             </div> --}}
+                            <div class="row">
+                                @foreach ($deadline_sanksi_terdekat as $d)
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $d->pelaku_usaha->nama }} dengan NO {{ $d->no_surat }} tanggal jatuh tempo
+                                        {{ \Carbon\Carbon::parse($d->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                         <div class="card-body mt-1">
                             <div class="table-responsive">

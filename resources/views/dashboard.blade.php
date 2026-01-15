@@ -45,17 +45,6 @@
                     </div> --}}
 
                     <div class="card mb-2 text-white text-center bg-transparent shadow-none">
-                        {{-- <div class="col-sm-3 ms-auto card text-dark text-center mb-2">
-                            <form action="" method="get" id="filter_tahun">
-                                <select name="tahun" class="form-select" onchange="this.form.submit()">
-                                    <option value="">Semua Tahun</option>
-                                    @foreach ($tahun_list as $t)
-                                        <option value="{{ $t }}" {{ request('tahun') == $t ? 'selected' : '' }}>
-                                            {{ $t }}</option>
-                                    @endforeach
-                                </select>
-                            </form>
-                        </div> --}}
                         <div class="ms-auto">
                             <form action="" method="GET" id="filter_tahun">
                                 <div class="btn-group">

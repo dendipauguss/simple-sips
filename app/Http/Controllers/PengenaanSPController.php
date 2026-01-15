@@ -71,6 +71,16 @@ class PengenaanSPController extends Controller
             ->orderBy('nama')
             ->get();
 
+        $deadline_sanksi_terdekat = $query
+            ->with([
+                'sanksi', // 🔥 WAJIB
+                'pelaku_usaha.jenis_pelaku_usaha',
+                'jenis_pelanggaran',
+                'user'
+            ])
+            ->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')
+            ->get();
+
         return view('pengenaan_sp.index', [
             'title' => 'Monitoring Pengenaan Sanksi',
             'pengenaan_sp' => $pengenaan_sp,
