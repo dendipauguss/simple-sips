@@ -86,14 +86,6 @@
                                         class="btn btn-sm btn-danger" target="_blank">Generate Laporan</a>
                                 </div>
                             </div> --}}
-                            <div class="row">
-                                @foreach ($deadline_sanksi_terdekat as $d)
-                                    <div class="alert alert-danger" role="alert">
-                                        {{ $d->pelaku_usaha->nama }} dengan NO {{ $d->no_surat }} tanggal jatuh tempo
-                                        {{ \Carbon\Carbon::parse($d->tanggal_selesai)->translatedFormat('l, d F Y') }}
-                                    </div>
-                                @endforeach
-                            </div>
                         </div>
                         <div class="card-body mt-1">
                             <div class="table-responsive">
@@ -116,8 +108,41 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            // Helper konversi hari → bulan + hari
+                                            function formatHariKeBulan($hari)
+                                            {
+                                                $hari = abs($hari);
+                                                $bulan = intdiv($hari, 30);
+                                                $sisaHari = $hari % 30;
+
+                                                if ($bulan > 0 && $sisaHari > 0) {
+                                                    return "{$bulan} bulan {$sisaHari} hari";
+                                                } elseif ($bulan > 0) {
+                                                    return "{$bulan} bulan";
+                                                }
+
+                                                return "{$hari} hari";
+                                            }
+                                        @endphp
                                         @foreach ($pengenaan_sp as $sp)
-                                            <tr>
+                                            @php
+                                                $hariIni = now();
+                                                $tglSelesai = \Carbon\Carbon::parse($sp->tanggal_selesai);
+                                                $sisaHari = $hariIni->diffInDays($tglSelesai, false);
+
+                                                $statusAktif = in_array($sp->status_surat, [
+                                                    'belum_ditanggapi',
+                                                    'pending',
+                                                ]);
+                                            @endphp
+
+                                            <tr
+                                                class="{{ $statusAktif && $sisaHari < 0
+                                                    ? 'table-danger'
+                                                    : ($statusAktif && $sisaHari >= 0 && $sisaHari <= 5
+                                                        ? 'table-warning'
+                                                        : '') }}">
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td class="text-center">
                                                     {{ $sp->no_surat }}
@@ -136,6 +161,18 @@
                                                 </td>
                                                 <td class="text-center">
                                                     {{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                                                    <br>
+                                                    @if ($statusAktif)
+                                                        @if ($sisaHari < 0)
+                                                            <div class="text-danger" style="font-size: 11px;">
+                                                                Terlambat {{ formatHariKeBulan($sisaHari) }}
+                                                            </div>
+                                                        @elseif ($sisaHari <= 5)
+                                                            <div class="text-warning" style="font-size: 11px;">
+                                                                Jatuh tempo {{ formatHariKeBulan($sisaHari) }} lagi
+                                                            </div>
+                                                        @endif
+                                                    @endif
                                                 </td>
 
                                                 <td class="text-center">

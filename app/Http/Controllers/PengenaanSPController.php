@@ -34,6 +34,8 @@ class PengenaanSPController extends Controller
 {
     public function index(Request $request)
     {
+        $hari_ini = Carbon::today()->toDateString();
+
         $query = PengenaanSP::query()->with([
             'sanksi', // 🔥 WAJIB
             'pelaku_usaha.jenis_pelaku_usaha',
@@ -64,21 +66,32 @@ class PengenaanSPController extends Controller
                 'jenis_pelanggaran',
                 'user'
             ])
-            ->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')
+            ->orderByRaw("CASE
+            -- 1️⃣ Overdue & belum ditanggapi / pending (PALING ATAS)
+            WHEN tanggal_selesai < CURDATE()
+                 AND status_surat IN ('belum_ditanggapi', 'pending')
+            THEN 1
+
+            -- 2️⃣ H-0 s.d H-5 (peringatan)
+            WHEN DATEDIFF(tanggal_selesai, CURDATE()) BETWEEN 0 AND 5
+                 AND status_surat IN ('belum_ditanggapi', 'pending')
+            THEN 2
+
+            -- 3️⃣ Lebih dari 5 hari
+            WHEN DATEDIFF(tanggal_selesai, CURDATE()) > 5
+                 AND status_surat IN ('belum_ditanggapi', 'pending')
+            THEN 3
+
+            -- 4️⃣ Sudah ditanggapi (PALING BAWAH)
+            ELSE 4
+        END
+    ")
+
+            ->orderByRaw("ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC")
             ->get();
 
         $perusahaan = PelakuUsaha::whereHas('pengenaan_sp')
             ->orderBy('nama')
-            ->get();
-
-        $deadline_sanksi_terdekat = $query
-            ->with([
-                'sanksi', // 🔥 WAJIB
-                'pelaku_usaha.jenis_pelaku_usaha',
-                'jenis_pelanggaran',
-                'user'
-            ])
-            ->orderByRaw('ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC')
             ->get();
 
         return view('pengenaan_sp.index', [
