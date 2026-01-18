@@ -139,6 +139,7 @@
                 height: 100%;
             }
         </style>
+
         <script src="{{ env('JQUERY_LINK') }}/jquery-3.7.1.min.js"></script>
     </head>
 
@@ -192,6 +193,20 @@
                             <div class="d-flex">
                                 <div class="toast-body">
                                     {{ session('error') }}
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                                    data-bs-dismiss="toast"></button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                @if (session('info'))
+                    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+                        <div id="toastInfo" class="toast align-items-center text-white bg-info border-0" role="alert">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    {{ session('info') }}
                                 </div>
                                 <button type="button" class="btn-close btn-close-white me-2 m-auto"
                                     data-bs-dismiss="toast"></button>
@@ -790,6 +805,13 @@
                 @endif
                 @if (session('error'))
                     var toastElement = document.getElementById('toastDanger');
+                    var toast = new bootstrap.Toast(toastElement, {
+                        delay: 3000
+                    });
+                    toast.show();
+                @endif
+                @if (session('info'))
+                    var toastElement = document.getElementById('toastInfo');
                     var toast = new bootstrap.Toast(toastElement, {
                         delay: 3000
                     });

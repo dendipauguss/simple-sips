@@ -123,6 +123,33 @@
                                                     In</button>
                                             </div>
                                         </form>
+
+                                        <!-- Login With Google -->
+                                        @if ($histori_login->count())
+                                            <div class="mt-3">
+                                                <small class="text-muted">Login terakhir</small>
+
+                                                @foreach ($histori_login as $item)
+                                                    <div class="d-flex align-items-center p-2 border rounded mb-2">
+                                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($item->name) }}"
+                                                            width="32" class="rounded-circle me-2">
+
+                                                        <div>
+                                                            <strong>{{ $item->name }}</strong><br>
+                                                            <small class="text-muted">{{ $item->email }}</small>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+
+                                        <div id="g_id_onload" data-client_id="{{ env('GOOGLE_AUTH_CLIENT_ID') }}"
+                                            data-callback="handleCredentialResponse" class="mt-4">
+                                        </div>
+
+                                        <div class="g_id_signin" data-type="standard">
+                                        </div>
+                                        <!-- Login With Google -->
                                     </div>
                                 </div>
                                 <div class="col-md-5">
@@ -164,6 +191,9 @@
         <!-- Chart JS Scripts [ OPTIONAL ] -->
         <script src="{{ env('THM_LINK') }}/assets/vendors/chart.js/chart.min.js" defer=""></script>
 
+        <!-- GSI Client -->
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+
         <script defer=""
             src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
             integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
@@ -182,6 +212,27 @@
                 $(this).html(type === 'password' ? '<i class="psi-eye-visible"></i>' :
                     '<i class="psi-eye-invisible"></i>');
             });
+
+            function handleCredentialResponse(response) {
+                fetch('/auth/google', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            credential: response.credential
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.success) {
+                            window.location.href = res.redirect;
+                        } else {
+                            alert(res.message ?? 'Login gagal');
+                        }
+                    });
+            }
         </script>
     </body>
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Google\Client as GoogleClient;
+use App\Models\HistoriLogin;
 
 class AuthController extends Controller
 {
@@ -13,7 +15,10 @@ class AuthController extends Controller
     public function showLogin()
     {
         return view('auth.login', [
-            'title' => 'Login'
+            'title' => 'Login',
+            'histori_login' => HistoriLogin::latest('last_login_at')
+                ->limit(3)
+                ->get()
         ]);
     }
 
@@ -38,7 +43,18 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             // regenerate session
             $request->session()->regenerate();
-            return redirect()->route('dashboard');
+
+            HistoriLogin::updateOrCreate(
+                ['user_id' => Auth::id()],
+                [
+                    'email' => Auth::user()->email,
+                    'name' => Auth::user()->nama,
+                    'provider' => 'password',
+                    'last_login_at' => now()
+                ]
+            );
+
+            return redirect()->route('dashboard')->with('info', 'Selamat Datang ' . Auth::user()->nama);
         }
 
         return back()->withErrors([
@@ -83,5 +99,67 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+
+    public function login_with_google(Request $request)
+    {
+        $request->validate([
+            'credential' => 'required'
+        ]);
+
+        $client = new GoogleClient([
+            'client_id' => env('GOOGLE_AUTH_CLIENT_ID')
+        ]);
+
+        try {
+            $payload = $client->verifyIdToken($request->credential);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Token Google tidak valid'
+            ], 401);
+        }
+
+        if (!$payload) {
+            return response()->json([
+                'message' => 'Token Google tidak valid'
+            ], 401);
+        }
+
+        $email = $payload['email'];
+        $googleId = $payload['sub'];
+
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Akun tidak terdaftar'
+            ], 403);
+        }
+
+        // simpan google_id jika belum ada
+        if (!$user->google_id) {
+            $user->update([
+                'google_id' => $googleId
+            ]);
+        }
+
+        Auth::login($user);
+
+        HistoriLogin::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'email' => $user->email,
+                'name' => $user->nama,
+                'provider' => 'google',
+                'last_login_at' => now()
+            ]
+        );
+
+        session()->flash('info', 'Selamat Datang ' . $user->nama);
+
+        return response()->json([
+            'success' => true,
+            'redirect' => url('/dashboard')
+        ]);
     }
 }
