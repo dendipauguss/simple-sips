@@ -29,6 +29,7 @@ use App\Models\Laporan;
 use App\Models\Sanksi;
 use App\Models\LaporanItem;
 use App\Models\DasarPengenaanSanksi;
+use App\Models\PengenaanSPEskalasi;
 
 class PengenaanSPController extends Controller
 {
@@ -200,10 +201,6 @@ class PengenaanSPController extends Controller
                     'user_id' => auth()->id(),
                 ]);
 
-                $filename = "SP-{$this->sanitizeFolderName($sp->no_surat)}";
-
-                $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp', $sp->id, 'surat', $folderPath, $filename);
-
                 $sanksiUtamaId = $request->sanksi_id[$i];
                 $isDenda       = $request->is_denda[$i] ?? 0;
 
@@ -231,18 +228,23 @@ class PengenaanSPController extends Controller
                         'updated_at' => now(),
                     ]);
                 }
+
+                $eskalasi = PengenaanSPEskalasi::create([
+                    'pengenaan_sp_id' => $sp->id,
+                    'sanksi_id'       => $sanksiUtamaId,
+                    'level'           => 1,
+                    'no_surat'        => $sp->no_surat,
+                    'tanggal_mulai'   => $sp->tanggal_mulai,
+                    'tanggal_selesai' => $sp->tanggal_selesai,
+                    'is_denda'        => $isDenda,
+                    'nominal_denda'   => $isDenda ? $request->nominal_denda[$i] : null,
+                    'status'          => 'aktif',
+                ]);
+
+                $filename = "SP-{$eskalasi->level}-{$this->sanitizeFolderName($eskalasi->no_surat)}";
+
+                $this->uploadFileToGDrive($request->file("lampiran.$i"), 'pengenaan_sp_eskalasi', $eskalasi->id, 'surat', $folderPath, $filename);
             }
-
-            // ---- 3. Update no_sp dengan bulan/tahun ----
-            // $bulan_tersimpan = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('m');
-            // $tahun_tersimpan = \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y');
-
-            // $sp->update([
-            // 'no_surat' => $sp->no_surat . "/{$bulan_tersimpan}/{$tahun_tersimpan}"
-            // ]);
-
-            // ---- 4. Otomatis Export PDF setelah simpan ----
-            // $this->exportPdf($sp->id);
         });
 
         return redirect()->route('pengenaan-sp.index')
@@ -365,129 +367,102 @@ class PengenaanSPController extends Controller
         return back()->with('success', 'Data berhasil dihapus!');
     }
 
-    private function uploadFile(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen)
+    public function eskalasi($id)
     {
-        if (!$files) return;
+        $sp = PengenaanSP::with([
+            'eskalasi' => function ($q) {
+                $q->orderBy('level');
+            }
+        ])->findOrFail($id);
 
-        if (!is_array($files)) {
-            $files = [$files];
-        }
+        // eskalasi yang sedang aktif
+        $eskalasiAktif = $sp->eskalasi->where('status', 'aktif')->first();
 
-        foreach ($files as $file) {
+        // validasi jatuh tempo
+        // if (!$eskalasiAktif || now()->lte($eskalasiAktif->tanggal_selesai)) {
+        //     abort(403, 'Sanksi belum melewati tanggal jatuh tempo');
+        // }
 
-            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
-
-            $path = $file->storeAs(
-                "uploads/{$table_name}",
-                $filename,
-                'public'
-            );
-
-            Files::create([
-                'table_name'    => $table_name,
-                'table_id'      => $table_id,
-                'tipe'          => $tipe_dokumen,
-                'filename'      => $filename,
-                'original_name' => $file->getClientOriginalName(),
-                'url_path'      => 'storage/' . $path,
-            ]);
-        }
+        return view('pengenaan_sp.eskalasi', [
+            'title'          => 'Eskalasi Sanksi',
+            'sp'             => $sp,
+            'eskalasiAktif'  => $eskalasiAktif,
+            'nextLevel'      => $sp->eskalasi->max('level') + 1,
+            'sanksi' => Sanksi::all()
+        ]);
     }
 
-    private function uploadFilesToOneDrive(
-        UploadedFile|array|null $files,
-        string $table_name,
-        int $table_id,
-        string $tipe_dokumen,
-        OneDriveService $oneDrive
-    ) {
-        if (!$files) return;
-
-        if (!is_array($files)) {
-            $files = [$files];
-        }
-
-        foreach ($files as $file) {
-
-            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
-
-            // Upload ke OneDrive
-            $result = $oneDrive->upload(
-                auth()->id(),
-                $file->getRealPath(),
-                $filename,
-                "uploads/{$table_name}"
-            );
-
-            // Simpan metadata ke DB
-            Files::create([
-                'table_name'    => $table_name,
-                'table_id'      => $table_id,
-                'tipe'          => $tipe_dokumen,
-                'filename'      => $filename,
-                'original_name' => $file->getClientOriginalName(),
-                'url_path'      => $result['webUrl'], // URL OneDrive
-                'drive_file_id' => $result['id'],     // PENTING
-            ]);
-        }
-    }
-
-    private function uploadFileToGDrive(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen, string $folderPath, string $filenamed)
+    public function eskalasi_store(Request $request, $id)
     {
-        if (!$files) return;
+        $request->validate([
+            'no_surat'        => 'required|string',
+            'tanggal_mulai'   => 'required|date',
+            'tanggal_selesai' => 'required|date|after:tanggal_mulai',
+            'is_denda'        => 'required|in:0,1',
+            'nominal_denda'   => 'required_if:is_denda,1|nullable|numeric|min:0',
+            'dokumen'         => 'required|file|mimes:pdf,jpg,jpeg,png',
+        ]);
 
-        if (!is_array($files)) {
-            $files = [$files];
+        $sp = PengenaanSP::with('eskalasi')->findOrFail($id);
+
+        $eskalasiAktif = $sp->eskalasi
+            ->where('status', 'aktif')
+            ->first();
+
+        // pengaman
+        if (!$eskalasiAktif) {
+            return back()->withErrors('Tidak ada eskalasi aktif');
         }
 
-        // 🔑 HITUNG FILE YANG SUDAH ADA
-        $no = Files::where('table_name', $table_name)
-            ->where('table_id', $table_id)
-            ->where('tipe', $tipe_dokumen)
-            ->count() + 1;
+        if (now()->lte($eskalasiAktif->tanggal_selesai)) {
+            return back()->withErrors('Belum melewati tanggal jatuh tempo');
+        }
 
-        foreach ($files as $file) {
+        DB::transaction(function () use ($request, $sp, $eskalasiAktif) {
 
-            $filename = sprintf('%s-%02d.%s', $filenamed, $no++, $file->getClientOriginalExtension());
+            // 1. Tutup eskalasi sebelumnya
+            $eskalasiAktif->update([
+                'status' => 'selesai'
+            ]);
 
-            $fullPath = "{$folderPath}/{$filename}";
-
-            // ⬅️ INI YANG PALING PENTING
-            Gdrive::put($fullPath, $file);
-
-            // Ambil metadata file terakhir
-            $content = Gdrive::all($folderPath);
-            $uploaded = $content->last();
-
-            $meta = $uploaded?->extraMetadata() ?? [];
-
-            Files::create([
-                'table_name' => $table_name,
-                'table_id' => $table_id,
-                'tipe' => $tipe_dokumen,
-                'filename' => $meta['filename'] ?? $filename,
-                'original_name' => $file->getClientOriginalName(),
-                'google_file_id' => $meta['id'] ?? null,
-                'google_file_path' => $uploaded?->path(),
-                'url_path' => isset($meta['id'])
-                    ? 'https://drive.google.com/file/d/' . $meta['id']
+            // 2. Simpan eskalasi baru
+            $eskalasi_baru = PengenaanSpEskalasi::create([
+                'pengenaan_sp_id' => $sp->id,
+                'sanksi_id'       => $eskalasiAktif->sanksi_id, // jenis sanksi tetap
+                'level'           => $eskalasiAktif->level + 1,
+                'no_surat'        => $request->no_surat,
+                'tanggal_mulai'   => $request->tanggal_mulai,
+                'tanggal_selesai' => $request->tanggal_selesai,
+                'is_denda'        => $request->is_denda,
+                'nominal_denda'   => $request->is_denda
+                    ? $request->nominal_denda
                     : null,
+                'status'          => 'aktif',
             ]);
-        }
-    }
 
-    private function deleteFileFromGDrive($file_path): bool
-    {
-        try {
-            Gdrive::delete($file_path);
-            return true;
-        } catch (\Throwable $e) {
-            Log::error('GDrive delete failed', [
-                'path' => $file_path,
-                'error' => $e->getMessage(),
-            ]);
-            return false;
-        }
+            $dasar = DasarPengenaanSanksi::find($eskalasi_baru->pengenaan_sp->jenis_pelanggaran->dasar_pengenaan_sanksi_id)->nama;
+            $tahun = \Carbon\Carbon::parse($eskalasi_baru->pengenaan_sp->nota_dinas->tanggal_nota_dinas)->format('Y');
+            $noNota = $this->sanitizeFolderName($eskalasi_baru->pengenaan_sp->nota_dinas->no_nota_dinas);
+
+            $base = config('filesystems.disks.google.root'); // env('GOOGLE_DRIVE_FOLDER')
+            $folderPath = "{$base}/{$tahun}/{$dasar}/{$noNota}";
+            $pengenaan_sp = PengenaanSP::findOrFail($eskalasi_baru->pengenaan_sp_id);
+
+            $filename = "SP-{$eskalasi_baru->level}-{$this->sanitizeFolderName($pengenaan_sp->no_surat)}";
+            // 3. Upload dokumen → melekat ke eskalasi
+            $this->uploadFileToGDrive(
+                $request->file('dokumen'),
+                'pengenaan_sp_eskalasi',
+                $eskalasi_baru->id,
+                'surat',
+                $folderPath,
+                $filename // ⬅️ identitas dokumen pakai no_surat
+            );
+        });
+
+        return redirect()
+            ->route('pengenaan-sp.index')
+            ->with('success', 'Eskalasi sanksi berhasil disimpan');
     }
 
     public function laporan(Request $request)
@@ -641,6 +616,131 @@ class PengenaanSPController extends Controller
         Excel::import(new PengenaanSPImport, $request->file('file'));
 
         return back()->with('success', 'Data berhasil diimport');
+    }
+
+    private function uploadFile(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen)
+    {
+        if (!$files) return;
+
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
+        foreach ($files as $file) {
+
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $path = $file->storeAs(
+                "uploads/{$table_name}",
+                $filename,
+                'public'
+            );
+
+            Files::create([
+                'table_name'    => $table_name,
+                'table_id'      => $table_id,
+                'tipe'          => $tipe_dokumen,
+                'filename'      => $filename,
+                'original_name' => $file->getClientOriginalName(),
+                'url_path'      => 'storage/' . $path,
+            ]);
+        }
+    }
+
+    private function uploadFilesToOneDrive(
+        UploadedFile|array|null $files,
+        string $table_name,
+        int $table_id,
+        string $tipe_dokumen,
+        OneDriveService $oneDrive
+    ) {
+        if (!$files) return;
+
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
+        foreach ($files as $file) {
+
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Upload ke OneDrive
+            $result = $oneDrive->upload(
+                auth()->id(),
+                $file->getRealPath(),
+                $filename,
+                "uploads/{$table_name}"
+            );
+
+            // Simpan metadata ke DB
+            Files::create([
+                'table_name'    => $table_name,
+                'table_id'      => $table_id,
+                'tipe'          => $tipe_dokumen,
+                'filename'      => $filename,
+                'original_name' => $file->getClientOriginalName(),
+                'url_path'      => $result['webUrl'], // URL OneDrive
+                'drive_file_id' => $result['id'],     // PENTING
+            ]);
+        }
+    }
+
+    private function uploadFileToGDrive(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen, string $folderPath, string $filenamed)
+    {
+        if (!$files) return;
+
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
+        // 🔑 HITUNG FILE YANG SUDAH ADA
+        $no = Files::where('table_name', $table_name)
+            ->where('table_id', $table_id)
+            ->where('tipe', $tipe_dokumen)
+            ->count() + 1;
+
+        foreach ($files as $file) {
+
+            $filename = sprintf('%s-%02d.%s', $filenamed, $no++, $file->getClientOriginalExtension());
+
+            $fullPath = "{$folderPath}/{$filename}";
+
+            // ⬅️ INI YANG PALING PENTING
+            Gdrive::put($fullPath, $file);
+
+            // Ambil metadata file terakhir
+            $content = Gdrive::all($folderPath);
+            $uploaded = $content->last();
+
+            $meta = $uploaded?->extraMetadata() ?? [];
+
+            Files::create([
+                'table_name' => $table_name,
+                'table_id' => $table_id,
+                'tipe' => $tipe_dokumen,
+                'filename' => $meta['filename'] ?? $filename,
+                'original_name' => $file->getClientOriginalName(),
+                'google_file_id' => $meta['id'] ?? null,
+                'google_file_path' => $uploaded?->path(),
+                'url_path' => isset($meta['id'])
+                    ? 'https://drive.google.com/file/d/' . $meta['id']
+                    : null,
+            ]);
+        }
+    }
+
+    private function deleteFileFromGDrive($file_path): bool
+    {
+        try {
+            Gdrive::delete($file_path);
+            return true;
+        } catch (\Throwable $e) {
+            Log::error('GDrive delete failed', [
+                'path' => $file_path,
+                'error' => $e->getMessage(),
+            ]);
+            return false;
+        }
     }
 
     private function getOneDriveAccessToken()

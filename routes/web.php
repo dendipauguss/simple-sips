@@ -43,6 +43,9 @@ Route::middleware('auth', 'user-aktif')->group(function () {
     Route::get('/get-jenis-pelanggaran/{dasar_pengenaan_sanksi_id}', [DasarPengenaanSanksiController::class, 'getJenisPelanggaranByDasarPengenaanSanksi']);
     Route::get('/pengenaan-sp/export-excel', [PengenaanSPController::class, 'exportExcel'])->name('pengenaan-sp.export.excel');
     Route::get('/pengenaan-sp/export-pdf',   [PengenaanSPController::class, 'exportPdf'])->name('pengenaan-sp.export.pdf');
+    Route::get('/pengenaan-sp/eskalasi/{id}', [PengenaanSPController::class, 'eskalasi'])->name('pengenaan-sp.eskalasi');
+    Route::post('pengenaan-sp/eskalasi/{id}', [PengenaanSPController::class, 'eskalasi_store'])
+        ->name('pengenaan-sp.eskalasi.store');
     Route::get('/pengenaan-sp/generate-laporan',   [PengenaanSPController::class, 'generateLaporan'])->name('pengenaan-sp.generate.laporan');
     Route::get('/pengenaan-sp/{id}/generate-pdf', [PengenaanSPController::class, 'generatePdf'])
         ->name('pengenaan-sp.generate-pdf');

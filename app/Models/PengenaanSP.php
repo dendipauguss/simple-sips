@@ -85,4 +85,16 @@ class PengenaanSP extends Model
             'laporan_id'
         );
     }
+
+    public function eskalasi()
+    {
+        return $this->hasMany(PengenaanSPEskalasi::class, 'pengenaan_sp_id');
+    }
+
+    public function eskalasi_aktif()
+    {
+        return $this->hasOne(PengenaanSpEskalasi::class)
+            ->where('status', 'aktif')
+            ->latest('level');
+    }
 }

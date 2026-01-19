@@ -12,6 +12,7 @@ class CreateSanksiTable extends Migration
             $table->id();
             $table->string('nama');
             $table->string('kode_surat')->unique();
+            $table->integer('urutan');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

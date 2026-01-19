@@ -14,7 +14,6 @@ return new class extends Migration
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->unsignedBigInteger('nota_dinas_id');
-            $table->unsignedBigInteger('sanksi_id');
             $table->unsignedBigInteger('jenis_pelaku_usaha_id');
             $table->unsignedBigInteger('pelaku_usaha_id');
             $table->unsignedBigInteger('jenis_pelanggaran_id');
@@ -22,13 +21,11 @@ return new class extends Migration
             $table->text('detail_pelanggaran')->nullable();
             $table->string('tanggapan')->nullable();
             $table->enum('status_surat', ['pending', 'belum_ditanggapi', 'sudah_ditanggapi'])->default('belum_ditanggapi');
-            // $table->enum('status_laporan', ['acc', 'pending', 'return'])->default('pending');
+            $table->enum('status_aktif', ['aktif', 'selesai'])->default('aktif');
             $table->unsignedBigInteger('user_id');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
-
             $table->foreign('nota_dinas_id')->references('id')->on('nota_dinas')->onDelete('cascade');
-            $table->foreign('sanksi_id')->references('id')->on('sanksi')->onDelete('cascade');
             $table->foreign('jenis_pelaku_usaha_id')->references('id')->on('jenis_pelaku_usaha')->onDelete('cascade');
             $table->foreign('pelaku_usaha_id')->references('id')->on('pelaku_usaha')->onDelete('cascade');
             $table->foreign('jenis_pelanggaran_id')->references('id')->on('jenis_pelanggaran')->onDelete('cascade');

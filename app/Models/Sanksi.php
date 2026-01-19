@@ -12,10 +12,10 @@ class Sanksi extends Model
 
     protected $guarded = ['id'];
 
-    public function perintah_sanksi()
-    {
-        return $this->hasMany(PerintahSanksi::class);
-    }
+    // public function perintah_sanksi()
+    // {
+    //     return $this->hasMany(PerintahSanksi::class);
+    // }
 
     public function pengenaan_sp()
     {

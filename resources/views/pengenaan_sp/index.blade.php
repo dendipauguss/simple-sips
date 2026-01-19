@@ -130,7 +130,7 @@
                                                 $hariIni = now();
                                                 $tglSelesai = \Carbon\Carbon::parse($sp->tanggal_selesai);
                                                 $sisaHari = $hariIni->diffInDays($tglSelesai, false);
-
+                                                $eskalasiAktif = $sp->eskalasiAktif;
                                                 $statusAktif = in_array($sp->status_surat, [
                                                     'belum_ditanggapi',
                                                     'pending',
@@ -189,9 +189,26 @@
                                                         <div class="btn-group" role="group">
                                                             @if (auth()->user()->id == $sp->user->id)
                                                                 <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
+                                                                    class="badge bg-info me-1 text-decoration-none"
+                                                                    title="Tanggapi">
+                                                                    Tanggapi <i class="psi-pencil"></i>
+                                                                </a>
+                                                                {{-- @if ($eskalasiAktif && \Carbon\Carbon::now()->gt($eskalasiAktif->tanggal_selesai))
+                                                                    <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
+                                                                        class="badge bg-warning me-1 text-decoration-none"
+                                                                        title="Eskalasi">
+                                                                        ESKALASI <i class="psi-exclamation"></i>
+                                                                    </a>
+                                                                @else
+                                                                    <a class="badge bg-gray me-1 text-decoration-none text-dark"
+                                                                        disabled>
+                                                                        ESKALASI <i class="psi-exclamation"></i>
+                                                                    </a>
+                                                                @endif --}}
+                                                                <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
                                                                     class="badge bg-warning me-1 text-decoration-none"
-                                                                    title="Edit">
-                                                                    Edit <i class="psi-pencil"></i>
+                                                                    title="Eskalasi">
+                                                                    ESKALASI <i class="psi-exclamation"></i>
                                                                 </a>
                                                                 <a href="#"
                                                                     class="badge bg-danger text-decoration-none"
