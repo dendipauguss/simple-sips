@@ -61,7 +61,9 @@
                         <tbody>
                             @foreach ($sp->eskalasi as $e)
                                 <tr>
-                                    <td class="text-center">SP {{ $e->level }}</td>
+                                    <td class="text-center">
+                                        {{ $e->sanksi->kode_surat === 'SP' ? 'SP ' . $e->level : $e->sanksi->kode_surat }}
+                                    </td>
                                     <td>{{ $e->no_surat }}</td>
                                     <td>
                                         {{ $e->tanggal_mulai }} <br>
@@ -75,8 +77,8 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ $e->status === 'aktif' ? 'success' : 'secondary' }}">
-                                            {{ ucfirst($e->status) }}
+                                        <span class="badge bg-{{ $e->status === 'aktif' ? 'success' : 'danger' }}">
+                                            {{ $e->status == 'selesai' ? 'Lewat Jatuh Tempo' : ucfirst($e->status) }}
                                         </span>
                                     </td>
                                     <td>

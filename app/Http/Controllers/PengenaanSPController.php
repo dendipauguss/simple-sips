@@ -377,6 +377,20 @@ class PengenaanSPController extends Controller
         // eskalasi yang sedang aktif
         $eskalasiAktif = $sp->eskalasi->where('status', 'aktif')->first();
 
+        $sanksi_kecuali = [];
+
+        if ($eskalasiAktif && $eskalasiAktif->sanksi->kode_surat == 'SP') {
+            $sanksi_kecuali = ['SP'];
+        } elseif ($eskalasiAktif && $eskalasiAktif->sanksi->kode_surat == 'BTS') {
+            $sanksi_kecuali = ['SP', 'BTS'];
+        } elseif ($eskalasiAktif && $eskalasiAktif->sanksi->kode_surat == 'BKU') {
+            $sanksi_kecuali = ['SP', 'BTS', 'BKU'];
+        } elseif ($eskalasiAktif && $eskalasiAktif->sanksi->kode_surat == 'CBTU') {
+            $sanksi_kecuali = ['SP', 'BTS', 'BKU', 'CBTU'];
+        }
+
+        $sanksi = Sanksi::whereNotIn('kode_surat', $sanksi_kecuali)->get();
+
         // validasi jatuh tempo
         // if (!$eskalasiAktif || now()->lte($eskalasiAktif->tanggal_selesai)) {
         //     abort(403, 'Sanksi belum melewati tanggal jatuh tempo');
@@ -387,7 +401,7 @@ class PengenaanSPController extends Controller
             'sp'             => $sp,
             'eskalasiAktif'  => $eskalasiAktif,
             'nextLevel'      => $sp->eskalasi->max('level') + 1,
-            'sanksi' => Sanksi::all()
+            'sanksi' => $sanksi
         ]);
     }
 
@@ -395,6 +409,7 @@ class PengenaanSPController extends Controller
     {
         $request->validate([
             'no_surat'        => 'required|string',
+            'sanksi_id'       => 'required|integer',
             'tanggal_mulai'   => 'required|date',
             'tanggal_selesai' => 'required|date|after:tanggal_mulai',
             'is_denda'        => 'required|in:0,1',
@@ -408,13 +423,19 @@ class PengenaanSPController extends Controller
             ->where('status', 'aktif')
             ->first();
 
-        // pengaman
-        if (!$eskalasiAktif) {
-            return back()->with('error', 'Tidak ada eskalasi aktif');
-        }
+        $sanksi = Sanksi::findOrFail($request->sanksi_id);
 
-        if (now()->lte($eskalasiAktif->tanggal_selesai)) {
-            return back()->with('error', 'Belum melewati tanggal jatuh tempo');
+        // pengaman
+        // if (!$eskalasiAktif) {
+        //     return back()->with('error', 'Tidak ada eskalasi aktif');
+        // }
+
+        // if (now()->lte($eskalasiAktif->tanggal_selesai)) {
+        //     return back()->with('error', 'Belum melewati tanggal jatuh tempo');
+        // }
+
+        if ($sanksi->kode_surat == 'SP') {
+            return back()->with('error', 'SP Maksimal 3 kali sampai SP 3');
         }
 
         DB::transaction(function () use ($request, $sp, $eskalasiAktif) {
@@ -427,7 +448,7 @@ class PengenaanSPController extends Controller
             // 2. Simpan eskalasi baru
             $eskalasi_baru = PengenaanSpEskalasi::create([
                 'pengenaan_sp_id' => $sp->id,
-                'sanksi_id'       => $eskalasiAktif->sanksi_id, // jenis sanksi tetap
+                'sanksi_id'       => $request->sanksi_id, // jenis sanksi tetap
                 'level'           => $eskalasiAktif->level + 1,
                 'no_surat'        => $request->no_surat,
                 'tanggal_mulai'   => $request->tanggal_mulai,

@@ -185,7 +185,7 @@
                                                                     title="Tanggapi">
                                                                     Tanggapi <i class="psi-pencil"></i>
                                                                 </a>
-                                                                @if ($bolehEskalasi)
+                                                                {{-- @if ($bolehEskalasi)
                                                                     <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
                                                                         class="badge bg-warning me-1 text-decoration-none"
                                                                         title="Eskalasi">
@@ -196,12 +196,12 @@
                                                                         disabled>
                                                                         ESKALASI <i class="psi-exclamation"></i>
                                                                     </a>
-                                                                @endif
-                                                                {{-- <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
+                                                                @endif --}}
+                                                                <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
                                                                     class="badge bg-warning me-1 text-decoration-none"
                                                                     title="Eskalasi">
                                                                     ESKALASI <i class="psi-exclamation"></i>
-                                                                </a> --}}
+                                                                </a>
                                                                 <a href="#"
                                                                     class="badge bg-danger text-decoration-none"
                                                                     onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $sp->id }}').submit();">
