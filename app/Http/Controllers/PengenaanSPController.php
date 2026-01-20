@@ -35,7 +35,6 @@ class PengenaanSPController extends Controller
 {
     public function index(Request $request)
     {
-        $hari_ini = Carbon::today()->toDateString();
 
         $query = PengenaanSP::query()->with([
             'sanksi', // 🔥 WAJIB
@@ -411,11 +410,11 @@ class PengenaanSPController extends Controller
 
         // pengaman
         if (!$eskalasiAktif) {
-            return back()->withErrors('Tidak ada eskalasi aktif');
+            return back()->with('error', 'Tidak ada eskalasi aktif');
         }
 
         if (now()->lte($eskalasiAktif->tanggal_selesai)) {
-            return back()->withErrors('Belum melewati tanggal jatuh tempo');
+            return back()->with('error', 'Belum melewati tanggal jatuh tempo');
         }
 
         DB::transaction(function () use ($request, $sp, $eskalasiAktif) {

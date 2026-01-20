@@ -93,7 +93,7 @@ class PengenaanSP extends Model
 
     public function eskalasi_aktif()
     {
-        return $this->hasOne(PengenaanSpEskalasi::class)
+        return $this->hasOne(PengenaanSpEskalasi::class, 'pengenaan_sp_id')
             ->where('status', 'aktif')
             ->latest('level');
     }

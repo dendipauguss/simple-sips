@@ -109,28 +109,19 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            // Helper konversi hari → bulan + hari
-                                            function formatHariKeBulan($hari)
-                                            {
-                                                $hari = abs($hari);
-                                                $bulan = intdiv($hari, 30);
-                                                $sisaHari = $hari % 30;
-
-                                                if ($bulan > 0 && $sisaHari > 0) {
-                                                    return "{$bulan} bulan {$sisaHari} hari";
-                                                } elseif ($bulan > 0) {
-                                                    return "{$bulan} bulan";
-                                                }
-
-                                                return "{$hari} hari";
-                                            }
+                                            \Carbon\Carbon::setLocale('id');
                                         @endphp
                                         @foreach ($pengenaan_sp as $sp)
                                             @php
+                                                $tgl = \Carbon\Carbon::parse($sp->tanggal_selesai);
                                                 $hariIni = now();
                                                 $tglSelesai = \Carbon\Carbon::parse($sp->tanggal_selesai);
                                                 $sisaHari = $hariIni->diffInDays($tglSelesai, false);
-                                                $eskalasiAktif = $sp->eskalasiAktif;
+                                                $eskalasiAktif = $sp->eskalasi_aktif;
+                                                $bolehEskalasi =
+                                                    $eskalasiAktif &&
+                                                    $hariIni->gt($eskalasiAktif->tanggal_selesai) &&
+                                                    in_array($sp->status_surat, ['belum_ditanggapi', 'pending']);
                                                 $statusAktif = in_array($sp->status_surat, [
                                                     'belum_ditanggapi',
                                                     'pending',
@@ -165,11 +156,12 @@
                                                     @if ($statusAktif)
                                                         @if ($sisaHari < 0)
                                                             <div class="text-danger" style="font-size: 11px;">
-                                                                Terlambat {{ formatHariKeBulan($sisaHari) }}
+                                                                Terlambat {{ $tgl->longAbsoluteDiffForHumans(now()) }}
                                                             </div>
                                                         @elseif ($sisaHari <= 5)
                                                             <div class="text-warning" style="font-size: 11px;">
-                                                                Jatuh tempo {{ formatHariKeBulan($sisaHari) }} lagi
+                                                                Jatuh tempo {{ $tgl->longAbsoluteDiffForHumans(now()) }}
+                                                                lagi
                                                             </div>
                                                         @endif
                                                     @endif
@@ -193,7 +185,7 @@
                                                                     title="Tanggapi">
                                                                     Tanggapi <i class="psi-pencil"></i>
                                                                 </a>
-                                                                {{-- @if ($eskalasiAktif && \Carbon\Carbon::now()->gt($eskalasiAktif->tanggal_selesai))
+                                                                @if ($bolehEskalasi)
                                                                     <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
                                                                         class="badge bg-warning me-1 text-decoration-none"
                                                                         title="Eskalasi">
@@ -204,12 +196,12 @@
                                                                         disabled>
                                                                         ESKALASI <i class="psi-exclamation"></i>
                                                                     </a>
-                                                                @endif --}}
-                                                                <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
+                                                                @endif
+                                                                {{-- <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
                                                                     class="badge bg-warning me-1 text-decoration-none"
                                                                     title="Eskalasi">
                                                                     ESKALASI <i class="psi-exclamation"></i>
-                                                                </a>
+                                                                </a> --}}
                                                                 <a href="#"
                                                                     class="badge bg-danger text-decoration-none"
                                                                     onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $sp->id }}').submit();">

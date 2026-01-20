@@ -4,7 +4,7 @@
     <div class="content__boxed">
         <div class="content__wrap">
 
-            <a href="{{ route('pengenaan-sp.index') }}" class="btn btn-sm btn-dark mb-3">
+            <a href="{{ route('pengenaan-sp.index') }}" class="btn btn-sm btn-light mb-3">
                 ⬅ Kembali
             </a>
 
@@ -106,7 +106,8 @@
 
                             <div class="mb-3">
                                 <label>No Surat</label>
-                                <input type="text" name="no_surat" class="form-control" required>
+                                <input type="text" name="no_surat" class="form-control" required
+                                    value="{{ old('no_surat') }}">
                             </div>
 
                             <div class="row">
@@ -118,7 +119,8 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label>Tanggal Jatuh Tempo</label>
-                                    <input type="date" name="tanggal_selesai" class="form-control" required>
+                                    <input type="date" name="tanggal_selesai" class="form-control" required
+                                        value="{{ old('tanggal_selesai') }}">
                                 </div>
                             </div>
 
@@ -126,7 +128,8 @@
                                 <label class="form-label">Bentuk Sanksi</label>
                                 <select name="sanksi_id" class="form-select sanksi-id">
                                     @foreach ($sanksi as $s)
-                                        <option value="{{ $s->id }}" data-kode="{{ $s->kode_surat }}">
+                                        <option value="{{ $s->id }}" data-kode="{{ $s->kode_surat }}"
+                                            {{ old('sanksi_id') == $s->id ? 'selected' : '' }}>
                                             {{ $s->nama }}
                                         </option>
                                     @endforeach

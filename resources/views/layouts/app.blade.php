@@ -172,14 +172,17 @@
                 {{-- Alert Success --}}
                 @if (session('success'))
                     <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
-                        <div id="toastSuccess" class="toast align-items-center text-white bg-success border-0"
+                        <div id="toastSuccess" class="toast align-items-center bg-white border-1 border-success"
                             role="alert">
-                            <div class="d-flex">
-                                <div class="toast-body">
-                                    {{ session('success') }}
+                            <div class="d-flex bg-success">
+                                <div class="toast-header text-white">
+                                    Sukses
                                 </div>
                                 <button type="button" class="btn-close btn-close-white me-2 m-auto"
                                     data-bs-dismiss="toast"></button>
+                            </div>
+                            <div class="toast-body text-dark">
+                                {{ session('success') }}
                             </div>
                         </div>
                     </div>
@@ -188,14 +191,17 @@
                 {{-- Alert Error --}}
                 @if (session('error'))
                     <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
-                        <div id="toastDanger" class="toast align-items-center text-white bg-danger border-0"
+                        <div id="toastDanger" class="toast align-items-center bg-white border-1 border-danger"
                             role="alert">
-                            <div class="d-flex">
-                                <div class="toast-body">
-                                    {{ session('error') }}
+                            <div class="d-flex bg-danger">
+                                <div class="toast-header text-white">
+                                    Peringatan
                                 </div>
                                 <button type="button" class="btn-close btn-close-white me-2 m-auto"
                                     data-bs-dismiss="toast"></button>
+                            </div>
+                            <div class="toast-body text-dark">
+                                {{ session('error') }}
                             </div>
                         </div>
                     </div>
@@ -203,13 +209,17 @@
 
                 @if (session('info'))
                     <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
-                        <div id="toastInfo" class="toast align-items-center text-white bg-info border-0" role="alert">
-                            <div class="d-flex">
-                                <div class="toast-body">
-                                    {{ session('info') }}
+                        <div id="toastInfo" class="toast align-items-center bg-white border-1 border-info"
+                            role="alert">
+                            <div class="d-flex bg-info">
+                                <div class="toast-header text-white">
+                                    Info
                                 </div>
                                 <button type="button" class="btn-close btn-close-white me-2 m-auto"
                                     data-bs-dismiss="toast"></button>
+                            </div>
+                            <div class="toast-body text-dark">
+                                {{ session('info') }}
                             </div>
                         </div>
                     </div>
