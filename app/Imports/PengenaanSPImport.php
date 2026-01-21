@@ -6,6 +6,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Collection;
 use App\Models\PengenaanSP;
 use App\Models\PengenaanSPSanksi;
+use App\Models\PengenaanSPEskalasi;
 use App\Models\JenisPelakuUsaha;
 use App\Models\PelakuUsaha;
 use App\Models\JenisPelanggaran;
@@ -103,6 +104,18 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
         PengenaanSPSanksi::create([
             'pengenaan_sp_id' => $sp->id,
             'sanksi_id'       => 1, // SP
+        ]);
+
+        PengenaanSPEskalasi::create([
+            'pengenaan_sp_id' => $sp->id,
+            'sanksi_id'       => 1, // jenis sanksi tetap
+            'level'           => 1,
+            'no_surat'        => $sp->no_surat,
+            'tanggal_mulai'   => $sp->tanggal_mulai,
+            'tanggal_selesai' => $sp->tanggal_selesai,
+            'is_denda'        => false,
+            'nominal_denda'   => null,
+            'status'          => 'aktif',
         ]);
 
         // JIKA ADA DENDA

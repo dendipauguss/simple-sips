@@ -113,7 +113,6 @@
                                         @endphp
                                         @foreach ($pengenaan_sp as $sp)
                                             @php
-                                                $tgl = \Carbon\Carbon::parse($sp->tanggal_selesai);
                                                 $hariIni = now();
                                                 $eskalasiAktif = $sp->eskalasi_aktif;
                                                 $tglSelesai = \Carbon\Carbon::parse($eskalasiAktif->tanggal_selesai);
@@ -121,11 +120,8 @@
                                                 $bolehEskalasi =
                                                     $eskalasiAktif &&
                                                     $hariIni->gt($eskalasiAktif->tanggal_selesai) &&
-                                                    in_array($sp->status_surat, ['belum_ditanggapi', 'pending']);
-                                                $statusAktif = in_array($sp->status_surat, [
-                                                    'belum_ditanggapi',
-                                                    'pending',
-                                                ]);
+                                                    in_array($sp->status_surat, ['belum_ditanggapi']);
+                                                $statusAktif = in_array($sp->status_surat, ['belum_ditanggapi']);
                                             @endphp
 
                                             <tr
@@ -139,7 +135,7 @@
                                                     {{ $sp->no_surat }}
                                                 </td>
                                                 <td class="text-center">
-                                                    {{ \Carbon\Carbon::parse($sp->tanggal_mulai)->translatedFormat('d-m-Y') }}
+                                                    {{ \Carbon\Carbon::parse($eskalasiAktif->tanggal_mulai)->translatedFormat('d-m-Y') }}
                                                 </td>
                                                 <td class="text-center">{{ $sp->pelaku_usaha->jenis_pelaku_usaha->nama }}
                                                 </td>
@@ -166,16 +162,18 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    {{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                                                    {{ \Carbon\Carbon::parse($eskalasiAktif->tanggal_selesai)->translatedFormat('l, d F Y') }}
                                                     <br>
                                                     @if ($statusAktif)
                                                         @if ($sisaHari < 0)
                                                             <div class="text-danger" style="font-size: 11px;">
-                                                                Terlambat {{ $tgl->longAbsoluteDiffForHumans(now()) }}
+                                                                Terlambat
+                                                                {{ $tglSelesai->longAbsoluteDiffForHumans(now()) }}
                                                             </div>
                                                         @elseif ($sisaHari <= 5)
                                                             <div class="text-warning" style="font-size: 11px;">
-                                                                Jatuh tempo {{ $tgl->longAbsoluteDiffForHumans(now()) }}
+                                                                Jatuh tempo
+                                                                {{ $tglSelesai->longAbsoluteDiffForHumans(now()) }}
                                                                 lagi
                                                             </div>
                                                         @endif

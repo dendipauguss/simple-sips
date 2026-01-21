@@ -25,7 +25,8 @@
                             <th>Sanksi Aktif</th>
                             <td>
                                 {{ $eskalasiAktif->sanksi->nama }}
-                                (SP {{ $eskalasiAktif->level }})
+                                (SP
+                                {{ $eskalasiAktif->level }}){{ $eskalasiAktif->is_denda ? ', Denda Administratif' : '' }}
                             </td>
                         </tr>
                         <tr>
@@ -116,7 +117,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label>Tanggal Surat</label>
                                     <input type="date" name="tanggal_mulai" class="form-control" required
-                                        value="{{ $sp->tanggal_mulai }}" readonly>
+                                        value="{{ old('tanggal_mulai') }}">
                                 </div>
 
                                 <div class="col-md-6 mb-3">

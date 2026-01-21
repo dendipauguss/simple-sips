@@ -292,7 +292,7 @@
                                         @elseif($sp->status_surat == 'sudah_ditanggapi')
                                             Sudah Ditanggapi
                                         @else
-                                            -
+                                            Pending
                                         @endif
                                     </td>
 

@@ -63,33 +63,28 @@ class PengenaanSPController extends Controller
 
         $pengenaan_sp = $query
             ->with([
-                'sanksi', // 🔥 WAJIB
+                'sanksi',
                 'pelaku_usaha.jenis_pelaku_usaha',
                 'jenis_pelanggaran',
-                'user'
+                'user',
+                'eskalasi_aktif.sanksi'
             ])
-            ->orderByRaw("CASE
-            -- 1️⃣ Overdue & belum ditanggapi / pending (PALING ATAS)
-            WHEN tanggal_selesai < CURDATE()
-                 AND status_surat IN ('belum_ditanggapi', 'pending')
-            THEN 1
-
-            -- 2️⃣ H-0 s.d H-5 (peringatan)
-            WHEN DATEDIFF(tanggal_selesai, CURDATE()) BETWEEN 0 AND 5
-                 AND status_surat IN ('belum_ditanggapi', 'pending')
-            THEN 2
-
-            -- 3️⃣ Lebih dari 5 hari
-            WHEN DATEDIFF(tanggal_selesai, CURDATE()) > 5
-                 AND status_surat IN ('belum_ditanggapi', 'pending')
-            THEN 3
-
-            -- 4️⃣ Sudah ditanggapi (PALING BAWAH)
-            ELSE 4
-        END
-    ")
-
-            ->orderByRaw("ABS(DATEDIFF(tanggal_selesai, CURDATE())) ASC")
+            ->orderByRaw("
+                CASE
+                    WHEN status_surat = 'belum_ditanggapi' AND tanggal_selesai < CURDATE() THEN 1
+                    WHEN status_surat = 'belum_ditanggapi' THEN 2
+                    WHEN status_surat = 'pending' THEN 3
+                    WHEN status_surat = 'sudah_ditanggapi' THEN 4
+                    ELSE 5
+                END
+            ")
+            ->orderByRaw("
+                CASE
+                    WHEN status_surat IN ('belum_ditanggapi', 'pending')
+                    THEN ABS(DATEDIFF(tanggal_selesai, CURDATE()))
+                    ELSE 999999
+                END
+            ")
             ->get();
 
         $perusahaan = PelakuUsaha::whereHas('pengenaan_sp')
