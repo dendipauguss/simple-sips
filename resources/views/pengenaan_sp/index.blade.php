@@ -115,9 +115,9 @@
                                             @php
                                                 $tgl = \Carbon\Carbon::parse($sp->tanggal_selesai);
                                                 $hariIni = now();
-                                                $tglSelesai = \Carbon\Carbon::parse($sp->tanggal_selesai);
-                                                $sisaHari = $hariIni->diffInDays($tglSelesai, false);
                                                 $eskalasiAktif = $sp->eskalasi_aktif;
+                                                $tglSelesai = \Carbon\Carbon::parse($eskalasiAktif->tanggal_selesai);
+                                                $sisaHari = $hariIni->diffInDays($tglSelesai, false);
                                                 $bolehEskalasi =
                                                     $eskalasiAktif &&
                                                     $hariIni->gt($eskalasiAktif->tanggal_selesai) &&
@@ -148,7 +148,22 @@
                                                 </td>
 
                                                 <td>
-                                                    {{ $sp->sanksi->isNotEmpty() ? $sp->sanksi->pluck('nama')->implode(', ') : '-' }}
+                                                    @if ($eskalasiAktif)
+                                                        {{ $eskalasiAktif->sanksi->nama }}
+                                                        @if ($eskalasiAktif->sanksi->kode_surat === 'SP')
+                                                            {{ $eskalasiAktif->level }}
+                                                        @endif
+
+                                                        @if ($eskalasiAktif->is_denda)
+                                                            <br>
+                                                            <small class="text-danger">
+                                                                Denda: Rp
+                                                                {{ number_format($eskalasiAktif->nominal_denda, 0, ',', '.') }}
+                                                            </small>
+                                                        @endif
+                                                    @else
+                                                        -
+                                                    @endif
                                                 </td>
                                                 <td class="text-center">
                                                     {{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}
@@ -178,12 +193,11 @@
                                                 </td>
                                                 @if (auth()->user()->role != 'ketua_tim')
                                                     <td class="text-center">
-                                                        <div class="btn-group" role="group">
-                                                            @if (auth()->user()->id == $sp->user->id)
+                                                        @if (auth()->user()->id == $sp->user->id)
+                                                            <div class="btn-group" role="group">
                                                                 <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
-                                                                    class="badge bg-info me-1 text-decoration-none"
-                                                                    title="Tanggapi">
-                                                                    Tanggapi <i class="psi-pencil"></i>
+                                                                    class="btn btn-sm btn-info" title="Tanggapi">
+                                                                    <i class="psi-pencil"></i>
                                                                 </a>
                                                                 {{-- @if ($bolehEskalasi)
                                                                     <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
@@ -198,30 +212,28 @@
                                                                     </a>
                                                                 @endif --}}
                                                                 <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
-                                                                    class="badge bg-warning me-1 text-decoration-none"
-                                                                    title="Eskalasi">
-                                                                    ESKALASI <i class="psi-exclamation"></i>
+                                                                    class="btn btn-sm btn-warning" title="Eskalasi">
+                                                                    <i class="psi-up"></i>
                                                                 </a>
-                                                                <a href="#"
-                                                                    class="badge bg-danger text-decoration-none"
-                                                                    onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $sp->id }}').submit();">
-                                                                    Hapus <i class="psi-trash"></i>
+                                                                <a href="#" class="btn btn-sm btn-danger"
+                                                                    onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $sp->id }}').submit();"
+                                                                    title="Hapus">
+                                                                    <i class="psi-trash"></i>
                                                                 </a>
-
-                                                                <form id="delete-{{ $sp->id }}"
-                                                                    action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
-                                                                    method="POST" style="display:none;">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                </form>
-                                                            @else
-                                                                <div class="badge bg-warning">
-                                                                    <span class="fs-3">
-                                                                        <i class="psi-security-settings"></i>
-                                                                    </span>
-                                                                </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                            <form id="delete-{{ $sp->id }}"
+                                                                action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
+                                                                method="POST" style="display:none;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            </form>
+                                                        @else
+                                                            <div class="badge bg-warning">
+                                                                <span class="fs-3">
+                                                                    <i class="psi-security-settings"></i>
+                                                                </span>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 @endif
                                                 <td class="text-start">

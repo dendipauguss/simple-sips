@@ -30,6 +30,7 @@ use App\Models\Sanksi;
 use App\Models\LaporanItem;
 use App\Models\DasarPengenaanSanksi;
 use App\Models\PengenaanSPEskalasi;
+use Illuminate\Support\Str;
 
 class PengenaanSPController extends Controller
 {
@@ -40,7 +41,8 @@ class PengenaanSPController extends Controller
             'sanksi', // 🔥 WAJIB
             'pelaku_usaha.jenis_pelaku_usaha',
             'jenis_pelanggaran',
-            'user'
+            'user',
+            'eskalasi_aktif.sanksi'
         ]);
 
         $status = $request->status;
@@ -125,7 +127,6 @@ class PengenaanSPController extends Controller
 
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'no_nota_dinas' => 'required|string',
             'tanggal_nota_dinas' => 'required|date',
@@ -374,19 +375,29 @@ class PengenaanSPController extends Controller
             }
         ])->findOrFail($id);
 
+        $kodeSanksiDipakai = $sp->eskalasi
+            ->pluck('sanksi.kode_surat')
+            ->filter()
+            ->toArray();
+        $jumlahSP = collect($kodeSanksiDipakai)
+            ->where(fn($kode) => $kode === 'SP')
+            ->count();
+
         // eskalasi yang sedang aktif
         $eskalasiAktif = $sp->eskalasi->where('status', 'aktif')->first();
 
         $sanksi_kecuali = [];
 
-        if ($eskalasiAktif && $eskalasiAktif->sanksi->kode_surat == 'SP') {
-            $sanksi_kecuali = ['SP'];
-        } elseif ($eskalasiAktif && $eskalasiAktif->sanksi->kode_surat == 'BTS') {
-            $sanksi_kecuali = ['SP', 'BTS'];
-        } elseif ($eskalasiAktif && $eskalasiAktif->sanksi->kode_surat == 'BKU') {
-            $sanksi_kecuali = ['SP', 'BTS', 'BKU'];
-        } elseif ($eskalasiAktif && $eskalasiAktif->sanksi->kode_surat == 'CBTU') {
-            $sanksi_kecuali = ['SP', 'BTS', 'BKU', 'CBTU'];
+        // selain SP → kalau sudah dipakai, exclude
+        foreach ($kodeSanksiDipakai as $kode) {
+            if ($kode !== 'SP') {
+                $sanksi_kecuali[] = $kode;
+            }
+        }
+
+        // SP → boleh maksimal 3 kali
+        if ($jumlahSP >= 3) {
+            $sanksi_kecuali[] = 'SP';
         }
 
         $sanksi = Sanksi::whereNotIn('kode_surat', $sanksi_kecuali)->get();
@@ -429,13 +440,20 @@ class PengenaanSPController extends Controller
         // if (!$eskalasiAktif) {
         //     return back()->with('error', 'Tidak ada eskalasi aktif');
         // }
+        // if ($sp->eskalasi()->where('status', 'aktif')->exists()) {
+        //     throw new \Exception('Masih ada eskalasi aktif');
+        // }
 
         // if (now()->lte($eskalasiAktif->tanggal_selesai)) {
         //     return back()->with('error', 'Belum melewati tanggal jatuh tempo');
         // }
 
-        if ($sanksi->kode_surat == 'SP') {
-            return back()->with('error', 'SP Maksimal 3 kali sampai SP 3');
+        if ($eskalasiAktif->level == 3 && $sanksi->kode_surat == 'SP') {
+            return back()->with('error', 'SP Maksimal 3 kali sampai SP 3!');
+        }
+
+        if ($request->tanggal_selesai <= $eskalasiAktif->tanggal_selesai) {
+            return back()->with('error', 'Tanggal jatuh tempo jangan sama atau kurang dari tanggal jatuh tempo sebelumnya!');
         }
 
         DB::transaction(function () use ($request, $sp, $eskalasiAktif) {
@@ -731,7 +749,7 @@ class PengenaanSPController extends Controller
             // Ambil metadata file terakhir
             $content = Gdrive::all($folderPath);
             $uploaded = $content->last();
-
+            // $uploaded = Gdrive::all($folderPath)->last();
             $meta = $uploaded?->extraMetadata() ?? [];
 
             Files::create([
@@ -742,9 +760,10 @@ class PengenaanSPController extends Controller
                 'original_name' => $file->getClientOriginalName(),
                 'google_file_id' => $meta['id'] ?? null,
                 'google_file_path' => $uploaded?->path(),
-                'url_path' => isset($meta['id'])
-                    ? 'https://drive.google.com/file/d/' . $meta['id']
-                    : null,
+                // 'url_path' => isset($meta['id'])
+                //     ? 'https://drive.google.com/file/d/' . $meta['id']
+                //     : null,
+                'file_token' => Str::uuid()
             ]);
         }
     }

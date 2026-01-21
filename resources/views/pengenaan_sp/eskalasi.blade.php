@@ -83,7 +83,7 @@
                                     </td>
                                     <td>
                                         @foreach ($e->files as $file)
-                                            <a href="{{ $file->url_path }}" target="_blank"
+                                            <a href="{{ route('file.view', $file->file_token) }}" target="_blank"
                                                 class="d-block text-decoration-none">
                                                 📄 {{ $file->original_name ?? 'Dokumen' }}
                                             </a>

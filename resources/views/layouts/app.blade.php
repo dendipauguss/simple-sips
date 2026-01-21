@@ -181,8 +181,8 @@
                                 <button type="button" class="btn-close btn-close-white me-2 m-auto"
                                     data-bs-dismiss="toast"></button>
                             </div>
-                            <div class="toast-body text-dark">
-                                {{ session('success') }}
+                            <div class="px-2 py-2 text-dark">
+                                <p class="text-justify">{{ session('success') }}</p>
                             </div>
                         </div>
                     </div>
@@ -200,8 +200,8 @@
                                 <button type="button" class="btn-close btn-close-white me-2 m-auto"
                                     data-bs-dismiss="toast"></button>
                             </div>
-                            <div class="toast-body text-dark">
-                                {{ session('error') }}
+                            <div class="px-2 py-2 text-dark">
+                                <p class="text-justify">{{ session('error') }}</p>
                             </div>
                         </div>
                     </div>
@@ -218,8 +218,8 @@
                                 <button type="button" class="btn-close btn-close-white me-2 m-auto"
                                     data-bs-dismiss="toast"></button>
                             </div>
-                            <div class="toast-body text-dark">
-                                {{ session('info') }}
+                            <div class="px-2 py-2 text-dark">
+                                <p class="text-justify">{{ session('info') }}</p>
                             </div>
                         </div>
                     </div>

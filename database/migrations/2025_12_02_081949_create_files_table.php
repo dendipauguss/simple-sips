@@ -15,7 +15,7 @@ return new class extends Migration
             $table->enum('tipe', ['surat', 'bebas'])->default('bebas');
             $table->string('filename');
             $table->string('original_name')->nullable();
-            $table->string('url_path');
+            // $table->string('url_path');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

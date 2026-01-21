@@ -3,7 +3,8 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Laporan {{ $laporan->status_persetujuan == 'setuju' ? 'Disetujui' : ($laporan->status_persetujuan == 'dikembalikan' ? 'Dikembalikan' : 'Dipending') }}
+        <title>Laporan
+            {{ $laporan->status_persetujuan == 'setuju' ? 'Disetujui' : ($laporan->status_persetujuan == 'dikembalikan' ? 'Dikembalikan' : 'Dipending') }}
         </title>
         <style>
             /* @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap'); */
@@ -160,8 +161,7 @@
             <tr>
                 <td style="padding:2px 0;">Dari</td>
                 <td style="padding:2px 0;">:</td>
-                <td style="padding:2px 0;">Ketua Tim Bidang Penindakan PBK, Pasar Fisik, SRG dan PLK serta Entitas PBK
-                    Ilegal</td>
+                <td style="padding:2px 0;">Ketua Tim Bidang Penindakan PBK, Pasar Fisik, SRG dan PLK</td>
             </tr>
             <tr>
                 <td style="padding:2px 0;">Hal</td>
@@ -367,7 +367,6 @@
                 <td width="25%" style="vertical-align: top; text-align: left;">
                     Ketua Tim Bidang Penindakan<br>
                     PBK, Pasar Fisik, SRG dan PLK<br>
-                    serta Entitas PBK Ilegal,
                     <br>
                     @if ($laporan->status_persetujuan == 'pending')
                         <br><br><br><br>

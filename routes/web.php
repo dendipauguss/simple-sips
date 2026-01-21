@@ -17,6 +17,7 @@ use App\Http\Controllers\NotaDinasController;
 use App\Http\Controllers\DasarPengenaanSanksiController;
 use App\Http\Controllers\OneDriveController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\FileController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -70,6 +71,7 @@ Route::middleware('auth', 'user-aktif')->group(function () {
     Route::get('/auth/microsoft/callback', [OneDriveController::class, 'callback']);
     Route::get('/onedrive/upload', [OneDriveController::class, 'index']);
     Route::post('/onedrive/upload', [OneDriveController::class, 'upload'])->name('store-file');
+    Route::get('/file/{token}', [FileController::class, 'view'])->name('file.view');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');

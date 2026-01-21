@@ -97,4 +97,33 @@ class PengenaanSP extends Model
             ->where('status', 'aktif')
             ->latest('level');
     }
+
+    public function getLabelSanksiAttribute()
+    {
+        $labels = collect();
+
+        // 1️⃣ SP dari eskalasi aktif
+        $eskalasi = $this->eskalasi_aktif;
+
+        if ($eskalasi && $eskalasi->sanksi->kode_surat === 'SP') {
+            $labels->push(
+                $eskalasi->sanksi->nama . ' ' . $eskalasi->level
+            );
+        }
+
+        // 2️⃣ Denda dari pivot sanksi
+        $this->sanksi
+            ->where('kode_surat', 'DA')
+            ->each(function ($s) use ($labels) {
+                $labels->push(
+                    $s->pivot->nominal_denda
+                        ? $s->nama . ' (' . number_format($s->pivot->nominal_denda) . ')'
+                        : $s->nama
+                );
+            });
+
+        return $labels->isNotEmpty()
+            ? $labels->implode(', ')
+            : '-';
+    }
 }

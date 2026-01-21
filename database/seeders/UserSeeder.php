@@ -41,5 +41,13 @@ class UserSeeder extends Seeder
             'password' => Hash::make('dendi_gamtenk'),
             'role' => 'admin'
         ]);
+
+        User::create([
+            'nama' => 'Bagian 2 Rowasdak',
+            'email' => 'bagian2rowasdak@gmail.com',
+            'username' => 'bagian2rowasdak',
+            'password' => Hash::make('Bag!an22'),
+            'role' => 'admin'
+        ]);
     }
 }

@@ -11,13 +11,14 @@ return new class extends Migration
         Schema::table('files', function (Blueprint $table) {
             $table->string('google_file_id', 100)->nullable();
             $table->string('google_file_path')->nullable();
+            $table->uuid('file_token')->unique();
         });
     }
 
     public function down(): void
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->dropColumn(['google_file_id', 'google_file_path']);
+            $table->dropColumn(['google_file_id', 'google_file_path', 'file_token']);
         });
     }
 };
