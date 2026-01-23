@@ -248,14 +248,22 @@ class PengenaanSPController extends Controller
 
     public function show($id)
     {
+        $sp = PengenaanSP::with([
+            'pengenaan_sp_sanksi.sanksi',
+            'pelaku_usaha',
+            'jenis_pelanggaran',
+            'user',
+            'eskalasi' => function ($q) {
+                $q->orderBy('level');
+            }
+        ])->findOrFail($id);
+
+        $eskalasiAktif = $sp->eskalasi->where('status', 'aktif')->first();
+
         return view('pengenaan_sp.show', [
             'title' => 'Detail Sanksi',
-            'sp' => PengenaanSP::with([
-                'pengenaan_sp_sanksi.sanksi',
-                'pelaku_usaha',
-                'jenis_pelanggaran',
-                'user'
-            ])->findOrFail($id)
+            'sp' => $sp,
+            'eskalasi_aktif' => $eskalasiAktif
         ]);
     }
 

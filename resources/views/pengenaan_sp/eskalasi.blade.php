@@ -25,8 +25,8 @@
                             <th>Sanksi Aktif</th>
                             <td>
                                 {{ $eskalasiAktif->sanksi->nama }}
-                                (SP
-                                {{ $eskalasiAktif->level }}){{ $eskalasiAktif->is_denda ? ', Denda Administratif' : '' }}
+                                {{ $eskalasiAktif->sanksi->kode_surat == 'SP' ? '(SP ' . $eskalasiAktif->level . ')' : '' }}
+                                {{ $eskalasiAktif->is_denda ? ', Denda Administratif' : '' }}
                             </td>
                         </tr>
                         <tr>

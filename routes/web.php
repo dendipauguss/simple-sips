@@ -28,11 +28,10 @@ Route::post('/auth/google', [AuthController::class, 'login_with_google']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
 // AUTH ROUTES
 // Route yang hanya boleh diakses jika sudah login
 Route::middleware('auth', 'user-aktif')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/chart', [DashboardController::class, 'chartData']);
     // Route::get('/pengaturan/perintah-sanksi', [PerintahSanksiController::class, 'index'])->name('perintah-sanksi');    

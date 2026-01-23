@@ -13,21 +13,24 @@
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">Bentuk Sanksi</strong>
                                     <span>:
-                                        {{ $sp->pengenaan_sp_sanksi->pluck('sanksi.nama')->implode(', ') }}</span>
+                                        {{ $eskalasi_aktif->sanksi->nama }}
+                                        {{ $eskalasi_aktif->sanksi->kode_surat == 'SP' ? '(SP ' . $eskalasi_aktif->level . ')' : '' }}
+                                        {{ $eskalasi_aktif->is_denda ? ', Denda Administratif' : '' }}
+                                    </span>
                                 </li>
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">No Surat</strong>
                                     <span>:
-                                        {{ $sp->no_surat }}</span>
+                                        {{ $eskalasi_aktif->no_surat }}</span>
                                 </li>
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">Tanggal Surat</strong>
-                                    <span>: {{ $sp->tanggal_mulai }}</span>
+                                    <span>: {{ $eskalasi_aktif->tanggal_mulai }}</span>
                                 </li>
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">Bulan</strong>
                                     <span>:
-                                        {{ \Carbon\Carbon::parse($sp->tanggal_mulai)->translatedFormat('F') }}</span>
+                                        {{ \Carbon\Carbon::parse($eskalasi_aktif->tanggal_mulai)->translatedFormat('F') }}</span>
                                 </li>
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">Jenis Pelaku Usaha</strong>
@@ -49,11 +52,13 @@
                                     <strong class="me-3" style="width: 150px;">Detail Pelanggaran</strong>
                                     <span>: {{ $sp->detail_pelanggaran }}</span>
                                 </li>
-                                @if ($sp->pengenaan_sp_sanksi->whereNotNull('nominal_denda')->isNotEmpty())
+                                @if ($eskalasi_aktif->is_denda)
                                     <li class="list-group-item d-flex">
                                         <strong class="me-3" style="width: 150px;">Nominal Denda</strong>
                                         <span>:
-                                            <b class="text-danger">{{ $sp->pengenaan_sp_sanksi->whereNotNull('nominal_denda')->map(fn($i) => 'Rp ' . number_format($i->nominal_denda, 0, ',', '.'))->implode(', ') }}
+                                            <b class="text-danger">
+                                                Rp
+                                                {{ number_format($eskalasi_aktif->nominal_denda, 0, ',', '.') }}
                                             </b>
                                         </span>
                                     </li>
@@ -61,12 +66,12 @@
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">Jangka Waktu Hari</strong>
                                     <span>:
-                                        {{ \Carbon\Carbon::parse($sp->tanggal_mulai)->diffInDays(\Carbon\Carbon::parse($sp->tanggal_selesai)) }}</span>
+                                        {{ \Carbon\Carbon::parse($eskalasi_aktif->tanggal_mulai)->diffInDays(\Carbon\Carbon::parse($eskalasi_aktif->tanggal_selesai)) }}</span>
                                 </li>
                                 <li class="list-group-item d-flex">
                                     <strong class="me-3" style="width: 150px;">Tanggal Jatuh Tempo</strong>
                                     <span>:
-                                        {{ \Carbon\Carbon::parse($sp->tanggal_selesai)->translatedFormat('l, d F Y') }}</span>
+                                        {{ \Carbon\Carbon::parse($eskalasi_aktif->tanggal_selesai)->translatedFormat('l, d F Y') }}</span>
                                 </li>
                                 <li class="list-group-item d-flex align-items-center">
                                     <strong class="me-3" style="width: 150px;">Tanggapan Atas Perbaikan</strong>
@@ -121,17 +126,17 @@
                 <div class="col-xl-5">
                     <div class="card h-100">
                         <div class="card-body py-4">
-                            @if (isset($sp->file))
+                            @if (isset($eskalasi_aktif->file))
                                 <ul class="list-group">
                                     <li class="list-group-item d-flex">
                                         <strong class="me-3" style="width: 150px;">Dokumen SP</strong>
-                                        <span>: <a href="{{ $sp->file->url_path }}" class="text-decoration-none"
-                                                target="_blank">{{ $sp->file->original_name }}</a></span>
+                                        <span>: <a href="{{ route('file.view', $eskalasi_aktif->file->file_token) }}"
+                                                class="text-decoration-none"
+                                                target="_blank">{{ $eskalasi_aktif->file->original_name }}</a></span>
                                     </li>
                                 </ul>
-                                <iframe
-                                    src="https://drive.google.com/file/d/{{ $sp->file->google_file_id }}/preview?usp=sharing"
-                                    frameborder="0" width="100%" height="600px" allowfullscreen></iframe>
+                                <iframe src="/file/{{ $eskalasi_aktif->file->file_token }}" frameborder="0" width="100%"
+                                    height="600px" allowfullscreen></iframe>
                             @endif
                         </div>
                     </div>

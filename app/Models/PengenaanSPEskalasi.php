@@ -28,4 +28,10 @@ class PengenaanSPEskalasi extends Model
         return $this->hasMany(Files::class, 'table_id')
             ->where('table_name', 'pengenaan_sp_eskalasi');
     }
+
+    public function file()
+    {
+        return $this->hasOne(Files::class, 'table_id')
+            ->where('table_name', 'pengenaan_sp_eskalasi');
+    }
 }

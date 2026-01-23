@@ -114,14 +114,15 @@ class LaporanController extends Controller
         $laporan = Laporan::with([
             'pengenaan_sp.pelaku_usaha.jenis_pelaku_usaha',
             'pengenaan_sp.pengenaan_sp_sanksi.sanksi',
-            'pengenaan_sp.jenis_pelanggaran'
+            'pengenaan_sp.jenis_pelanggaran',
+            'pengenaan_sp.eskalasi_aktif'
         ])->findOrFail($id);
 
         $items = $laporan->pengenaan_sp
             ->groupBy([
                 fn($sp) => $sp->pelaku_usaha->nama,
                 fn($sp) => $sp->pelaku_usaha->jenis_pelaku_usaha->nama,
-                fn($sp) => Carbon::parse($sp->tanggal_mulai)->format('Y-m')
+                fn($sp) => Carbon::parse($sp->eskalasi_aktif->tanggal_mulai)->format('Y-m')
             ]);
 
         $rekap_perusahaan = $laporan->pengenaan_sp
