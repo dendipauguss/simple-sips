@@ -10,6 +10,7 @@ use App\Models\JenisPelanggaran;
 use App\Models\PelakuUsaha;
 use App\Models\JenisPelakuUsaha;
 use App\Models\Sanksi;
+use App\Models\PengenaanSPEskalasi;
 
 class DashboardController extends Controller
 {
@@ -90,8 +91,8 @@ class DashboardController extends Controller
                 return $item;
             });
 
-        $sanksi_per_bentuk = Sanksi::withCount([
-            'pengenaan_sp_sanksi as pengenaan_sp_count' => function ($q) use ($tahun) {
+        $sanksi_per_bentuk = Sanksi::where('status', 1)->withCount([
+            'pengenaan_sp_eskalasi as pengenaan_sp_count' => function ($q) use ($tahun) {
                 $q->whereHas('pengenaan_sp', function ($qq) use ($tahun) {
                     if ($tahun) {
                         $qq->whereYear('tanggal_mulai', $tahun);
@@ -104,6 +105,14 @@ class DashboardController extends Controller
         ])
             ->orderByDesc('pengenaan_sp_count')
             ->get();
+
+        $total_denda = PengenaanSPEskalasi::where('is_denda', 1)
+            ->whereHas('pengenaan_sp', function ($q) use ($tahun) {
+                if ($tahun) {
+                    $q->whereYear('tanggal_mulai', $tahun);
+                }
+            })
+            ->count();
 
         $sanksi_per_pelanggaran = JenisPelanggaran::withCount([
             'pengenaan_sp' => fn($q) =>
@@ -185,7 +194,8 @@ class DashboardController extends Controller
             'sanksi_per_pelanggaran' => $sanksi_per_pelanggaran,
             'sanksi_per_bentuk' => $sanksi_per_bentuk,
             'top_jenis_pelaku_bar' => $top_jenis_pelaku_bar,
-            'tahun_list' => $tahunList
+            'tahun_list' => $tahunList,
+            'total_denda' => $total_denda
         ]);
     }
 

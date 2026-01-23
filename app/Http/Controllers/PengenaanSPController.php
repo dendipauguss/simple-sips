@@ -455,6 +455,10 @@ class PengenaanSPController extends Controller
             return back()->with('error', 'SP Maksimal 3 kali sampai SP 3!');
         }
 
+        if ($request->tanggal_mulai <= $eskalasiAktif->tanggal_mulai || $request->tanggal_mulai <= $eskalasiAktif->tanggal_selesai) {
+            return back()->with('error', 'Tanggal surat jangan sama atau kurang dari tanggal surat dan tanggal jatuh tempo sebelumnya!');
+        }
+        
         if ($request->tanggal_selesai <= $eskalasiAktif->tanggal_selesai) {
             return back()->with('error', 'Tanggal jatuh tempo jangan sama atau kurang dari tanggal jatuh tempo sebelumnya!');
         }

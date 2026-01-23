@@ -32,4 +32,8 @@ class Sanksi extends Model
     {
         return $this->hasMany(PengenaanSPSanksi::class);
     }
+
+    public function pengenaan_sp_eskalasi(){
+        return $this->hasMany(PengenaanSPEskalasi::class);
+    }
 }

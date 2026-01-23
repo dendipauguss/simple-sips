@@ -106,9 +106,17 @@
                         <div class="card-body">
                             <h5 class="card-title">Total Sanksi Per Bentuk Sanksi</h5>
                             <!-- Status Chart -->
+                            @php
+                                $labels = $sanksi_per_bentuk->pluck('kode_surat')->toArray();
+                                $values = $sanksi_per_bentuk->pluck('pengenaan_sp_count')->toArray();
+
+                                // Tambahkan DENDA
+                                $labels[] = 'DA';
+                                $values[] = $total_denda;
+                            @endphp
                             <div style="height: 300px;">
-                                <canvas id="sanksi_per_bentuk_chart" data-labels='@json($sanksi_per_bentuk->pluck('kode_surat'))'
-                                    data-values='@json($sanksi_per_bentuk->pluck('pengenaan_sp_count'))'>></canvas>
+                                <canvas id="sanksi_per_bentuk_chart" data-labels='@json($labels)'
+                                    data-values='@json($values)'>></canvas>
                             </div>
                             <!-- END : Status Chart -->
                         </div>

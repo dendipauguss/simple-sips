@@ -46,7 +46,7 @@ class LaporanController extends Controller
             return back()->with('error', 'Pilih minimal satu filter.');
         }
         // Cek duplikasi laporan
-        $exists = Laporan::where('bulan', $bulan)
+        $laporan = Laporan::where('bulan', $bulan)
             ->where('tahun', $tahun)
             ->where('status_surat', $status_surat)
             ->when(
@@ -54,10 +54,19 @@ class LaporanController extends Controller
                 fn($q) =>
                 $q->where('pelaku_usaha_id', $perusahaan_id)
             )
-            ->exists();
+            ->first();
 
-        if ($exists) {
-            return back()->with('error', 'Laporan dengan filter tersebut sudah ada.');
+        if ($laporan) {
+            // hapus item lama
+            LaporanItem::where('laporan_id', $laporan->id)->delete();
+        } else {
+            // buat laporan baru
+            $laporan = Laporan::create([
+                'bulan' => $bulan,
+                'tahun' => $tahun,
+                'pelaku_usaha_id' => $perusahaan_id,
+                'status_surat' => $status_surat
+            ]);
         }
 
         // Query data Sanksi
@@ -74,14 +83,6 @@ class LaporanController extends Controller
             return back()->with('error', 'Data tidak ditemukan.');
         }
 
-        // Simpan laporan
-        $laporan = Laporan::create([
-            'bulan' => $bulan,
-            'tahun' => $tahun,
-            'pelaku_usaha_id' => $perusahaan_id,
-            'status_surat' => $status_surat
-        ]);
-
         foreach ($data as $sp) {
             LaporanItem::create([
                 'laporan_id' => $laporan->id,
@@ -90,7 +91,7 @@ class LaporanController extends Controller
         }
 
         return redirect()->route('laporan.index')
-            ->with('success', 'Laporan berhasil dibuat.');
+            ->with('success', 'Laporan berhasil diperbarui dengan data terbaru.');
     }
 
     public function show($id)

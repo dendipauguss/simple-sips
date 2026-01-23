@@ -552,7 +552,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (sanksiPerBentukCanvas) {
         const labels = JSON.parse(sanksiPerBentukCanvas.dataset.labels);
         const values = JSON.parse(sanksiPerBentukCanvas.dataset.values);
-        const bgColors = generateRandomColors(labels.length);
+        const bgColors = labels.map(label =>
+            label === 'DA' ? '#dc3545' : '#0d6efd'
+        );
 
         new Chart(sanksiPerBentukCanvas, {
             type: "bar",
@@ -562,8 +564,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     {
                         label: "Total Sanksi",
                         data: values,
-                        backgroundColor: primaryColor,
-                        borderColor: primaryColor,
+                        backgroundColor: bgColors,
+                        borderColor: bgColors,
                         borderWidth: 2
                     }
                 ]
