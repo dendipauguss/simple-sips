@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
         <meta name="description"
             content="Nifty is a responsive admin dashboard template based on Bootstrap 5 framework. There are a lot of useful components.">
-        <title>{{ $title }}</title>
+        <title>{{ env('APP_NAME') }}{{ !empty($title) ? ' | ' . $title : '' }}</title>
 
         <link rel="shortcut icon" href="/img/kemendag-bappebti-logo.ico" type="image/x-icon">
         <!-- STYLESHEETS -->
