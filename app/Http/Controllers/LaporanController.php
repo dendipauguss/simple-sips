@@ -120,6 +120,7 @@ class LaporanController extends Controller
         ])->findOrFail($id);
 
         $items = $laporan->pengenaan_sp
+            ->sortByDesc(fn($sp) => $sp->eskalasi_aktif?->tanggal_mulai)
             ->groupBy([
                 fn($sp) => $sp->pelaku_usaha->nama,
                 fn($sp) => $sp->pelaku_usaha->jenis_pelaku_usaha->nama,
