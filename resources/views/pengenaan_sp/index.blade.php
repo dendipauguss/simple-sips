@@ -191,7 +191,10 @@
                                                 </td>
                                                 @if (auth()->user()->role != 'ketua_tim')
                                                     <td class="text-center">
-                                                        @if (auth()->user()->id == $sp->user->id)
+                                                        @if (auth()->user()->id == $sp->user->id ||
+                                                                \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y') == '2025' ||
+                                                                \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y') == '2024' ||
+                                                                \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y') == '2023')
                                                             <div class="btn-group" role="group">
                                                                 <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
                                                                     class="btn btn-sm btn-info" title="Tanggapi">

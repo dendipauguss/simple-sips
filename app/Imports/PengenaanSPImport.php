@@ -73,10 +73,10 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
             $tanggalSelesai = $this->parseTanggal($row['tanggal_selesai']);
 
             if (!$tanggalSelesai) {
-                $tanggalSelesai = $tanggalMulai->copy()->addDays(30);
+                $tanggalSelesai = $tanggalMulai->copy()->addDays(14);
             }
         } else {
-            $tanggalSelesai = $tanggalMulai->copy()->addDays(30);
+            $tanggalSelesai = $tanggalMulai->copy()->addDays(14);
         }
 
         if (!empty($row['tanggapan'])) {

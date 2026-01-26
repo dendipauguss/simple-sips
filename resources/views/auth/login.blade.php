@@ -82,7 +82,7 @@
                     <div class="content__wrap">
                         <div class="card rounded-1 bg-dark border-info">
                             <div class="row">
-                                <div class="col-md-7">
+                                <div class="col-md-7 col-sm-5 col-xl-7">
                                     <div class="card-body">
                                         <div class="text-center">
                                             <h1 class="h3 text-white">Login</h1>
@@ -152,7 +152,7 @@
                                         <!-- Login With Google -->
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-5 d-flex align-items-center">
                                     <div class="card-body">
                                         <div class="text-center">
                                             <img src="/img/kemendag-bappebti-logo.jpg" alt="" srcset=""
