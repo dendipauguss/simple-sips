@@ -3,7 +3,8 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Laporan {{ $laporan->status_persetujuan == 'setuju' ? 'Disetujui' : ($laporan->status_persetujuan == 'dikembalikan' ? 'Dikembalikan' : 'Dipending') }}
+        <title>Laporan
+            {{ $laporan->status_persetujuan == 'setuju' ? 'Disetujui' : ($laporan->status_persetujuan == 'dikembalikan' ? 'Dikembalikan' : 'Dipending') }}
         </title>
         <style>
             /* @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap'); */
@@ -230,7 +231,10 @@
                         @php $firstKategori = true; @endphp
 
                         @foreach ($periodeGroup as $periode => $rows)
-                            @php $firstPeriode = true; @endphp
+                            @php
+                                $firstPeriode = true;
+                                $noSanksi = 1; // ⬅️ reset per periode
+                            @endphp
 
                             @foreach ($rows as $sp)
                                 <tr>
@@ -271,24 +275,25 @@
 
                                     {{-- BENTUK SANKSI (GABUNG SEMUA) --}}
                                     <td>
-                                        <div>
-                                            @if ($sp->eskalasi_aktif)
-                                                {{ $sp->eskalasi_aktif->sanksi->nama }}
-                                                @if ($sp->eskalasi_aktif->sanksi->kode_surat === 'SP')
-                                                    {{ $sp->eskalasi_aktif->level }}
-                                                @endif
 
-                                                @if ($sp->eskalasi_aktif->is_denda)
-                                                    <br>
-                                                    <small class="text-danger">
-                                                        Denda: Rp
-                                                        {{ number_format($sp->eskalasi_aktif->nominal_denda, 0, ',', '.') }}
-                                                    </small>
-                                                @endif
-                                            @else
-                                                -
+                                        @if ($sp->eskalasi_aktif)
+                                            {{ $sp->eskalasi_aktif->sanksi->nama }}
+
+                                            @if ($sp->eskalasi_aktif->sanksi->kode_surat === 'SP')
+                                                {{ $sp->eskalasi_aktif->level }}
                                             @endif
-                                        </div>
+
+                                            @if ($sp->eskalasi_aktif->is_denda)
+                                                <br>
+                                                <small class="text-danger">
+                                                    Denda: Rp
+                                                    {{ number_format($sp->eskalasi_aktif->nominal_denda, 0, ',', '.') }}
+                                                </small>
+                                            @endif
+                                        @else
+                                            -
+                                        @endif
+
                                     </td>
 
                                     {{-- PELANGGARAN --}}
@@ -317,6 +322,7 @@
                                     $firstPerusahaan = false;
                                     $firstKategori = false;
                                     $firstPeriode = false;
+                                    $noSanksi++;
                                 @endphp
                             @endforeach
                         @endforeach
