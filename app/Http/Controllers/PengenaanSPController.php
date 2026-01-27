@@ -363,11 +363,18 @@ class PengenaanSPController extends Controller
     {
         $file = Files::findOrFail($id);
         if (!empty($file)) {
-            Storage::disk('public')->delete($file->url_path);
+            $hapus_file_gdrive = $this->deleteFileFromGDrive($file->google_file_path);
+
+            if ($hapus_file_gdrive) {
+                $pesan = 'Dan Berhasil hapus file google drive';
+            } else {
+                $pesan = 'Tetapi Gagal hapus file google drive';
+            }
+
             $file->delete();
         }
 
-        return back()->with('success', 'Data berhasil dihapus!');
+        return back()->with('success', 'Data berhasil dihapus!' . $pesan);
     }
 
     public function eskalasi($id)
@@ -458,7 +465,7 @@ class PengenaanSPController extends Controller
         if ($request->tanggal_mulai <= $eskalasiAktif->tanggal_mulai || $request->tanggal_mulai <= $eskalasiAktif->tanggal_selesai) {
             return back()->with('error', 'Tanggal surat jangan sama atau kurang dari tanggal surat dan tanggal jatuh tempo sebelumnya!');
         }
-        
+
         if ($request->tanggal_selesai <= $eskalasiAktif->tanggal_selesai) {
             return back()->with('error', 'Tanggal jatuh tempo jangan sama atau kurang dari tanggal jatuh tempo sebelumnya!');
         }
