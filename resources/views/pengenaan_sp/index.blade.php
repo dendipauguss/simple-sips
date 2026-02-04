@@ -184,8 +184,10 @@
                                                     @if ($sp->status_surat == 'pending')
                                                         <span id="status-penindakan-{{ $sp->id }}">-</span>
                                                     @else
-                                                        <span id="status-penindakan-{{ $sp->id }}"
-                                                            class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
+                                                        <h5>
+                                                            <span id="status-penindakan-{{ $sp->id }}"
+                                                                class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
+                                                        </h5>
                                                     @endif
 
                                                 </td>

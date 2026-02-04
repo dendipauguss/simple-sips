@@ -14,34 +14,4 @@ class NotaDinasController extends Controller
             'nota_dinas' => NotaDinas::with(['pengenaan_sp'])->latest()->get()
         ]);
     }
-
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(NotaDinas $notaDinas)
-    {
-        //
-    }
-
-    public function edit(NotaDinas $notaDinas)
-    {
-        //
-    }
-
-    public function update(Request $request, NotaDinas $notaDinas)
-    {
-        //
-    }
-
-    public function destroy(NotaDinas $notaDinas)
-    {
-        //
-    }
 }

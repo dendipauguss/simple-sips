@@ -383,7 +383,7 @@
                 {{-- TANDA TANGAN (KANAN) --}}
                 <td width="25%" style="vertical-align: top; text-align: left;">
                     Ketua Tim Bidang Penindakan<br>
-                    PBK, Pasar Fisik, SRG dan PLK<br>
+                    PBK, SRG dan PLK<br>
                     <br>
                     @if ($laporan->status_persetujuan == 'pending')
                         <br><br><br><br>

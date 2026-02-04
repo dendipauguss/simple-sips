@@ -267,16 +267,6 @@ class PengenaanSPController extends Controller
         ]);
     }
 
-    public function edit(PengenaanSP $pengenaanSP)
-    {
-        //
-    }
-
-    public function update(Request $request, PengenaanSP $pengenaanSP)
-    {
-        //
-    }
-
     public function destroy($id)
     {
         $pengenaan_sp = PengenaanSP::findOrFail($id);
@@ -699,44 +689,6 @@ class PengenaanSPController extends Controller
         }
     }
 
-    private function uploadFilesToOneDrive(
-        UploadedFile|array|null $files,
-        string $table_name,
-        int $table_id,
-        string $tipe_dokumen,
-        OneDriveService $oneDrive
-    ) {
-        if (!$files) return;
-
-        if (!is_array($files)) {
-            $files = [$files];
-        }
-
-        foreach ($files as $file) {
-
-            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
-
-            // Upload ke OneDrive
-            $result = $oneDrive->upload(
-                auth()->id(),
-                $file->getRealPath(),
-                $filename,
-                "uploads/{$table_name}"
-            );
-
-            // Simpan metadata ke DB
-            Files::create([
-                'table_name'    => $table_name,
-                'table_id'      => $table_id,
-                'tipe'          => $tipe_dokumen,
-                'filename'      => $filename,
-                'original_name' => $file->getClientOriginalName(),
-                'url_path'      => $result['webUrl'], // URL OneDrive
-                'drive_file_id' => $result['id'],     // PENTING
-            ]);
-        }
-    }
-
     private function uploadFileToGDrive(UploadedFile|array|null $files, string $table_name, int $table_id, string $tipe_dokumen, string $folderPath, string $filenamed)
     {
         if (!$files) return;
@@ -794,41 +746,6 @@ class PengenaanSPController extends Controller
             ]);
             return false;
         }
-    }
-
-    private function getOneDriveAccessToken()
-    {
-        $token = DB::table('ms_token')
-            ->where('user_id', auth()->id())
-            ->first();
-
-        // Kalau belum expired → langsung pakai
-        if ($token && now()->lt($token->expires_at)) {
-            return $token->access_token;
-        }
-
-        // Refresh token
-        $response = Http::asForm()->post(
-            'https://login.microsoftonline.com/' . config('services.microsoft.tenant_id') . '/oauth2/v2.0/token',
-            [
-                'client_id' => config('services.microsoft.client_id'),
-                'client_secret' => config('services.microsoft.client_secret'),
-                'grant_type' => 'refresh_token',
-                'refresh_token' => $token->refresh_token,
-                'scope' => 'offline_access Files.ReadWrite',
-            ]
-        );
-
-        $newToken = $response->json();
-
-        DB::table('ms_token')
-            ->where('user_id', auth()->id())
-            ->update([
-                'access_token'  => $newToken['access_token'],
-                'expires_at'    => now()->addSeconds($newToken['expires_in']),
-            ]);
-
-        return $newToken['access_token'];
     }
 
     private function sanitizeFolderName(string $name): string

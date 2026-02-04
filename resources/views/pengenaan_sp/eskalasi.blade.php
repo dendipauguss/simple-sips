@@ -8,11 +8,11 @@
                 ⬅ Kembali
             </a>
 
-            <div class="card mb-4">
+            <div class="card mb-4 bg-primary border-info text-white">
                 <div class="card-body">
                     <h5 class="mb-3">Detail Pengenaan Sanksi</h5>
 
-                    <table class="table table-sm">
+                    <table class="table table-sm text-white">
                         <tr>
                             <th width="30%">Perusahaan</th>
                             <td>{{ $sp->pelaku_usaha->nama ?? '-' }}</td>
@@ -41,14 +41,24 @@
                                 {{ \Carbon\Carbon::parse($eskalasiAktif->tanggal_selesai)->translatedFormat('l, d F Y') }}
                             </td>
                         </tr>
+                        <tr>
+                            <th>Status Tanggapan</th>
+                            <td>
+                                <h5>
+                                    <span
+                                        class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : ($sp->status_surat == 'sudah_ditanggapi' ? 'bg-success' : 'bg-warning') }}">
+                                        {{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
+                                </h5>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>
-            <div class="card mb-4">
+            <div class="card mb-4 bg-primary border-info text-white">
                 <div class="card-body">
                     <h5 class="mb-3">Riwayat Eskalasi Sanksi</h5>
 
-                    <table class="table table-hover table-striped">
+                    <table class="table table-hover text-white">
                         <thead class="table-dark">
                             <tr>
                                 <th width="5%">Level</th>
@@ -78,9 +88,11 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ $e->status === 'aktif' ? 'success' : 'danger' }}">
-                                            {{ $e->status == 'selesai' ? 'Lewat Jatuh Tempo' : ucfirst($e->status) }}
-                                        </span>
+                                        <h5>
+                                            <span class="badge bg-{{ $e->status === 'aktif' ? 'success' : 'danger' }}">
+                                                {{ $e->status == 'selesai' ? 'Lewat Jatuh Tempo' : ucfirst($e->status) }}
+                                            </span>
+                                        </h5>
                                     </td>
                                     <td>
                                         @foreach ($e->files as $file)
@@ -96,7 +108,7 @@
                     </table>
                 </div>
             </div>
-            <div class="card">
+            <div class="card bg-primary border-info text-white">
                 <div class="card-body">
                     <div class="data-item">
                         <h5 class="mb-3">Tambah Eskalasi Baru</h5>
@@ -109,27 +121,29 @@
 
                             <div class="mb-3">
                                 <label>No Surat</label>
-                                <input type="text" name="no_surat" class="form-control" required
-                                    value="{{ old('no_surat') }}">
+                                <input type="text" name="no_surat" class="form-control bg-primary border-info text-white"
+                                    required value="{{ old('no_surat') }}">
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label>Tanggal Surat</label>
-                                    <input type="date" name="tanggal_mulai" class="form-control" required
+                                    <input type="date" name="tanggal_mulai"
+                                        class="form-control bg-primary border-info text-white" required
                                         value="{{ old('tanggal_mulai') }}">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label>Tanggal Jatuh Tempo</label>
-                                    <input type="date" name="tanggal_selesai" class="form-control" required
+                                    <input type="date" name="tanggal_selesai"
+                                        class="form-control bg-primary border-info text-white" required
                                         value="{{ old('tanggal_selesai') }}">
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Bentuk Sanksi</label>
-                                <select name="sanksi_id" class="form-select sanksi-id">
+                                <select name="sanksi_id" class="form-select sanksi-id bg-primary border-info text-white">
                                     @foreach ($sanksi as $s)
                                         <option value="{{ $s->id }}" data-kode="{{ $s->kode_surat }}"
                                             {{ old('sanksi_id') == $s->id ? 'selected' : '' }}>
@@ -143,15 +157,15 @@
                             <div class="form-check form-check-inline mb-3 is-denda">
                                 <label class="form-check-label">Termasuk Denda</label>
                                 <input type="hidden" name="is_denda" value="0">
-                                <input class="form-check-input" type="checkbox" name="is_denda" value="1"
-                                    {{ old('is_denda') ? 'checked' : '' }}>
+                                <input class="form-check-input bg-primary border-info text-white" type="checkbox"
+                                    name="is_denda" value="1" {{ old('is_denda') ? 'checked' : '' }}>
                             </div>
 
                             {{-- Nominal Denda --}}
                             <div class="mb-3 nominal-denda">
                                 <label class="form-label">Nominal Denda</label>
                                 <input type="number" name="nominal_denda"
-                                    class="form-control @error('nominal_denda') is-invalid @enderror"
+                                    class="form-control @error('nominal_denda') is-invalid @enderror bg-primary border-info text-white"
                                     value="{{ old('nominal_denda') }}">
                                 @error('nominal_denda')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -160,7 +174,8 @@
 
                             <div class="mb-3">
                                 <label>Dokumen Eskalasi</label>
-                                <input type="file" name="dokumen" class="form-control" required>
+                                <input type="file" name="dokumen" class="form-control bg-primary border-info text-white"
+                                    required>
                             </div>
 
                             <button class="btn btn-warning">

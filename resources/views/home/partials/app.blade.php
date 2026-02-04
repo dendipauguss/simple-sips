@@ -4,13 +4,13 @@
     <head>
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <title>{{ env('APP_NAME') }}</title>
+        <title>{{ config('assets.app-name') }}</title>
         <meta name="description" content="">
         <meta name="keywords" content="">
 
         <!-- Favicons -->
-        <link href="{{ env('HOME_LINK') }}/assets/img/favicon.png" rel="icon">
-        <link href="{{ env('HOME_LINK') }}/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+        <link href="{{ config('assets.home-link') }}/assets/img/favicon.png" rel="icon">
+        <link href="{{ config('assets.home-link') }}/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -20,14 +20,15 @@
             rel="stylesheet">
 
         <!-- Vendor CSS Files -->
-        <link href="{{ env('HOME_LINK') }}/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="{{ env('HOME_LINK') }}/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-        <link href="{{ env('HOME_LINK') }}/assets/vendor/aos/aos.css" rel="stylesheet">
-        <link href="{{ env('HOME_LINK') }}/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-        <link href="{{ env('HOME_LINK') }}/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+        <link href="{{ config('assets.home-link') }}/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="{{ config('assets.home-link') }}/assets/vendor/bootstrap-icons/bootstrap-icons.css"
+            rel="stylesheet">
+        <link href="{{ config('assets.home-link') }}/assets/vendor/aos/aos.css" rel="stylesheet">
+        <link href="{{ config('assets.home-link') }}/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+        <link href="{{ config('assets.home-link') }}/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
         <!-- Main CSS File -->
-        <link href="{{ env('HOME_LINK') }}/assets/css/main.css" rel="stylesheet">
+        <link href="{{ config('assets.home-link') }}/assets/css/main.css" rel="stylesheet">
 
         <!-- =======================================================
   * Template Name: BizLand
@@ -63,7 +64,7 @@
                 <div class="container position-relative d-flex align-items-center justify-content-between">
                     <a href="index.html" class="logo d-flex align-items-center">
                         <!-- Uncomment the line below if you also wish to use an image logo -->
-                        <!-- <img src="{{ env('HOME_LINK') }}/assets/img/logo.png" alt=""> -->
+                        <!-- <img src="{{ config('assets.home-link') }}/assets/img/logo.png" alt=""> -->
                         <h1 class="sitename">BizLand</h1>
                     </a>
 
@@ -183,18 +184,18 @@
         </div>
 
         <!-- Vendor JS Files -->
-        <script src="{{ env('HOME_LINK') }}/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="{{ env('HOME_LINK') }}/assets/vendor/php-email-form/validate.js"></script>
-        <script src="{{ env('HOME_LINK') }}/assets/vendor/aos/aos.js"></script>
-        <script src="{{ env('HOME_LINK') }}/assets/vendor/glightbox/js/glightbox.min.js"></script>
-        <script src="{{ env('HOME_LINK') }}/assets/vendor/waypoints/noframework.waypoints.js"></script>
-        <script src="{{ env('HOME_LINK') }}/assets/vendor/purecounter/purecounter_vanilla.js"></script>
-        <script src="{{ env('HOME_LINK') }}/assets/vendor/swiper/swiper-bundle.min.js"></script>
-        <script src="{{ env('HOME_LINK') }}/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-        <script src="{{ env('HOME_LINK') }}/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/vendor/php-email-form/validate.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/vendor/aos/aos.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/vendor/glightbox/js/glightbox.min.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/vendor/waypoints/noframework.waypoints.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/vendor/swiper/swiper-bundle.min.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
 
         <!-- Main JS File -->
-        <script src="{{ env('HOME_LINK') }}/assets/js/main.js"></script>
+        <script src="{{ config('assets.home-link') }}/assets/js/main.js"></script>
 
     </body>
 

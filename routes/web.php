@@ -5,17 +5,14 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SanksiController;
-use App\Http\Controllers\PerintahSanksiController;
 use App\Http\Controllers\PelakuUsahaController;
 use App\Http\Controllers\JenisPelakuUsahaController;
 use App\Http\Controllers\PengenaanSPController;
 use App\Http\Controllers\JenisPelanggaranController;
 use App\Http\Controllers\KategoriSPController;
-use App\Http\Controllers\SKController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\NotaDinasController;
 use App\Http\Controllers\DasarPengenaanSanksiController;
-use App\Http\Controllers\OneDriveController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FileController;
 
@@ -34,8 +31,6 @@ Route::middleware('auth', 'user-aktif')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/chart', [DashboardController::class, 'chartData']);
-    // Route::get('/pengaturan/perintah-sanksi', [PerintahSanksiController::class, 'index'])->name('perintah-sanksi');    
-    // Route::get('/pengaturan/perintah-sanksi/{id}', [PerintahSanksiController::class, 'show']);
     Route::get('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'importView']);
     Route::post('/pengaturan/pelaku-usaha/import', [PelakuUsahaController::class, 'import'])->name('pelaku-usaha.import');
     Route::get('/get-pelaku-usaha/{jenis_id}', [PelakuUsahaController::class, 'getPelakuUsahaByJenis']);
@@ -55,7 +50,6 @@ Route::middleware('auth', 'user-aktif')->group(function () {
     Route::post('/pengenaan-sp/import', [PengenaanSPController::class, 'import'])->name('pengenaan-sp.import');
     Route::get('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'importView']);
     Route::post('/pengaturan/kategori-sp/import', [KategoriSPController::class, 'import'])->name('kategori-sp.import');
-    Route::get('/sk/create/{id}', [SKController::class, 'create'])->name('sk.create');
     Route::delete('/dokumen/hapus/{id}', [PengenaanSPController::class, 'hapusDokumen'])->name('dokumen.hapus');
     // Laporan
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
@@ -66,21 +60,15 @@ Route::middleware('auth', 'user-aktif')->group(function () {
     // Route::post('laporan/{id}/approve', [LaporanController::class, 'approve'])->name('laporan.approve');
     Route::post('laporan/approve', [LaporanController::class, 'approve'])
         ->name('laporan.approve');
-    Route::get('/auth/microsoft', [OneDriveController::class, 'redirect']);
-    Route::get('/auth/microsoft/callback', [OneDriveController::class, 'callback']);
-    Route::get('/onedrive/upload', [OneDriveController::class, 'index']);
-    Route::post('/onedrive/upload', [OneDriveController::class, 'upload'])->name('store-file');
     Route::get('/file/{token}', [FileController::class, 'view'])->name('file.view');
     Route::resource('/pengaturan/pelaku-usaha', PelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelaku-usaha', JenisPelakuUsahaController::class)->middleware('admin');
     Route::resource('/pengaturan/sanksi', SanksiController::class)->middleware('admin');
-    Route::resource('/pengaturan/perintah-sanksi', PerintahSanksiController::class)->middleware('admin');
     Route::resource('/pengaturan/users', UserController::class)->middleware('admin');
     Route::resource('/pengaturan/jenis-pelanggaran', JenisPelanggaranController::class)->middleware('admin');
     Route::resource('/pengaturan/kategori-sp', KategoriSPController::class)->middleware('admin');
     Route::resource('/nota-dinas', NotaDinasController::class)->middleware('admin');
     Route::resource('/pengenaan-sp', PengenaanSPController::class);
-    Route::resource('/sk', SKController::class);
 });
 // AUTH ROUTES
 

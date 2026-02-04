@@ -71,11 +71,6 @@ class PengenaanSP extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function sk()
-    {
-        return $this->hasOne(SK::class);
-    }
-
     public function laporan()
     {
         return $this->belongsToMany(

@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
         <meta name="description"
             content="Nifty is a responsive admin dashboard template based on Bootstrap 5 framework. There are a lot of useful components.">
-        <title>{{ env('APP_NAME') }}{{ !empty($title) ? ' | ' . $title : '' }}</title>
+        <title>{{ config('assets.app-name') }}{{ !empty($title) ? ' | ' . $title : '' }}</title>
 
         <link rel="shortcut icon" href="/img/kemendag-bappebti-logo.ico" type="image/x-icon">
         <!-- STYLESHEETS -->
@@ -20,37 +20,38 @@
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&amp;family=Ubuntu:wght@400;500;700&amp;display=swap"
             rel="stylesheet">
         <!-- Bootstrap CSS [ REQUIRED ] -->
-        {{-- <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/bootstrap.min.css">
+        {{-- <link rel="stylesheet" href="{{ config('assets.theme') }}/assets/css/bootstrap.min.css">
 
         <!-- Nifty CSS [ REQUIRED ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/nifty.min.css"> --}}
+        <link rel="stylesheet" href="{{ config('assets.theme') }}/assets/css/nifty.min.css"> --}}
 
         <!-- Bootstrap CSS [ REQUIRED ] -->
         <link rel="stylesheet"
-            href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/night/bootstrap.min.css">
+            href="{{ config('assets.theme') }}/assets/css/color-schemes/all-headers/night/bootstrap.min.css">
 
         <!-- Nifty CSS [ REQUIRED ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/night/nifty.min.css">
+        <link rel="stylesheet"
+            href="{{ config('assets.theme') }}/assets/css/color-schemes/all-headers/night/nifty.min.css">
 
         <!-- Nifty Color Schemes -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/dark/nifty.min.css">
+        <link rel="stylesheet" href="{{ config('assets.theme') }}/assets/css/color-schemes/dark/nifty.min.css">
 
-        {{-- <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/brand/night/nifty.min.css"> --}}
+        {{-- <link rel="stylesheet" href="{{ config('assets.theme') }}/assets/css/color-schemes/brand/night/nifty.min.css"> --}}
 
         <!-- Nifty Premium Line Icons [ OPTIONAL ] -->
         <link rel="stylesheet"
-            href="{{ env('THM_LINK') }}/assets/premium/icon-sets/icons/line-icons/premium-line-icons.min.css">
+            href="{{ config('assets.theme') }}/assets/premium/icon-sets/icons/line-icons/premium-line-icons.min.css">
 
         <!-- Nifty Premium Solid Icons -->
         <link rel="stylesheet"
-            href="{{ env('THM_LINK') }}/assets/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css">
+            href="{{ config('assets.theme') }}/assets/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css">
 
-        <link rel="stylesheet" href="{{ env('DTABLES_LINK') }}/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="{{ config('assets.datatables') }}/css/jquery.dataTables.min.css">
 
         <!-- Select2 Styles -->
-        <link href="{{ env('SELECT2_LINK') }}/dist/css/select2.min.css" rel="stylesheet" />
+        <link href="{{ config('assets.select2') }}/dist/css/select2.min.css" rel="stylesheet" />
 
-        <link rel="stylesheet" href="{{ env('SELECT2_BOOTSTRAP_LINK') }}/dist/select2-bootstrap-5-theme.min.css" />
+        <link rel="stylesheet" href="{{ config('assets.select2-bs') }}/dist/select2-bootstrap-5-theme.min.css" />
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~---
 
@@ -138,9 +139,20 @@
             .select2-container--default .select2-selection--single .select2-selection__arrow {
                 height: 100%;
             }
+
+            .text-outlined-white {
+                color: white;
+                /* Text color */
+                text-shadow:
+                    -1px -1px 0 #000,
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+                /* Outline color */
+            }
         </style>
 
-        <script src="{{ env('JQUERY_LINK') }}/jquery-3.7.1.min.js"></script>
+        <script src="{{ config('assets.jquery') }}/jquery-3.7.1.min.js"></script>
     </head>
 
     <body class="jumping {{ request()->is('dashboard') ? 'centered-layout' : '' }}">
@@ -728,27 +740,27 @@
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
         <!-- Popper JS [ OPTIONAL ] -->
-        <script src="{{ env('THM_LINK') }}/assets/vendors/popperjs/popper.min.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/vendors/popperjs/popper.min.js" defer=""></script>
 
         <!-- Bootstrap JS [ OPTIONAL ] -->
-        <script src="{{ env('THM_LINK') }}/assets/vendors/bootstrap/bootstrap.min.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/vendors/bootstrap/bootstrap.min.js" defer=""></script>
 
         <!-- Nifty JS [ OPTIONAL ] -->
-        <script src="{{ env('THM_LINK') }}/assets/js/nifty.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/js/nifty.js" defer=""></script>
 
         <!-- Nifty Settings [ DEMO ] -->
-        <script src="{{ env('THM_LINK') }}/assets/js/demo-purpose-only.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/js/demo-purpose-only.js" defer=""></script>
 
         <!-- Chart JS Scripts [ OPTIONAL ] -->
-        <script src="{{ env('THM_LINK') }}/assets/vendors/chart.js/chart.min.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/vendors/chart.js/chart.min.js" defer=""></script>
 
         <!-- Initialize [ SAMPLE ] -->
         <script src="/chart.js" defer=""></script>
 
-        <script src="{{ env('DTABLES_LINK') }}/js/jquery.dataTables.min.js"></script>
+        <script src="{{ config('assets.datatables') }}/js/jquery.dataTables.min.js"></script>
 
         <!-- Select2 JS -->
-        <script src="{{ env('SELECT2_LINK') }}/dist/js/select2.min.js"></script>
+        <script src="{{ config('assets.select2') }}/dist/js/select2.min.js"></script>
 
         <script defer=""
             src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
