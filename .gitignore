@@ -20,4 +20,5 @@ yarn-error.log
 /.vscode
 siomes-bappebti-storage.json
 siomes-bappebti-baru.json
-.sql
+sips-users.sql
+sips.sql
