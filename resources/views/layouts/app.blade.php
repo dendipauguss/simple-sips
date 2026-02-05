@@ -150,6 +150,24 @@
                     1px 1px 0 #000;
                 /* Outline color */
             }
+
+            /* Dropdown length DataTables */
+            .dataTables_length select {
+                color: #fff;
+                /* warna teks */
+                background-color: #2c3e50;
+                /* background */
+                border: 1px solid #17a2b8;
+                /* border */
+            }
+
+            /* Option di dalam dropdown */
+            .dataTables_length select option {
+                color: #000;
+                /* warna teks option */
+                background-color: #fff;
+                /* background option */
+            }
         </style>
 
         <script src="{{ config('assets.jquery') }}/jquery-3.7.1.min.js"></script>
@@ -282,7 +300,7 @@
                                     width="40" height="40">
                             </a>
                             <!-- Brand title -->
-                            <div class="brand-title">SiOMeS</div>
+                            <div class="brand-title">{{ config('assets.app-name') }}</div>
                             <!-- You can also use IMG or SVG instead of a text element. -->
                         </div>
                     </div>

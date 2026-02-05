@@ -16,8 +16,11 @@ use App\Http\Controllers\DasarPengenaanSanksiController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FileController;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/auth/google', [AuthController::class, 'login_with_google']);

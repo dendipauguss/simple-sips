@@ -31,6 +31,7 @@
 
             <!-- Navigation Category -->
             <div class="mainnav__categoriy py-3">
+
                 <h6 class="mainnav__caption mt-0 px-3 fw-bold">
                     {{ ucwords(str_replace('_', ' ', auth()->user()->role)) }}</h6>
                 <ul class="mainnav__menu nav flex-column">
@@ -192,6 +193,17 @@
         <!-- Bottom navigation menu -->
         <div class="mainnav__bottom-content scrollable-content border-top pb-2">
             <ul id="mainnav" class="mainnav__menu nav flex-column">
+                <!-- Home -->
+                <li class="nav-item">
+                    <a href="{{ url('home') }}"
+                        class="nav-link mininav-toggle collapsed {{ request()->is('home') || request()->is('/') ? 'active' : '' }}"><i
+                            class="psi-to-left fs-5 me-2"></i>
+
+                        <span class="nav-label mininav-content ms-1">Kembali ke Home</span>
+                    </a>
+                </li>
+                <!-- END : Home -->
+
                 <li class="nav-item">
                     <a href="#" class="nav-link mininav-toggle collapsed"
                         onclick="event.preventDefault(); document.getElementById('logout').submit();">

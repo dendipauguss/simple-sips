@@ -88,121 +88,121 @@
                             </div> --}}
                         </div>
                         <div class="card-body mt-1">
-                            <div class="table-responsive">
-                                <table class="table table-hover bg-primary text-white" id="dataTables">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th class="text-dark text-center">No</th>
-                                            <th class="text-dark text-center">No Surat</th>
-                                            <th class="text-dark text-center">Tanggal Surat</th>
-                                            <th class="text-dark text-center">Kategori Pelaku Usaha</th>
-                                            <th class="text-dark text-center">Perusahaan</th>
-                                            <th class="text-dark text-center">Kategori Pelanggaran</th>
-                                            <th class="text-dark text-center">Bentuk Sanksi</th>
-                                            <th class="text-dark text-center">Tanggal Jatuh Tempo Sanksi</th>
-                                            <th class="text-dark text-center" style="width: 10%;">Status</th>
-                                            @if (auth()->user()->role != 'ketua_tim')
-                                                <th class="text-dark text-center">Aksi</th>
-                                            @endif
-                                            <th class="text-dark text-center">PIC</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+
+                            <table class="table table-hover bg-primary text-white" id="dataTables">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th class="text-dark text-center">No</th>
+                                        <th class="text-dark text-center">No Surat</th>
+                                        <th class="text-dark text-center">Tanggal Surat</th>
+                                        <th class="text-dark text-center">Kategori Pelaku Usaha</th>
+                                        <th class="text-dark text-center">Perusahaan</th>
+                                        <th class="text-dark text-center">Kategori Pelanggaran</th>
+                                        <th class="text-dark text-center">Bentuk Sanksi</th>
+                                        <th class="text-dark text-center">Tanggal Jatuh Tempo Sanksi</th>
+                                        <th class="text-dark text-center" style="width: 10%;">Status</th>
+                                        @if (auth()->user()->role != 'ketua_tim')
+                                            <th class="text-dark text-center">Aksi</th>
+                                        @endif
+                                        <th class="text-dark text-center">PIC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        \Carbon\Carbon::setLocale('id');
+                                    @endphp
+                                    @foreach ($pengenaan_sp as $sp)
                                         @php
-                                            \Carbon\Carbon::setLocale('id');
+                                            $hariIni = now();
+                                            $eskalasiAktif = $sp->eskalasi_aktif;
+                                            $tglSelesai = \Carbon\Carbon::parse($eskalasiAktif->tanggal_selesai);
+                                            $sisaHari = $hariIni->diffInDays($tglSelesai, false);
+                                            $bolehEskalasi =
+                                                $eskalasiAktif &&
+                                                $hariIni->gt($eskalasiAktif->tanggal_selesai) &&
+                                                in_array($sp->status_surat, ['belum_ditanggapi']);
+                                            $statusAktif = in_array($sp->status_surat, ['belum_ditanggapi']);
                                         @endphp
-                                        @foreach ($pengenaan_sp as $sp)
-                                            @php
-                                                $hariIni = now();
-                                                $eskalasiAktif = $sp->eskalasi_aktif;
-                                                $tglSelesai = \Carbon\Carbon::parse($eskalasiAktif->tanggal_selesai);
-                                                $sisaHari = $hariIni->diffInDays($tglSelesai, false);
-                                                $bolehEskalasi =
-                                                    $eskalasiAktif &&
-                                                    $hariIni->gt($eskalasiAktif->tanggal_selesai) &&
-                                                    in_array($sp->status_surat, ['belum_ditanggapi']);
-                                                $statusAktif = in_array($sp->status_surat, ['belum_ditanggapi']);
-                                            @endphp
 
-                                            <tr
-                                                class="{{ $statusAktif && $sisaHari < 0
-                                                    ? 'table-danger'
-                                                    : ($statusAktif && $sisaHari >= 0 && $sisaHari <= 5
-                                                        ? 'table-warning'
-                                                        : '') }}">
-                                                <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">
-                                                    {{ $sp->no_surat }}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ \Carbon\Carbon::parse($eskalasiAktif->tanggal_mulai)->translatedFormat('d-m-Y') }}
-                                                </td>
-                                                <td class="text-center">{{ $sp->pelaku_usaha->jenis_pelaku_usaha->nama }}
-                                                </td>
-                                                <td class="text-center">{{ $sp->pelaku_usaha->nama }}</td>
-                                                <td class="text-center">{{ $sp->jenis_pelanggaran->nama }}
-                                                </td>
+                                        <tr
+                                            class="{{ $statusAktif && $sisaHari < 0
+                                                ? 'table-danger'
+                                                : ($statusAktif && $sisaHari >= 0 && $sisaHari <= 5
+                                                    ? 'table-warning'
+                                                    : '') }}">
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">
+                                                {{ $sp->no_surat }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($eskalasiAktif->tanggal_mulai)->translatedFormat('d-m-Y') }}
+                                            </td>
+                                            <td class="text-center">{{ $sp->pelaku_usaha->jenis_pelaku_usaha->nama }}
+                                            </td>
+                                            <td class="text-center">{{ $sp->pelaku_usaha->nama }}</td>
+                                            <td class="text-center">{{ $sp->jenis_pelanggaran->nama }}
+                                            </td>
 
-                                                <td>
-                                                    @if ($eskalasiAktif)
-                                                        {{ $eskalasiAktif->sanksi->nama }}
-                                                        @if ($eskalasiAktif->sanksi->kode_surat === 'SP')
-                                                            {{ $eskalasiAktif->level }}
-                                                        @endif
-
-                                                        @if ($eskalasiAktif->is_denda)
-                                                            <br>
-                                                            <small class="text-danger">
-                                                                Denda: Rp
-                                                                {{ number_format($eskalasiAktif->nominal_denda, 0, ',', '.') }}
-                                                            </small>
-                                                        @endif
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ \Carbon\Carbon::parse($eskalasiAktif->tanggal_selesai)->translatedFormat('l, d F Y') }}
-                                                    <br>
-                                                    @if ($statusAktif)
-                                                        @if ($sisaHari < 0)
-                                                            <div class="text-danger" style="font-size: 11px;">
-                                                                Terlambat
-                                                                {{ $tglSelesai->longAbsoluteDiffForHumans(now()) }}
-                                                            </div>
-                                                        @elseif ($sisaHari <= 5)
-                                                            <div class="text-warning" style="font-size: 11px;">
-                                                                Jatuh tempo
-                                                                {{ $tglSelesai->longAbsoluteDiffForHumans(now()) }}
-                                                                lagi
-                                                            </div>
-                                                        @endif
-                                                    @endif
-                                                </td>
-
-                                                <td class="text-center">
-                                                    @if ($sp->status_surat == 'pending')
-                                                        <span id="status-penindakan-{{ $sp->id }}">-</span>
-                                                    @else
-                                                        <h5>
-                                                            <span id="status-penindakan-{{ $sp->id }}"
-                                                                class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
-                                                        </h5>
+                                            <td>
+                                                @if ($eskalasiAktif)
+                                                    {{ $eskalasiAktif->sanksi->nama }}
+                                                    @if ($eskalasiAktif->sanksi->kode_surat === 'SP')
+                                                        {{ $eskalasiAktif->level }}
                                                     @endif
 
-                                                </td>
-                                                @if (auth()->user()->role != 'ketua_tim')
-                                                    <td class="text-center">
-                                                        @if (auth()->user()->id == $sp->user->id ||
-                                                                \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y') == '2025' ||
-                                                                \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y') == '2024' ||
-                                                                \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y') == '2023')
-                                                            <div class="btn-group" role="group">
-                                                                <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
-                                                                    class="btn btn-sm btn-info" title="Tanggapi">
-                                                                    <i class="psi-pencil"></i>
-                                                                </a>
-                                                                {{-- @if ($bolehEskalasi)
+                                                    @if ($eskalasiAktif->is_denda)
+                                                        <br>
+                                                        <small class="text-danger">
+                                                            Denda: Rp
+                                                            {{ number_format($eskalasiAktif->nominal_denda, 0, ',', '.') }}
+                                                        </small>
+                                                    @endif
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($eskalasiAktif->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                                                <br>
+                                                @if ($statusAktif)
+                                                    @if ($sisaHari < 0)
+                                                        <div class="text-danger" style="font-size: 11px;">
+                                                            Terlambat
+                                                            {{ $tglSelesai->longAbsoluteDiffForHumans(now()) }}
+                                                        </div>
+                                                    @elseif ($sisaHari <= 5)
+                                                        <div class="text-warning" style="font-size: 11px;">
+                                                            Jatuh tempo
+                                                            {{ $tglSelesai->longAbsoluteDiffForHumans(now()) }}
+                                                            lagi
+                                                        </div>
+                                                    @endif
+                                                @endif
+                                            </td>
+
+                                            <td class="text-center">
+                                                @if ($sp->status_surat == 'pending')
+                                                    <span id="status-penindakan-{{ $sp->id }}">-</span>
+                                                @else
+                                                    <h5>
+                                                        <span id="status-penindakan-{{ $sp->id }}"
+                                                            class="badge {{ $sp->status_surat == 'belum_ditanggapi' ? 'bg-danger' : 'bg-success' }}">{{ ucwords(str_replace('_', ' ', $sp->status_surat)) }}</span>
+                                                    </h5>
+                                                @endif
+
+                                            </td>
+                                            @if (auth()->user()->role != 'ketua_tim')
+                                                <td class="text-center">
+                                                    @if (auth()->user()->id == $sp->user->id ||
+                                                            \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y') == '2025' ||
+                                                            \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y') == '2024' ||
+                                                            \Carbon\Carbon::parse($sp->tanggal_mulai)->format('Y') == '2023')
+                                                        <div class="btn-group" role="group">
+                                                            <a href="{{ route('pengenaan-sp.show', $sp->id) }}"
+                                                                class="btn btn-sm btn-info" title="Tanggapi">
+                                                                <i class="psi-pencil"></i>
+                                                            </a>
+                                                            {{-- @if ($bolehEskalasi)
                                                                     <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
                                                                         class="badge bg-warning me-1 text-decoration-none"
                                                                         title="Eskalasi">
@@ -214,39 +214,39 @@
                                                                         ESKALASI <i class="psi-exclamation"></i>
                                                                     </a>
                                                                 @endif --}}
-                                                                <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
-                                                                    class="btn btn-sm btn-warning" title="Eskalasi">
-                                                                    <i class="psi-up"></i>
-                                                                </a>
-                                                                <a href="#" class="btn btn-sm btn-danger"
-                                                                    onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $sp->id }}').submit();"
-                                                                    title="Hapus">
-                                                                    <i class="psi-trash"></i>
-                                                                </a>
-                                                            </div>
-                                                            <form id="delete-{{ $sp->id }}"
-                                                                action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
-                                                                method="POST" style="display:none;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form>
-                                                        @else
-                                                            <div class="badge bg-warning">
-                                                                <span class="fs-3">
-                                                                    <i class="psi-security-settings"></i>
-                                                                </span>
-                                                            </div>
-                                                        @endif
-                                                    </td>
-                                                @endif
-                                                <td class="text-start">
-                                                    {{ $sp->user->nama }}
+                                                            <a href="{{ route('pengenaan-sp.eskalasi', $sp->id) }}"
+                                                                class="btn btn-sm btn-warning" title="Eskalasi">
+                                                                <i class="psi-up"></i>
+                                                            </a>
+                                                            <a href="#" class="btn btn-sm btn-danger"
+                                                                onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $sp->id }}').submit();"
+                                                                title="Hapus">
+                                                                <i class="psi-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                        <form id="delete-{{ $sp->id }}"
+                                                            action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
+                                                            method="POST" style="display:none;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
+                                                    @else
+                                                        <div class="badge bg-warning">
+                                                            <span class="fs-3">
+                                                                <i class="psi-security-settings"></i>
+                                                            </span>
+                                                        </div>
+                                                    @endif
                                                 </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                            @endif
+                                            <td class="text-start">
+                                                {{ $sp->user->nama }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
                         </div>
                     </div>
                 </div>

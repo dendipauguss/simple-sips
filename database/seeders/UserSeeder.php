@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
             'nama' => 'Dendi Paugus Sukmaya',
             'email' => 'dendipauguss0@gmail.com',
             'username' => 'dendipauguss0',
-            'password' => Hash::make('Dendipauguss_0'),
+            'password' => Hash::make('D3nd!p4u9u55_0'),
             'role' => 'admin'
         ]);
 
@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'nama' => 'Dendi Paugus Sukmaya',
             'email' => 'dendipauguss00@gmail.com',
             'username' => 'dendipauguss00',
-            'password' => Hash::make('Dendipauguss_00'),
+            'password' => Hash::make('D3nd!p4u9u55_00'),
             'role' => 'ketua_tim'
         ]);
 
@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
             'nama' => 'Dendi Paugus Sukmaya',
             'email' => 'dendipauguss000@gmail.com',
             'username' => 'dendipauguss000',
-            'password' => Hash::make('Dendipauguss_000'),
+            'password' => Hash::make('D3nd!p4u9u55_000'),
             'role' => 'pegawai'
         ]);
 

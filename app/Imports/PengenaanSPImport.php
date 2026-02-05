@@ -98,7 +98,7 @@ class PengenaanSPImport implements ToModel, WithHeadingRow
             'detail_pelanggaran'    => $row['detail_pelanggaran'],
             'tanggapan'             => $row['tanggapan'],
             'status_surat'          => $status_tanggapan,
-            'user_id'               => 2,
+            'user_id'               => 3,
         ]);
 
         PengenaanSPSanksi::create([

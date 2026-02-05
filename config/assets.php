@@ -2,10 +2,10 @@
 
 return [
     'app-name'  => env('APP_NAME'),
-    'theme'     => env('THM_LINK'),
-    'datatables' => env('DTABLES_LINK'),
-    'select2'   => env('SELECT2_LINK'),
-    'select2-bs' => env('SELECT2_BOOTSTRAP_LINK'),
-    'jquery'    => env('JQUERY_LINK'),
-    'home-link' => env('THM_HOME_LINK'),
+    'theme'     => 'https://nifty.perewah.com',
+    'datatables' => 'https://cdn.datatables.net/1.13.6',
+    'select2'   => 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0',
+    'jquery'    => 'https://code.jquery.com',
+    'select2-bs' => 'https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0',
+    'home-link' => 'BizLand',
 ];
