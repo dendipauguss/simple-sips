@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => 'Administratif',
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'env' => 'local',
+    'env' => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'debug' => (bool) true,
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'url' => 'http://10.88.65.8:8004',
+    'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL'),
 
@@ -122,7 +122,7 @@ return [
     |
     */
 
-    'key' => 'base64:hRASkNm6ipyBuWUZDVRe6XAAQR4IY2fkUk9guNUabkg=',
+    'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
 
