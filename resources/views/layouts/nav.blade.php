@@ -194,14 +194,14 @@
         <div class="mainnav__bottom-content scrollable-content border-top pb-2">
             <ul id="mainnav" class="mainnav__menu nav flex-column">
                 <!-- Home -->
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ url('home') }}"
                         class="nav-link mininav-toggle collapsed {{ request()->is('home') || request()->is('/') ? 'active' : '' }}"><i
                             class="psi-to-left fs-5 me-2"></i>
 
                         <span class="nav-label mininav-content ms-1">Kembali ke Home</span>
                     </a>
-                </li>
+                </li> --}}
                 <!-- END : Home -->
 
                 <li class="nav-item">
