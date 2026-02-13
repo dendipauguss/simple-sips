@@ -130,7 +130,7 @@
             } */
 
             @page {
-                margin: 0.5cm 1cm 0.5cm 1cm;
+                margin: 0.5cm 0.5cm 1cm 0.5cm;
             }
         </style>
     </head>
