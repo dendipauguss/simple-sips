@@ -127,7 +127,7 @@
                                         </form>
 
                                         <!-- Login With Google -->
-                                        @if ($histori_login->count())
+                                        {{-- @if ($histori_login->count())
                                             <div class="mt-3">
                                                 <small class="text-muted">Login terakhir</small>
 
@@ -143,7 +143,7 @@
                                                     </div>
                                                 @endforeach
                                             </div>
-                                        @endif
+                                        @endif --}}
 
                                         <div id="g_id_onload" data-client_id="{{ env('GOOGLE_AUTH_CLIENT_ID') }}"
                                             data-callback="handleCredentialResponse" class="mt-4">
@@ -154,7 +154,7 @@
                                         <!-- Login With Google -->
                                     </div>
                                 </div>
-                                <div class="col-md-5 d-flex align-items-center">
+                                <div class="col-md-5 d-flex align-items-start">
                                     <div class="card-body">
                                         <div class="text-center">
                                             <img src="/img/kemendag-bappebti-logo.jpg" alt="" srcset=""

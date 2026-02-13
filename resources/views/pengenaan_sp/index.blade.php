@@ -6,67 +6,46 @@
                 <div class="col-xl-12 mb-3 mb-xl-0">
                     <div class="card h-100 bg-primary border-info text-white">
                         <div class="card-header border-0">
-                            <form action="{{ route('laporan.generate') }}" method="GET">
+                            <form method="GET" action="{{ route('pengenaan-sp.index') }}" id="filterForm">
                                 <div class="row align-items-center">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <select name="bulan" class="form-select bg-primary border-info text-white">
                                             <option value="">Semua Bulan</option>
                                             @foreach ($bulanList as $b)
-                                                <option value="{{ $b }}">
+                                                <option value="{{ $b }}"
+                                                    {{ request('bulan') == $b ? 'selected' : '' }}>
                                                     {{ \Carbon\Carbon::createFromFormat('!m', $b)->translatedFormat('F') }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <select name="tahun" class="form-select bg-primary border-info text-white">
                                             <option value="">Semua Tahun</option>
                                             @foreach ($tahunList as $t)
-                                                <option value="{{ $t }}">{{ $t }}</option>
+                                                <option value="{{ $t }}"
+                                                    {{ request('tahun') == $t ? 'selected' : '' }}>
+                                                    {{ $t }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-md-3">
-                                        <select name="perusahaan_id" id="perusahaan_id" class="form-select select2">
+                                    <div class="col-md-2">
+                                        <select name="perusahaan_id" class="form-select select2">
                                             <option value="">Semua Perusahaan</option>
                                             @foreach ($perusahaan as $p)
-                                                <option value="{{ $p->id }}">{{ $p->nama }}</option>
+                                                <option value="{{ $p->id }}"
+                                                    {{ request('perusahaan_id') == $p->id ? 'selected' : '' }}>
+                                                    {{ $p->nama }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    {{-- <div class="col-md-3">
-                                        <select name="status_surat" class="form-select">
-                                            <option value="">Semua Status</option>
-                                            <option value="sudah_ditanggapi">
-                                                Sudah Ditanggapi
-                                            </option>
-                                            <option value="belum_ditanggapi">
-                                                Belum Ditanggapi
-                                            </option>
-                                        </select>
-                                    </div> --}}
-
-                                    <div class="col-sm-3">
-                                        <div class="input-group">
-                                            <button class="btn btn-light ms-1">Generate Laporan</button>
-                                            @if (auth()->user()->role == 'admin')
-                                                <a href="{{ url('pengenaan-sp/import') }}" class="btn btn-sm btn-success">+
-                                                    Import
-                                                    Excel</a>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <form method="GET" action="{{ route('pengenaan-sp.index') }}">
-                                <div class="row align-items-center mt-2">
-                                    <div class="col-sm-3">
-                                        <select name="status" class="form-select bg-primary border-info text-white"
-                                            onchange="this.form.submit()">
+                                    <div class="col-md-2">
+                                        <select name="status" class="form-select bg-primary border-info text-white">
                                             <option value="">Semua Status</option>
                                             <option value="sudah_ditanggapi"
                                                 {{ request('status') == 'sudah_ditanggapi' ? 'selected' : '' }}>
@@ -78,8 +57,21 @@
                                             </option>
                                         </select>
                                     </div>
+
+                                    <div class="col-md-2 ms-auto">
+                                        <div class="btn-group w-100">
+                                            <button type="submit" class="btn btn-light">
+                                                🔍 Filter
+                                            </button>
+
+                                            <button type="button" class="btn btn-success" onclick="generateLaporan()">
+                                                📄 Generate
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
+
                             {{-- <div class="row row-cols-md-auto">
                                 <div class="input-group ms-2">
                                     <a href="{{ route('laporan.generate', request()->all()) }}"
@@ -327,5 +319,12 @@
                 });
             });
         });
+
+        function generateLaporan() {
+            const form = document.getElementById('filterForm');
+            const params = new URLSearchParams(new FormData(form)).toString();
+            const url = "{{ route('laporan.generate') }}" + '?' + params;
+            window.open(url, '_blank');
+        }
     </script>
 @endsection

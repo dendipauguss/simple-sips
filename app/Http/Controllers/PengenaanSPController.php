@@ -36,7 +36,6 @@ class PengenaanSPController extends Controller
 {
     public function index(Request $request)
     {
-
         $query = PengenaanSP::query()->with([
             'sanksi', // 🔥 WAJIB
             'pelaku_usaha.jenis_pelaku_usaha',
@@ -45,11 +44,17 @@ class PengenaanSPController extends Controller
             'eskalasi_aktif.sanksi'
         ]);
 
-        $status = $request->status;
+        // Ambil filter
+        $bulan        = $request->bulan;
+        $tahun        = $request->tahun;
+        $perusahaanId = $request->perusahaan_id;
+        $status       = $request->status;
 
-        if ($status) {
-            $query->where('status_surat', $status);
-        }
+        // Terapkan filter
+        if ($bulan)        $query->whereMonth('tanggal_mulai', $bulan);
+        if ($tahun)        $query->whereYear('tanggal_mulai', $tahun);
+        if ($perusahaanId) $query->where('pelaku_usaha_id', $perusahaanId);
+        if ($status)       $query->where('status_surat', $status);
 
         $bulanList = PengenaanSP::selectRaw('MONTH(tanggal_mulai) as bulan')
             ->groupBy('bulan')

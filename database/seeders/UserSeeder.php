@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
     {
         User::create([
             'nama' => 'Dendi Paugus Sukmaya',
-            'email' => 'dendipauguss1111@gmail.com',
+            'email' => 'dendipauguss0@gmail.com',
             'username' => 'dendipauguss0',
             'password' => Hash::make('D3nd!p4u9u55_0'),
             'role' => 'admin'
@@ -28,9 +28,9 @@ class UserSeeder extends Seeder
 
         User::create([
             'nama' => 'Dendi Paugus Sukmaya',
-            'email' => 'dendipauguss000@gmail.com',
-            'username' => 'dendipauguss000',
-            'password' => Hash::make('D3nd!p4u9u55_000'),
+            'email' => 'dendipauguss1111@gmail.com',
+            'username' => 'dendipauguss',
+            'password' => Hash::make('D3nd!p4u9u55_11'),
             'role' => 'pegawai'
         ]);
 

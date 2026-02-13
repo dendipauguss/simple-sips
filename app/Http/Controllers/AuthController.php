@@ -44,15 +44,15 @@ class AuthController extends Controller
             // regenerate session
             $request->session()->regenerate();
 
-            HistoriLogin::updateOrCreate(
-                ['user_id' => Auth::id()],
-                [
-                    'email' => Auth::user()->email,
-                    'name' => Auth::user()->nama,
-                    'provider' => 'password',
-                    'last_login_at' => now()
-                ]
-            );
+            // HistoriLogin::updateOrCreate(
+            //     ['user_id' => Auth::id()],
+            //     [
+            //         'email' => Auth::user()->email,
+            //         'name' => Auth::user()->nama,
+            //         'provider' => 'password',
+            //         'last_login_at' => now()
+            //     ]
+            // );
 
             return redirect()->route('dashboard')->with('info', 'Selamat Datang ' . Auth::user()->nama);
         }
@@ -145,15 +145,15 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        HistoriLogin::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'email' => $user->email,
-                'name' => $user->nama,
-                'provider' => 'google',
-                'last_login_at' => now()
-            ]
-        );
+        // HistoriLogin::updateOrCreate(
+        //     ['user_id' => $user->id],
+        //     [
+        //         'email' => $user->email,
+        //         'name' => $user->nama,
+        //         'provider' => 'google',
+        //         'last_login_at' => now()
+        //     ]
+        // );
 
         session()->flash('info', 'Selamat Datang ' . $user->nama);
 
