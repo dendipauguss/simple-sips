@@ -21,21 +21,22 @@
             rel="stylesheet">
         <!-- Bootstrap CSS [ REQUIRED ] -->
         <link rel="stylesheet"
-            href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/night/bootstrap.min.css">
+            href="{{ config('assets.theme') }}/assets/css/color-schemes/all-headers/night/bootstrap.min.css">
 
         <!-- Nifty CSS [ REQUIRED ] -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/all-headers/night/nifty.min.css">
+        <link rel="stylesheet"
+            href="{{ config('assets.theme') }}/assets/css/color-schemes/all-headers/night/nifty.min.css">
 
         <!-- Nifty Color Schemes -->
-        <link rel="stylesheet" href="{{ env('THM_LINK') }}/assets/css/color-schemes/dark/nifty.min.css">
+        <link rel="stylesheet" href="{{ config('assets.theme') }}/assets/css/color-schemes/dark/nifty.min.css">
 
         <!-- Nifty Premium Line Icons [ OPTIONAL ] -->
         <link rel="stylesheet"
-            href="{{ env('THM_LINK') }}/assets/premium/icon-sets/icons/line-icons/premium-line-icons.min.css">
+            href="{{ config('assets.theme') }}/assets/premium/icon-sets/icons/line-icons/premium-line-icons.min.css">
 
         <!-- Nifty Premium Solid Icons -->
         <link rel="stylesheet"
-            href="{{ env('THM_LINK') }}/assets/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css">
+            href="{{ config('assets.theme') }}/assets/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css">
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~---
 
@@ -65,7 +66,7 @@
             }
         </style>
 
-        <script src="{{ env('JQUERY_LINK') }}/jquery-3.7.1.min.js"></script>
+        <script src="{{ config('assets.jquery') }}/jquery-3.7.1.min.js"></script>
     </head>
 
     <body class="jumping">
@@ -107,8 +108,9 @@
                                                     <input type="password"
                                                         class="form-control @error('password') is-invalid @enderror bg-primary border-info text-white"
                                                         placeholder="Password" name="password" id="password">
-                                                    <button type="button" id="togglePassword"
-                                                        class="input-group-text bg-primary border-info">
+                                                    <button type="button"
+                                                        class="input-group-text bg-primary border-info"
+                                                        id="togglePassword">
                                                         <i class="psi-eye-visible"></i>
                                                     </button>
                                                     @error('password')
@@ -177,19 +179,19 @@
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
         <!-- Popper JS [ OPTIONAL ] -->
-        <script src="{{ env('THM_LINK') }}/assets/vendors/popperjs/popper.min.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/vendors/popperjs/popper.min.js" defer=""></script>
 
         <!-- Bootstrap JS [ OPTIONAL ] -->
-        <script src="{{ env('THM_LINK') }}/assets/vendors/bootstrap/bootstrap.min.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/vendors/bootstrap/bootstrap.min.js" defer=""></script>
 
         <!-- Nifty JS [ OPTIONAL ] -->
-        <script src="{{ env('THM_LINK') }}/assets/js/nifty.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/js/nifty.js" defer=""></script>
 
         <!-- Nifty Settings [ DEMO ] -->
-        <script src="{{ env('THM_LINK') }}/assets/js/demo-purpose-only.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/js/demo-purpose-only.js" defer=""></script>
 
         <!-- Chart JS Scripts [ OPTIONAL ] -->
-        <script src="{{ env('THM_LINK') }}/assets/vendors/chart.js/chart.min.js" defer=""></script>
+        <script src="{{ config('assets.theme') }}/assets/vendors/chart.js/chart.min.js" defer=""></script>
 
         <!-- GSI Client -->
         <script src="https://accounts.google.com/gsi/client" async defer></script>
