@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+// use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use App\Models\Laporan;
 use App\Models\LaporanItem;
 use App\Models\PengenaanSP;
@@ -33,18 +34,18 @@ class LaporanController extends Controller
             'bulan' => 'nullable|integer|min:1|max:12',
             'tahun' => 'nullable|integer|min:2000',
             'perusahaan_id' => 'nullable|exists:pelaku_usaha,id',
-            'status_surat' => 'nullable|in:sudah_ditanggapi,belum_ditanggapi',
+            'status' => 'nullable|in:sudah_ditanggapi,belum_ditanggapi',
         ]);
 
-        $bulan = $request->bulan;   // 0 = Semua Bulan
-        $tahun = $request->tahun;   // 0 = Semua Tahun
-        $perusahaan_id = $request->perusahaan_id;
-        $status_surat = $request->status_surat;
+        $bulan = $request->input('bulan') ?: null;
+        $tahun = $request->input('tahun') ?: null;
+        $perusahaan_id = $request->input('perusahaan_id') ?: null;
+        $status_surat = $request->input('status') ?: null;
 
         // Cek duplikasi hanya jika bulan & tahun spesifik
-        if (!$bulan && !$tahun && !$perusahaan_id && !$status_surat) {
-            return back()->with('error', 'Pilih minimal satu filter.');
-        }
+        // if (!$bulan && !$tahun && !$perusahaan_id && !$status_surat) {
+        //     return back()->with('error', 'Pilih minimal satu filter.');
+        // }
         // Cek duplikasi laporan
         $laporan = Laporan::where('bulan', $bulan)
             ->where('tahun', $tahun)

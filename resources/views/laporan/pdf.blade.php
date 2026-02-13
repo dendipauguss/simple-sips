@@ -10,7 +10,7 @@
             /* @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap'); */
 
             body {
-                font-family: "Open Sans", sans-serif;
+                font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
                 font-size: 12px;
                 line-height: 1.4;
             }
@@ -65,8 +65,16 @@
 
             table th,
             table td {
-                padding: 5px;
+                padding: 4px;
                 vertical-align: top;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
             }
 
             .no-bullets {
@@ -117,9 +125,9 @@
             }
 
             /* Mencegah baris terpotong aneh (opsional) */
-            tr {
+            /* tr {
                 page-break-inside: avoid;
-            }
+            } */
 
             @page {
                 margin: 0.5cm 1cm 0.5cm 1cm;
@@ -134,7 +142,7 @@
             <table class="kop-table">
                 <tr align="center">
                     <td width="20%">
-                        <img src="img/kop-logo-1.png" width="90">
+                        <img src="{{ public_path('img/kop-logo-1.png') }}" width="90">
                     </td>
                     <td width="80%">
                         <div class="kop-title" style="font-size: 13pt">KEMENTERIAN PERDAGANGAN</div>

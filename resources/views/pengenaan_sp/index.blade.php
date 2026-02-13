@@ -322,9 +322,15 @@
 
         function generateLaporan() {
             const form = document.getElementById('filterForm');
-            const params = new URLSearchParams(new FormData(form)).toString();
-            const url = "{{ route('laporan.generate') }}" + '?' + params;
-            window.open(url, '_blank');
+
+            form.querySelectorAll('select').forEach(el => {
+                if (el.value === '') {
+                    el.disabled = true;
+                }
+            });
+
+            form.action = "{{ route('laporan.generate') }}";
+            form.submit();
         }
     </script>
 @endsection
