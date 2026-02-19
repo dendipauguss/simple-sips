@@ -9,11 +9,7 @@
                             @if (auth()->user()->role == 'admin')
                                 <div class="row row-cols-md-auto">
                                     <div class="input-group me-2">
-                                        <a href="{{ url('pengaturan/kategori-sp/create') }}" class="btn btn-sm btn-primary">+
-                                            Tambah</a>
-                                        <a href="{{ url('pengaturan/kategori-sp/import') }}"
-                                            class="btn btn-sm btn-success">+ Import
-                                            Excel</a>
+
                                     </div>
                                 </div>
                             @endif
@@ -75,9 +71,12 @@
                                                 🔍 Filter
                                             </button>
 
-                                            <button type="button" class="btn btn-success" onclick="generateLaporan()">
+                                            <button type="button" class="btn btn-info" onclick="generateLaporan()">
                                                 📄 Generate
                                             </button>
+
+                                            <a href="{{ url('pengenaan-sp/import') }}" class="btn btn-success">+ Import
+                                                Excel</a>
                                         </div>
                                     </div>
                                 </div>
