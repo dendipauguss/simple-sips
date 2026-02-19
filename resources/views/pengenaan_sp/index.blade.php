@@ -58,7 +58,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-3 ms-auto">
+                                    <div class="{{ auth()->user()->role == 'admin' ? 'col-md-3' : 'col-md-2' }} ms-auto">
                                         <div class="btn-group w-100">
                                             <button type="submit" class="btn btn-light">
                                                 🔍 Filter
