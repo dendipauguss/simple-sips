@@ -146,11 +146,10 @@
                                         @endif --}}
 
                                         <div id="g_id_onload" data-client_id="{{ env('GOOGLE_AUTH_CLIENT_ID') }}"
-                                            data-callback="handleCredentialResponse"
-                                            class="mt-4 d-flex justify-content-center">
+                                            data-callback="handleCredentialResponse" class="mt-4">
                                         </div>
 
-                                        <div class="g_id_signin" data-type="standard">
+                                        <div class="g_id_signin d-flex justify-content-center" data-type="standard">
                                         </div>
                                         <!-- Login With Google -->
                                     </div>
