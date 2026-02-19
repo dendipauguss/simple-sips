@@ -36,66 +36,57 @@ class UserSeeder extends Seeder
 
         User::create([
             'nama' => 'Amser Irawan Panjaitan',
-            'email' => 'amserirawanpanjaitan@gmail.com',
+            'email' => 'amserpanjaitan@gmail.com',
             'username' => 'amserirawanpanjaitan',
-            'password' => Hash::make('Amserirawanpanjaitan_1'),
+            'password' => Hash::make('Amser#irawan#panjaitan_1'),
             'role' => 'ketua_tim'
         ]);
 
         User::create([
-            'nama' => 'Agus Sulistiyanto',
-            'email' => 'agussulistiyanto@gmail.com',
-            'username' => 'agussulistiyanto',
-            'password' => Hash::make('Agussulistiyanto_2'),
-            'role' => 'pegawai'
-        ]);
-
-        User::create([
             'nama' => 'Bernard Asido',
-            'email' => 'bernardasido@gmail.com',
+            'email' => 'bernardasido24@gmail.com',
             'username' => 'bernardasido',
-            'password' => Hash::make('Bernardasido_3'),
+            'password' => Hash::make('Bernard#asido_3'),
             'role' => 'pegawai'
         ]);
 
         User::create([
             'nama' => 'Pirdaus Sabana',
-            'email' => 'pirdaussabana@gmail.com',
+            'email' => 'firdaus.sabana@gmail.com',
             'username' => 'pirdaussabana',
-            'password' => Hash::make('Pirdaussabana_4'),
-            'role' => 'pegawai'
-        ]);
-
-        User::create([
-            'nama' => 'Chandra Fredrik Purba',
-            'email' => 'chandrafredrikpurba@gmail.com',
-            'username' => 'chandrafredrikpurba',
-            'password' => Hash::make('Chandrafredrikpurba_5'),
+            'password' => Hash::make('Pirdaus#sabana_4'),
             'role' => 'pegawai'
         ]);
 
         User::create([
             'nama' => 'Tito Yassin',
-            'email' => 'titoyassin@gmail.com',
+            'email' => 'tito.yassin1991@gmail.com',
             'username' => 'titoyassin',
-            'password' => Hash::make('Titoyassin_6'),
+            'password' => Hash::make('Tito#yassin_5'),
             'role' => 'pegawai'
         ]);
 
         User::create([
             'nama' => 'Rendy Cisara Sandy',
-            'email' => 'rendycisarasandy@gmail.com',
+            'email' => 'Rendysandy04@gmail.com',
             'username' => 'rendycisarasandy',
-            'password' => Hash::make('Rendycisarasandy_7'),
+            'password' => Hash::make('Rendy#cisara#sandy_6'),
             'role' => 'pegawai'
         ]);
 
         User::create([
             'nama' => 'Aulia Puspa Ramadhani',
-            'email' => 'auliapusparamadhani@gmail.com',
+            'email' => 'r.auliapuspa@gmail.com',
             'username' => 'auliapusparamadhani',
-            'password' => Hash::make('AuliaPuspaRamadhani_8'),
+            'password' => Hash::make('Aulia#Puspa#Ramadhani_7'),
             'role' => 'pegawai'
+        ]);
+
+        User::create([
+            'nama' => 'Rorundak 2',
+            'email' => 'rorundak.2@gmail.com',
+            'username' => 'rorundak2',
+            'password' => Hash::make('Rorundak#2_2')
         ]);
     }
 }
