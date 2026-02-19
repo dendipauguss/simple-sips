@@ -6,13 +6,6 @@
                 <div class="col-xl-12 mb-3 mb-xl-0">
                     <div class="card h-100 bg-primary border-info text-white">
                         <div class="card-header border-0">
-                            @if (auth()->user()->role == 'admin')
-                                <div class="row row-cols-md-auto">
-                                    <div class="input-group me-2">
-
-                                    </div>
-                                </div>
-                            @endif
                             <form method="GET" action="{{ route('pengenaan-sp.index') }}" id="filterForm">
                                 <div class="row align-items-center">
                                     <div class="col-md-2">
@@ -65,7 +58,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-2 ms-auto">
+                                    <div class="col-md-3 ms-auto">
                                         <div class="btn-group w-100">
                                             <button type="submit" class="btn btn-light">
                                                 🔍 Filter
@@ -75,8 +68,10 @@
                                                 📄 Generate
                                             </button>
 
-                                            <a href="{{ url('pengenaan-sp/import') }}" class="btn btn-success">+ Import
-                                                Excel</a>
+                                            @if (auth()->user()->role == 'admin')
+                                                <a href="{{ url('pengenaan-sp/import') }}" class="btn btn-success">+ Import
+                                                    Excel</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
