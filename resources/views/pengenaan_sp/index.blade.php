@@ -6,6 +6,17 @@
                 <div class="col-xl-12 mb-3 mb-xl-0">
                     <div class="card h-100 bg-primary border-info text-white">
                         <div class="card-header border-0">
+                            @if (auth()->user()->role == 'admin')
+                                <div class="row row-cols-md-auto">
+                                    <div class="input-group me-2">
+                                        <a href="{{ url('pengaturan/kategori-sp/create') }}" class="btn btn-sm btn-primary">+
+                                            Tambah</a>
+                                        <a href="{{ url('pengaturan/kategori-sp/import') }}"
+                                            class="btn btn-sm btn-success">+ Import
+                                            Excel</a>
+                                    </div>
+                                </div>
+                            @endif
                             <form method="GET" action="{{ route('pengenaan-sp.index') }}" id="filterForm">
                                 <div class="row align-items-center">
                                     <div class="col-md-2">
