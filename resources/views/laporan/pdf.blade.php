@@ -1,13 +1,23 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
     <head>
         <meta charset="utf-8">
+        <meta name="generator" content="Hugo 0.87.0">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
         <title>Laporan {{ $laporan->status_persetujuan == 'setuju' ? 'Disetujui' : ($laporan->status_persetujuan == 'dikembalikan' ? 'Dikembalikan' : 'Dipending') }}
         </title>
+
         <link rel="shortcut icon" href="/img/kemendag-bappebti-logo.ico" type="image/x-icon">
-        <style>
-            /* @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap'); */
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&amp;family=Ubuntu:wght@400;500;700&amp;display=swap"
+            rel="stylesheet">
+
+        <style>            
 
             body {
                 font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
