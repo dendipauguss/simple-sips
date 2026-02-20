@@ -3,8 +3,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Laporan
-            {{ $laporan->status_persetujuan == 'setuju' ? 'Disetujui' : ($laporan->status_persetujuan == 'dikembalikan' ? 'Dikembalikan' : 'Dipending') }}
+        <title>Laporan {{ $laporan->status_persetujuan == 'setuju' ? 'Disetujui' : ($laporan->status_persetujuan == 'dikembalikan' ? 'Dikembalikan' : 'Dipending') }}
         </title>
         <link rel="shortcut icon" href="/img/kemendag-bappebti-logo.ico" type="image/x-icon">
         <style>
