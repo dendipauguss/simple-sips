@@ -276,6 +276,7 @@ class PengenaanSPController extends Controller
     {
         $pengenaan_sp = PengenaanSP::findOrFail($id);
 
+        dd($pengenaan_sp->file);
         $file = Files::findOrFail($pengenaan_sp->file->id);
 
         $hapus_file_gdrive = $this->deleteFileFromGDrive($file->google_file_path);
