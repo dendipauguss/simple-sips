@@ -15,12 +15,12 @@
                 line-height: 1.4;
             }
 
-            .kop-container {
+            /* .kop-container {
                 width: 100%;
-                /* border-bottom: 3px solid #000; */
+                border-bottom: 3px solid #000;
                 padding-bottom: 10px;
                 margin-bottom: 20px;
-            }
+            } */
 
             .kop-table {
                 width: 100%;
@@ -83,7 +83,7 @@
                 margin: 0;
             }
 
-            .kolom-nomor {
+            /* .kolom-nomor {
                 display: flex;
                 justify-content: center;
                 text-align: center;
@@ -91,7 +91,7 @@
 
             .kolom-nomor h3 {
                 margin-bottom: none;
-            }
+            } */
 
             .tabel-word {
                 border-collapse: collapse;
