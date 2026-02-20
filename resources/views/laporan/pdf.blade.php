@@ -159,7 +159,7 @@
             </table>
         </div>
 
-        <div class="kolom-nomor" style="font-size: 11pt">
+        <div style="font-size: 11pt; margin: 0 auto; width: 100%;">
             <h3>NOTA DINAS</h3>
             <span>Nomor : {{ $nomor_laporan }}</span>
         </div>
