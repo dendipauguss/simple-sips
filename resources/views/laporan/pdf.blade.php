@@ -83,15 +83,24 @@
                 margin: 0;
             }
 
-            /* .kolom-nomor {
+            .kolom-nomor {
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 text-align: center;
+                align-items: center;
+                margin: 15px 0;
             }
 
             .kolom-nomor h3 {
-                margin-bottom: none;
-            } */
+                margin: 0;
+                padding: 0;
+            }
+
+            .kolom-nomor span {
+                margin: 0;
+                padding: 0;
+            }
 
             .tabel-word {
                 border-collapse: collapse;
@@ -159,7 +168,7 @@
             </table>
         </div>
 
-        <div style="font-size: 11pt; margin: 0 auto; width: 100%;">
+        <div class="kolom-nomor" style="font-size: 11pt">
             <h3>NOTA DINAS</h3>
             <span>Nomor : {{ $nomor_laporan }}</span>
         </div>
