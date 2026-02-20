@@ -6,6 +6,7 @@
         <title>Laporan
             {{ $laporan->status_persetujuan == 'setuju' ? 'Disetujui' : ($laporan->status_persetujuan == 'dikembalikan' ? 'Dikembalikan' : 'Dipending') }}
         </title>
+        <link rel="shortcut icon" href="/img/kemendag-bappebti-logo.ico" type="image/x-icon">
         <style>
             /* @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Libre+Barcode+39&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Russo+One&display=swap'); */
 
