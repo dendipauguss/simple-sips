@@ -171,7 +171,7 @@ class PengenaanSPController extends Controller
             $tahun = \Carbon\Carbon::parse($request->tanggal_nota_dinas)->format('Y');
             $noNota = $this->sanitizeFolderName($request->no_nota_dinas);
 
-            $base = config('filesystems.disks.google.root'); // env('GOOGLE_DRIVE_FOLDER')
+            $base = config('filesystems.disks.google.folder'); // env('GOOGLE_DRIVE_FOLDER_ID')
 
             $folderPath = "{$base}/{$tahun}/{$dasar}/{$noNota}";
 
