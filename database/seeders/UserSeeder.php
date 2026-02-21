@@ -78,7 +78,7 @@ class UserSeeder extends Seeder
             'nama' => 'Aulia Puspa Ramadhani',
             'email' => 'r.auliapuspa@gmail.com',
             'username' => 'auliapusparamadhani',
-            'password' => Hash::make('Aulia#Puspa#Ramadhani_7'),
+            'password' => Hash::make('Aulia#puspa#ramadhani_7'),
             'role' => 'pegawai'
         ]);
 

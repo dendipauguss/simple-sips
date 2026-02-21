@@ -215,18 +215,23 @@
                                                                     class="btn btn-sm btn-warning" title="Eskalasi">
                                                                     <i class="psi-up"></i>
                                                                 </a>
+
+                                                                {{-- TOMBOL HAPUS --}}
                                                                 <a href="#" class="btn btn-sm btn-danger"
                                                                     onclick="event.preventDefault(); if(confirm('Yakin ingin menghapus data ini?')) document.getElementById('delete-{{ $sp->id }}').submit();"
                                                                     title="Hapus">
                                                                     <i class="psi-trash"></i>
                                                                 </a>
+                                                                {{-- TOMBOL HAPUS --}}
                                                             </div>
+                                                            {{-- AKSI TOMBOL HAPUS --}}
                                                             <form id="delete-{{ $sp->id }}"
                                                                 action="{{ route('pengenaan-sp.destroy', $sp->id) }}"
                                                                 method="POST" style="display:none;">
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>
+                                                            {{-- AKSI TOMBOL HAPUS --}}
                                                         @else
                                                             <div class="badge bg-warning">
                                                                 <span class="fs-3">

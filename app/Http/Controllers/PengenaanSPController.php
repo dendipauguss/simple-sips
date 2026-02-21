@@ -35,7 +35,7 @@ use Illuminate\Support\Str;
 class PengenaanSPController extends Controller
 {
     public function index(Request $request)
-    {
+    {        
         $query = PengenaanSP::query()->with([
             'sanksi', // 🔥 WAJIB
             'pelaku_usaha.jenis_pelaku_usaha',
@@ -274,21 +274,35 @@ class PengenaanSPController extends Controller
 
     public function destroy($id)
     {
-        $pengenaan_sp = PengenaanSP::findOrFail($id);
+        $pengenaan_sp = PengenaanSPEskalasi::findOrFail($id);
 
-        dd($pengenaan_sp->file);
-        $file = Files::findOrFail($pengenaan_sp->file->id);
+        $messages = [];
 
-        $hapus_file_gdrive = $this->deleteFileFromGDrive($file->google_file_path);
+        DB::transaction(function () use ($pengenaan_sp, &$messages) {
+            // Ambil semua file yang berelasi dengan eskalasi ini
+            $files = $pengenaan_sp->files()->get();
 
-        if ($hapus_file_gdrive) {
-            $pesan = 'Dan Berhasil hapus file google drive';
-        } else {
-            $pesan = 'Tetapi Gagal hapus file google drive';
-        }
+            foreach ($files as $file) {
+                try {
+                    $deleted = $this->deleteFileFromGDrive($file->google_file_path);
+                    if ($deleted) {
+                        $messages[] = 'Berhasil hapus file google drive: ' . ($file->original_name ?? $file->filename);
+                    } else {
+                        $messages[] = 'Gagal hapus file google drive: ' . ($file->original_name ?? $file->filename);
+                    }
+                } catch (\Throwable $e) {
+                    $messages[] = 'Error saat menghapus file di GDrive: ' . ($file->original_name ?? $file->filename);
+                }
 
-        $file->delete();
-        $pengenaan_sp->delete();
+                // Hapus record file dari database (file lokal/remote dianggap sudah ditangani di deleteFileFromGDrive)
+                $file->delete();
+            }
+
+            // Terakhir hapus record eskalasi
+            $pengenaan_sp->delete();
+        });
+
+        $pesan = $messages ? implode(' | ', $messages) : 'Tidak ada file terkait.';
 
         return redirect()->route('pengenaan-sp.index')->with('success', 'Data berhasil dihapus! ' . $pesan);
     }
@@ -338,7 +352,8 @@ class PengenaanSPController extends Controller
         $tahun = \Carbon\Carbon::parse($request->tanggal_nota_dinas)->format('Y');
         $noNota = $this->sanitizeFolderName($request->no_nota_dinas);
 
-        $base = config('filesystems.disks.google.root'); // env('GOOGLE_DRIVE_FOLDER')
+        $base = config('filesystems.disks.google.folder'); // env('GOOGLE_DRIVE_FOLDER')
+        
         $folderPath = "{$base}/{$tahun}/{$dasar}/{$noNota}";
         $pengenaan_sp = PengenaanSP::findOrFail($request->pengenaan_sp_id);
 
@@ -474,7 +489,7 @@ class PengenaanSPController extends Controller
             ]);
 
             // 2. Simpan eskalasi baru
-            $eskalasi_baru = PengenaanSpEskalasi::create([
+            $eskalasi_baru = PengenaanSPEskalasi::create([
                 'pengenaan_sp_id' => $sp->id,
                 'sanksi_id'       => $request->sanksi_id, // jenis sanksi tetap
                 'level'           => $eskalasiAktif->level + 1,
@@ -492,7 +507,8 @@ class PengenaanSPController extends Controller
             $tahun = \Carbon\Carbon::parse($eskalasi_baru->pengenaan_sp->nota_dinas->tanggal_nota_dinas)->format('Y');
             $noNota = $this->sanitizeFolderName($eskalasi_baru->pengenaan_sp->nota_dinas->no_nota_dinas);
 
-            $base = config('filesystems.disks.google.root'); // env('GOOGLE_DRIVE_FOLDER')
+            $base = config('filesystems.disks.google.folder'); // env('GOOGLE_DRIVE_FOLDER')
+            
             $folderPath = "{$base}/{$tahun}/{$dasar}/{$noNota}";
             $pengenaan_sp = PengenaanSP::findOrFail($eskalasi_baru->pengenaan_sp_id);
 

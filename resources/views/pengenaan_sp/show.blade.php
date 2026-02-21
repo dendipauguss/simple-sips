@@ -83,7 +83,7 @@
                                             @foreach ($sp->files as $file)
                                                 @if ($file->tipe == 'bebas')
                                                     <div class="d-flex align-items-center">
-                                                        <a href="{{ asset($file->url_path) }}" target="_blank"
+                                                        <a href="{{ route('file.view', $file->file_token) }}" target="_blank"
                                                             class="text-decoration-none">
                                                             <span>{{ $file->original_name }}</span>
                                                         </a>
